@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  auth-service:
+    build:
+      context: ./auth-service
+    ports:
+      - "3001:3001"
+    environment:
+      - JWT_SECRET= sep-group-8
+
+  costomer-service:
+    build:
+      context: ./customer-service
+    ports:
+      - "3002:3002"
+
+  cashier-service:
+    build:
+      context: ./cashier-service
+    ports:
+      - "3003:3003"
+
+  gateway:
+    build:
+      context: ./gateway
+    ports:
+      - "3000:3000"
+    depends_on:
+      - auth-service
+      - user-service
+      - order-service
