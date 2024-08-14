@@ -5,7 +5,7 @@ const cors = require('cors');
 const app = express();
 
 
-const PORT = process.env.PORT || 3001;
+const PORT =  3001;
 
 app.get('/', (req, res) => {
     res.send('Hello World from admin-services');
