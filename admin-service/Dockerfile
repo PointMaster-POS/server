@@ -2,16 +2,16 @@
 FROM node:16
 
 # Set the working directory
-WORKDIR /usr/src/server
+WORKDIR /usr/src
 
 # Copy package.json and package-lock.json
-COPY package*.json ./
+COPY src/package*.json ./
 
 # Install dependencies
 RUN npm install
 
 # Copy the rest of the application code
-COPY . .
+COPY src/ .
 
 # Expose the port the app runs on
 EXPOSE 3001
