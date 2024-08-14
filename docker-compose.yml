@@ -33,6 +33,8 @@ services:
     ports:
       - "3000:3000"
     depends_on:
+      - admin-service
       - auth-service
-      - user-service
-      - order-service
+      - cashier-service
+      - costomer-service
+      
