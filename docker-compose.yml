@@ -27,14 +27,5 @@ services:
 
   
 
-  gateway:
-    build:
-      context: ./gateway
-    ports:
-      - "3000:3000"
-    depends_on:
-      - admin-service
-      - auth-service
-      - cashier-service
-      - costomer-service
+
       
