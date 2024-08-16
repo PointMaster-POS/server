@@ -1,7 +1,6 @@
 {
-  "name": "admin-services",
+  "name": "cachier-services",
   "version": "1.0.0",
-  "description": "this is the services related to the admins of point master",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -10,7 +9,9 @@
   },
   "author": "Himindu Kularathne",
   "license": "MIT",
+  "description": "",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.19.2",
     "nodemon": "^3.1.4"
   }
