@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const {customerRouter} = require('./routes/customer');
+const customerRouter = require('./routes/customer');
 
 //app is an instance of express
 const app = express();
