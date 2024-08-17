@@ -6,6 +6,6 @@ const { getAllShops, getShopByID } = require("../controllers/shop");
 shopsRouter.route("/").get(getAllShops);
 
 //this should return a shop with shop id, shop name, shop location, shop owner, shop contact - shop details
-shopsRouter.route("/:shopID").post(getShopByID);
+shopsRouter.route("/:shopID").get(getShopByID);
 
 module.exports = shopsRouter;
