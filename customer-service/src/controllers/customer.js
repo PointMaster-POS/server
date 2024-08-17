@@ -72,11 +72,12 @@ const getAllCustomers = asyncHandler(async (req, res) => {
 const updateCustomer = asyncHandler(async (req, res) => {
     const { customer_name, customer_mail, customer_phone, birthday, gender } = req.body;
     const token = req.headers.authorization.split(" ")[1];
+    
     const decoded = jsonwebtoken.verify(token, "panadura");
     const customer_id = decoded.customer_id;
     const query = `UPDATE customer SET customer_name = ?, customer_mail = ?, customer_phone = ?, birthday = ?, gender = ? WHERE customer_id = ?`;
 
-
+    console.log(req.body);
     //query to update customer
     db.query(query, [customer_name, customer_mail, customer_phone, birthday, gender, customer_id], (err, results) => {
         if (err) {
