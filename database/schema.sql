@@ -75,8 +75,7 @@ CREATE TABLE `customer` (
   `customer_phone` VARCHAR(55),
   `birthday` DATE,
   `gender` VARCHAR(55),
-  `loyalty_program_id` VARCHAR(36),
-  FOREIGN KEY (`loyalty_program_id`) REFERENCES `loyalty_programs`(`loyalty_program_id`)
+  `password` VARCHAR(2048)
 );
 
 CREATE TABLE `bill` (

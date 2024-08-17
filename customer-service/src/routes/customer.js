@@ -1,5 +1,5 @@
 const express = require("express");
-const router = express.Router();
+const customerRouter = express.Router();
 
 const {
   getAllCustomers,
@@ -9,14 +9,16 @@ const {
 } = require("../controllers/customer");
 
 //this route belongs to the customer service
-router
-  .route("/")
-  .get(getAllCustomers)
-  .post(registerCustomer)
-  .put(updateCustomer)
-  .delete(deleteCustomer);
+customerRouter
+  .route("/register")
+  .post(registerCustomer);
 
 //this route belongs to the customer service
-router.route("/:id").get(getCustomerById);
+// router.route("/:id").get(getCustomerById);
+customerRouter
+  .route("/")
+  .put(updateCustomer)
+  .get(getAllCustomers)
+  .delete(deleteCustomer);
 
-module.exports = router;
+module.exports = customerRouter;
