@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const customerRouter = require("./routes/customer");
+const dotenv = require("dotenv").config();
 // const shopRouter = require("./routes/shop");
 // const billsRouter = require("./routes/bills");
 // const loyalityRouter = require("./routes/loyality");

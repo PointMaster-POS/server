@@ -69,15 +69,13 @@ const getAllCustomers = asyncHandler(async (req, res) => {
 });
 
 //controller to update customer details , by decoding the token and getting the customer id
+//protected route
 const updateCustomer = asyncHandler(async (req, res) => {
     const { customer_name, customer_mail, customer_phone, birthday, gender } = req.body;
-    const token = req.headers.authorization.split(" ")[1];
-    
-    const decoded = jsonwebtoken.verify(token, "panadura");
-    const customer_id = decoded.customer_id;
+   
     const query = `UPDATE customer SET customer_name = ?, customer_mail = ?, customer_phone = ?, birthday = ?, gender = ? WHERE customer_id = ?`;
 
-    console.log(req.body);
+    const customer_id = req.customer.customer_id
     //query to update customer
     db.query(query, [customer_name, customer_mail, customer_phone, birthday, gender, customer_id], (err, results) => {
         if (err) {
@@ -86,11 +84,13 @@ const updateCustomer = asyncHandler(async (req, res) => {
         return res.status(200).json({ message: "Customer updated successfully" });
     });
 
+    
 });
 
 //controller to delete customer
+//protected route
 const deleteCustomer = asyncHandler(async (req, res) => {
-    const { customer_id } = req.body;
+    const customer_id = req.customer.customer_id
     const query = `DELETE FROM customer WHERE customer_id = ?`;
     db.query(query, [customer_id], (err, results) => {
         if (err) {

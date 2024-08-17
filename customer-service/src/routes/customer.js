@@ -7,18 +7,19 @@ const {
   updateCustomer,
   deleteCustomer,
 } = require("../controllers/customer");
+const validateToken = require("../middleware/validateTokenHandler");
 
 //this route belongs to the customer service
-customerRouter
-  .route("/register")
-  .post(registerCustomer);
+customerRouter.route("/register").post(registerCustomer);
 
 //this route belongs to the customer service
 // router.route("/:id").get(getCustomerById);
 customerRouter
   .route("/")
-  .put(updateCustomer)
-  .get(getAllCustomers)
-  .delete(deleteCustomer);
+  .get(getAllCustomers);
+
+//protected rotes
+customerRouter.put("/", validateToken, updateCustomer);
+customerRouter.delete("/", validateToken, deleteCustomer);
 
 module.exports = customerRouter;

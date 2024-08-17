@@ -6,11 +6,17 @@ const validateToken = asyncHandler(async (req, res, next) => {
     let authHeader = req.headers.authorization || req.headers.Authorization;
     if (authHeader && authHeader.startsWith('Bearer')) {
         token = authHeader.split(' ')[1];
-        jwt.verify(token, 'panadura', (err, decoded) => {
+        jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
             if (err) {
                 return res.status(401).json({ message: 'User is not Authorized' });
             } else {
-                console.log(decoded);
+
+                console.log({deco :decoded});
+                if(err) {
+                    res.status(401).json({message: 'User is not Authorized'});
+
+                }
+                req.customer = decoded.customer;
                 next();
             }
         });
@@ -19,4 +25,4 @@ const validateToken = asyncHandler(async (req, res, next) => {
 
 });
 
-module.exports = validateTokenHandler;
+module.exports = validateToken;

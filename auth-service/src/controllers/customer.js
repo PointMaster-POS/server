@@ -14,16 +14,17 @@ const customerLogginController = asyncHandler(async (req, res) => {
       } else {
         console.log(result);
         const customer = result[0];
+        console.log(process.env.ACCESS_TOKEN_SECRET);
         if (bcrypt.compare(hashed_password, customer.password)) {
           const accessToken = jwt.sign(
             {
-              employee: {
+              customer: {
                 customer_name: customer.customer_name,
                 customer_id: customer.customer_id,
                 customer_mail: customer.customer_mail,
               },
             },
-            "panadura",
+            process.env.ACCESS_TOKEN_SECRET,
             { expiresIn: "30m" }
           );
 
