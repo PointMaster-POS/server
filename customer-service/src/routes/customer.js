@@ -1,5 +1,5 @@
 const express = require("express");
-const router = express.Router();
+const customerRouter = express.Router();
 
 const {
   getAllCustomers,
@@ -7,16 +7,17 @@ const {
   updateCustomer,
   deleteCustomer,
 } = require("../controllers/customer");
+const validateToken = require("../middleware/validateTokenHandler");
 
 //this route belongs to the customer service
-router
-  .route("/")
-  .get(getAllCustomers)
-  .post(registerCustomer)
-  .put(updateCustomer)
-  .delete(deleteCustomer);
+customerRouter.route("/register").post(registerCustomer);
 
 //this route belongs to the customer service
-router.route("/:id").get(getCustomerById);
+// router.route("/:id").get(getCustomerById);
+customerRouter.route("/").get(getAllCustomers);
 
-module.exports = router;
+//protected rotes
+customerRouter.put("/", validateToken, updateCustomer);
+customerRouter.delete("/", validateToken, deleteCustomer);
+
+module.exports = customerRouter;

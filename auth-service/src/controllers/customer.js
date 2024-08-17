@@ -7,25 +7,38 @@ const db = require('../config/db');
 
 const customerLogginController = asyncHandler(async (req, res) => {
     const { email, hashed_password } = req.body;
-    db.query("SELECT * FROM employee WHERE email = ?", [email], (err, result) => {
+    db.query("SELECT * FROM customer WHERE customer_mail = ?", [email], (err, result) => {
       if (err) {
         res.status(400).json({ message: "error" });
         console.log(err);
       } else {
         console.log(result);
-        const employee = result[0];
-        if (bcrypt.compare(hashed_password, employee.employee_password)) {
+        const customer = result[0];
+        console.log(process.env.ACCESS_TOKEN_SECRET);
+        if (bcrypt.compare(hashed_password, customer.password)) {
           const accessToken = jwt.sign(
             {
-              employee: {
-                employee_name: employee.employee_name,
-                role: employee.role,
-                photo_url: employee.photo_url,
+              customer: {
+                customer_name: customer.customer_name,
+                customer_id: customer.customer_id,
+                customer_mail: customer.customer_mail,
               },
             },
-            "panadura",
+            process.env.ACCESS_TOKEN_SECRET,
             { expiresIn: "30m" }
           );
+
+          // const refreshToken = jwt.sign(
+          //   {
+          //     employee: {
+          //       customer_name: customer.customer_name,
+          //       customer_id: customer.customer_id,
+          //       customer_mail: customer.customer_mail,
+          //     },
+          //   },
+          //   "panadura",
+          //   { expiresIn: "120m" }
+          // );
   
           res.status(200).json(accessToken);
         } else {
