@@ -4,8 +4,8 @@ const cors = require("cors");
 const customerRouter = require("./routes/customer");
 const dotenv = require("dotenv").config();
 // const shopRouter = require("./routes/shop");
- const billsRouter = require("./routes/bills");
-// const loyalityRouter = require("./routes/loyality");
+const billsRouter = require("./routes/bills");
+const loyalityRouter = require("./routes/loyality");
 
 const app = express();
 const PORT = 3004;
@@ -16,7 +16,7 @@ app.use(bodyParser.json());
 app.use("/customer", customerRouter);
 // app.use("/shop", shopRouter);
 app.use("/bills", billsRouter);
-// app.use("/loyality", loyalityRouter);
+app.use("/loyalty", loyalityRouter);
 
 //listening to the port
 app.listen(PORT, () => {

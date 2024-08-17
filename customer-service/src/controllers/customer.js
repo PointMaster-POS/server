@@ -59,46 +59,60 @@ const registerCustomer = asyncHandler(async (req, res) => {
 
 //controller to get all customers
 const getAllCustomers = asyncHandler(async (req, res) => {
-    const query = "SELECT * FROM customer";
-    db.query(query, (err, results) => {
-        if (err) {
-        return res.status(500).json({ message: err.message });
-        }
-        return res.status(200).json(results);
-    });
+  const query = "SELECT * FROM customer";
+  db.query(query, (err, results) => {
+    if (err) {
+      return res.status(500).json({ message: err.message });
+    }
+    return res.status(200).json(results);
+  });
 });
 
 //controller to update customer details , by decoding the token and getting the customer id
 //protected route
 const updateCustomer = asyncHandler(async (req, res) => {
-    const { customer_name, customer_mail, customer_phone, birthday, gender } = req.body;
-   
-    const query = `UPDATE customer SET customer_name = ?, customer_mail = ?, customer_phone = ?, birthday = ?, gender = ? WHERE customer_id = ?`;
+  const { customer_name, customer_mail, customer_phone, birthday, gender } =
+    req.body;
 
-    const customer_id = req.customer.customer_id
-    //query to update customer
-    db.query(query, [customer_name, customer_mail, customer_phone, birthday, gender, customer_id], (err, results) => {
-        if (err) {
+  const query = `UPDATE customer SET customer_name = ?, customer_mail = ?, customer_phone = ?, birthday = ?, gender = ? WHERE customer_id = ?`;
+
+  const customer_id = req.customer.customer_id;
+  //query to update customer
+  db.query(
+    query,
+    [
+      customer_name,
+      customer_mail,
+      customer_phone,
+      birthday,
+      gender,
+      customer_id,
+    ],
+    (err, results) => {
+      if (err) {
         return res.status(500).json({ message: err.message });
-        }
-        return res.status(200).json({ message: "Customer updated successfully" });
-    });
-
-    
+      }
+      return res.status(200).json({ message: "Customer updated successfully" });
+    }
+  );
 });
 
 //controller to delete customer
 //protected route
 const deleteCustomer = asyncHandler(async (req, res) => {
-    const customer_id = req.customer.customer_id
-    const query = `DELETE FROM customer WHERE customer_id = ?`;
-    db.query(query, [customer_id], (err, results) => {
-        if (err) {
-        return res.status(500).json({ message: err.message });
-        }
-        return res.status(200).json({ message: "Customer deleted successfully" });
-    });
+  const customer_id = req.customer.customer_id;
+  const query = `DELETE FROM customer WHERE customer_id = ?`;
+  db.query(query, [customer_id], (err, results) => {
+    if (err) {
+      return res.status(500).json({ message: err.message });
+    }
+    return res.status(200).json({ message: "Customer deleted successfully" });
+  });
 });
 
-
-module.exports = { registerCustomer, getAllCustomers , updateCustomer, deleteCustomer };
+module.exports = {
+  registerCustomer,
+  getAllCustomers,
+  updateCustomer,
+  deleteCustomer,
+};
