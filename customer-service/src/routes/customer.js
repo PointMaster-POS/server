@@ -14,9 +14,7 @@ customerRouter.route("/register").post(registerCustomer);
 
 //this route belongs to the customer service
 // router.route("/:id").get(getCustomerById);
-customerRouter
-  .route("/")
-  .get(getAllCustomers);
+customerRouter.route("/").get(getAllCustomers);
 
 //protected rotes
 customerRouter.put("/", validateToken, updateCustomer);

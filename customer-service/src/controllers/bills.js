@@ -67,8 +67,7 @@ WHERE
 AND 
   bus.business_id = ?`;
 
-
-  db.query(query, [customer_id,business_id], (err, results) => {
+  db.query(query, [customer_id, business_id], (err, results) => {
     if (err) {
       return res.status(500).json({ message: err.message });
     } else {
