@@ -5,4 +5,4 @@ const { employeeLogginController } = require('../controllers/employee');
 
 employeeRouter.post('/login', employeeLogginController);
 
-module.exports = customerRouter;
+module.exports = employeeRouter;
