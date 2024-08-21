@@ -14,4 +14,7 @@ const {newBill} = require('../controllers/bill');
 
 billRouter.post('/bill', newBill);
 
+//get all items in bill by bill id
+
+billRouter.get('/bill/:billId', getBillItems);
 module.exports = billRouter;

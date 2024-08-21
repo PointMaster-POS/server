@@ -8,12 +8,12 @@ const businessAccess = require("../middleware/businessAccess");
 
 const {
      getCategories,
-    //getProducts 
+     getProducts 
 } = require("../controllers/inventory");
 
 //get all categories program of the business
 //this route should be protected by the auth middleware cashier should be authenticated
  inventoryRouter.get('/categories',verifyCashier,businessAccess, getCategories);
-// inventoryRouter.get("/products/:categoryID", verifyCashier, getProducts);
+inventoryRouter.get("/products/:categoryID", verifyCashier, getProducts);
 
 module.exports = inventoryRouter;

@@ -2,13 +2,14 @@
 
 const express = require('express');
 const historyRouter = express.Router();
-
-
-const {getBillHistory} = require('../controllers/history');
+const verifyCashier = require('../middleware/verifyCashier');
+const businessAccess = require('../middleware/businessAccess');
+const {getHistory} = require('../controllers/history');
 
 //get bill history at the branch
 //this route should be protected by the auth middleware cashier should be authenticated
-historyRouter.get('/history', getBillHistory);
+historyRouter.get('/',verifyCashier, businessAccess, getHistory);
+
 
 
 module.exports = historyRouter;

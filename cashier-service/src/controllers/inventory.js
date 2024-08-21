@@ -16,4 +16,17 @@ const getCategories = asyncHandler(async (req, res) => {
     });
 });
 
-module.exports = { getCategories };
+const getProducts = asyncHandler(async (req, res) => {
+    const query = "SELECT * FROM items Where category_id = ? ";
+    const categoryID = req.params.categoryID;
+
+    db.query(query, [categoryID], (err, result) => {
+        if (err) {
+            return res.status(500).json({ message: err.message });
+        } else {
+            res.status(200).json(result);
+        }
+    });
+});
+
+module.exports = { getCategories, getProducts };
