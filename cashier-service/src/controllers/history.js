@@ -3,7 +3,7 @@ const db = require('../config/db');
 
 const getHistory = asyncHandler(async (req, res) => {
     const query = "SELECT * FROM bill WHERE branch_id = ? ";
-    const branch_id = req.business.branch_id;
+    const branch_id = req.branch.branch_id;
 
     db.query(query, [branch_id], (err, result) => {
         if (err) {

@@ -4,7 +4,7 @@
 const express = require("express");
 const inventoryRouter = express.Router();
 const verifyCashier = require("../middleware/verifyCashier");
-const businessAccess = require("../middleware/businessAccess");
+const {branchAccess} = require("../middleware/businessAccess");
 
 const {
      getCategories,
@@ -13,7 +13,7 @@ const {
 
 //get all categories program of the business
 //this route should be protected by the auth middleware cashier should be authenticated
- inventoryRouter.get('/categories',verifyCashier,businessAccess, getCategories);
+ inventoryRouter.get('/categories',verifyCashier,branchAccess, getCategories);
 inventoryRouter.get("/products/:categoryID", verifyCashier, getProducts);
 
 module.exports = inventoryRouter;
