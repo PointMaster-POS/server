@@ -29,4 +29,17 @@ const getProducts = asyncHandler(async (req, res) => {
     });
 });
 
-module.exports = { getCategories, getProducts };
+const getProductByID = asyncHandler(async (req, res) => {
+    const query = "SELECT * FROM items Where item_id = ? ";
+    const itemID = req.params.productID;
+
+    db.query(query, [itemID], (err, result) => {
+        if (err) {
+            return res.status(500).json({ message: err.message });
+        } else {
+            res.status(200).json(result);
+        }
+    });
+});
+
+module.exports = { getCategories, getProducts, getProductByID };

@@ -17,7 +17,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 
-app.use('/cashier', inventoryRouter);
+app.use('/cashier/inventory', inventoryRouter);
 app.use('/cashier/history', historyRouter);
 app.use('/cashier/customer', customerRouter);
 app.use('/cashier/loyalty', loyaltyRouter);
