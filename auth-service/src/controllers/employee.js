@@ -4,16 +4,28 @@ const jwt = require('jsonwebtoken');
 const db = require('../config/db');
 
 const employeeLogginController = asyncHandler(async (req, res) => {
-    const { email, hashed_password } = req.body;
+    const { email, password } = req.body;
+    if (!email || !password) {
+      res.status(400).json({ message: "Email and password are required" });
+    } else {
     db.query("SELECT * FROM employee WHERE email = ?", [email], (err, result) => {
       if (err) {
         res.status(400).json({ message: "error" });
         console.log(err);
       } else {
-        console.log(result);
+        
         const employee = result[0];
-        console.log(process.env.ACCESS_TOKEN_SECRET);
-        if (bcrypt.compare(hashed_password, employee.password)) {
+        
+      
+        if (!employee) {
+          res.status(401).json({ message: "Login failed" });
+        } else {
+        bcrypt.compare(password, employee?.password, (err, result) => {
+          if (err) {
+            res.status(400).json({ message: "error" });
+            console.log(err);
+          }
+          if (result) {
           const accessToken = jwt.sign(
             {
               employee: {
@@ -43,9 +55,13 @@ const employeeLogginController = asyncHandler(async (req, res) => {
         } else {
           res.status(401).json({ message: "Login failed" });
         }
-      }
+      
+      });
+    }
+    }
     }
   );
+}
 });
 
 
