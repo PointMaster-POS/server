@@ -3,16 +3,21 @@ const db = require("../config/db");
 const bcrypt = require("bcryptjs");
 const jsonwebtoken = require("jsonwebtoken");
 
+
 // Register new customer
 const registerCustomer = asyncHandler(async (req, res) => {
+  // Hash the password
+  const saltRounds = 10;
   const {
     customer_name,
     customer_mail,
     customer_phone,
     birthday,
     gender,
-    hashed_pw,
+    password,
   } = req.body;
+  //hashing the password
+  const hashed_pw = await bcrypt.hash(password, saltRounds);
 
   if (!customer_name || !customer_mail || !hashed_pw) {
     return res
@@ -110,9 +115,21 @@ const deleteCustomer = asyncHandler(async (req, res) => {
   });
 });
 
+const getCustomerPhone = asyncHandler(async (req, res) => {
+  const customer_id = req.customer.customer_id;
+  const query = `SELECT customer_phone FROM customer WHERE customer_id = ?`;
+  db.query(query, [customer_id], (err, results) => {
+    if (err) {
+      return res.status(500).json({ message: err.message });
+    }
+    return res.status(200).json(results);
+  });
+});
+
 module.exports = {
   registerCustomer,
   getAllCustomers,
   updateCustomer,
   deleteCustomer,
+  getCustomerPhone,
 };

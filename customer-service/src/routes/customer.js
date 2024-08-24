@@ -6,6 +6,7 @@ const {
   registerCustomer,
   updateCustomer,
   deleteCustomer,
+  getCustomerPhone
 } = require("../controllers/customer");
 const validateToken = require("../middleware/validateTokenHandler");
 
@@ -19,5 +20,6 @@ customerRouter.route("/").get(getAllCustomers);
 //protected rotes
 customerRouter.put("/", validateToken, updateCustomer);
 customerRouter.delete("/", validateToken, deleteCustomer);
+customerRouter.get("/phone", validateToken, getCustomerPhone);
 
 module.exports = customerRouter;
