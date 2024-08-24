@@ -1,52 +1,68 @@
-const bodyParser = require('body-parser');
 const asyncHandler = require('express-async-handler');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const db = require('../config/db');
 
-
 const customerLogginController = asyncHandler(async (req, res) => {
-    const { email, hashed_password } = req.body;
-    db.query("SELECT * FROM customer WHERE customer_mail = ?", [email], (err, result) => {
-      if (err) {
-        res.status(400).json({ message: "error" });
-        console.log(err);
-      } else {
-        console.log(result);
-        const customer = result[0];
-        console.log(process.env.ACCESS_TOKEN_SECRET);
-        if (bcrypt.compare(hashed_password, customer.password)) {
-          const accessToken = jwt.sign(
-            {
-              customer: {
-                customer_name: customer.customer_name,
-                customer_id: customer.customer_id,
-                customer_mail: customer.customer_mail,
-              },
-            },
-            process.env.ACCESS_TOKEN_SECRET,
-            { expiresIn: "30m" }
-          );
+  const { email, password } = req.body;
 
-          // const refreshToken = jwt.sign(
-          //   {
-          //     employee: {
-          //       customer_name: customer.customer_name,
-          //       customer_id: customer.customer_id,
-          //       customer_mail: customer.customer_mail,
-          //     },
-          //   },
-          //   "panadura",
-          //   { expiresIn: "120m" }
-          // );
-  
-          res.status(200).json(accessToken);
-        } else {
-          res.status(401).json({ message: "Login failed" });
-        }
-      }
+  // Validate input
+  if (!email || !password) {
+    return res.status(400).json({ message: 'Email and password are required' });
+  }
+
+  // Query the database to find the customer by email
+  db.query("SELECT * FROM customer WHERE customer_mail = ?", [email], async (err, result) => {
+    if (err) {
+      return res.status(500).json({ message: "Database query error" });
     }
-  );
+
+    if (result.length === 0) {
+      return res.status(401).json({ message: "Invalid email or password" });
+    }
+
+    const customer = result[0];
+
+    // Compare the provided password with the hashed password in the database
+    try {
+      const isMatch = await bcrypt.compare(password, customer.password);
+
+      if (isMatch) {
+        // Generate JWT access token
+        const accessToken = jwt.sign(
+          {
+            customer: {
+              customer_name: customer.customer_name,
+              customer_id: customer.customer_id,
+              customer_mail: customer.customer_mail,
+            },
+          },
+          process.env.ACCESS_TOKEN_SECRET,
+          { expiresIn: '30m' }
+        );
+
+        // Optionally, generate a refresh token (commented out in your code)
+        // const refreshToken = jwt.sign(
+        //   {
+        //     customer: {
+        //       customer_name: customer.customer_name,
+        //       customer_id: customer.customer_id,
+        //       customer_mail: customer.customer_mail,
+        //     },
+        //   },
+        //   process.env.REFRESH_TOKEN_SECRET, // Should use a different secret for refresh tokens
+        //   { expiresIn: '120m' }
+        // );
+
+        // Send response with access token
+        return res.json({ accessToken });
+      } else {
+        return res.status(401).json({ message: "Invalid email or password" });
+      }
+    } catch (error) {
+      return res.status(500).json({ message: 'Error comparing passwords' });
+    }
+  });
 });
 
-module.exports = {customerLogginController};
+module.exports = { customerLogginController };
