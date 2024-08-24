@@ -1,31 +1,69 @@
 version: '3.8'
 
 services:
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: 
+      MYSQL_DATABASE: pointmaster
+      MYSQL_USER: root
+      MYSQL_PASSWORD: 
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+  
   admin-service:
     build:
       context: ./admin-service
     ports:
       - "3001:3001"
+    environment:
+      - ACCESS_TOKEN_SECRET=panadura
+      - DB_HOST=localhost
+      - DB_PORT=3306
+      - DB_USER=root
+      - DB_PASSWOR=
+      - DB_NAME=pointmaster
+  
   auth-service:
     build:
       context: ./auth-service
     ports:
       - "3002:3002"
     environment:
-      - JWT_SECRET= sep-group-8
+      - ACCESS_TOKEN_SECRET=panadura
+      - DB_HOST=localhost
+      - DB_PORT=3306
+      - DB_USER=root
+      - DB_PASSWOR=
+      - DB_NAME=pointmaster
+
   cashier-service:
     build:
       context: ./cashier-service
     ports:
       - "3003:3003"
-
-  costomer-service:
+    environment:
+      - ACCESS_TOKEN_SECRET=panadura
+      - DB_HOST=localhost
+      - DB_PORT=3306
+      - DB_USER=root
+      - DB_PASSWOR=
+      - DB_NAME=pointmaster
+  
+  customer-service:
     build:
       context: ./customer-service
     ports:
       - "3004:3004"
+    environment:
+      - ACCESS_TOKEN_SECRET=panadura
+      - DB_HOST=localhost
+      - DB_PORT=3306
+      - DB_USER=root
+      - DB_PASSWOR=
+      - DB_NAME=pointmaster
 
-  
-
-
-      
+volumes:
+  mysql-data:
