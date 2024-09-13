@@ -5,7 +5,7 @@ const db = mysql.createConnection({
     user: 'root',
     password: 'password',
     database: 'pointmaster',
-    port: '3306'
+    port: '3308'
 });
 
 db.connect((err) => {

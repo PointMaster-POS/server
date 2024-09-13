@@ -183,9 +183,9 @@ VALUES
 ((SELECT business_id FROM business WHERE business_mail = 'owner2@example.com'), 'Branch 2', 'Uptown', NULL, 'Manager 2', 'manager2@example.com', 'hashedmanagerpassword2', true);
 
 -- Insert data into employee table
-INSERT INTO employee (branch_id, employee_name, role, salary, photo_url, status, email, password)
+INSERT INTO employee (branch_id, employee_name, role, salary, photo_url, status, employee_email, password)
 VALUES 
-((SELECT branch_id FROM business_branch WHERE branch_name = 'Branch 1'), 'Employee 1', 'Cashier', 3000, 'employee1.png', true, 'john.doe@example.com', 'himindu123'),
+((SELECT branch_id FROM business_branch WHERE branch_name = 'Branch 1'), 'Employee 1', 'Cashier', 3000, 'employee1.png', true, 'john.doe@example.com', '$2a$12$YiVwORUpdUpZQSK5nbAf5uLoc3quatyJX1d4gjmFKe.QftSYFOelW'),
 ((SELECT branch_id FROM business_branch WHERE branch_name = 'Branch 2'), 'Employee 2', 'Sales', 3500, 'employee2.png', true, 'joane.doe@example.com', 'hashedpassword4');
 
 -- Insert data into loyalty_programs table
