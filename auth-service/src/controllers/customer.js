@@ -5,6 +5,7 @@ const db = require('../config/db');
 
 const customerLogginController = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
+  console.log ({email : email, password: password});
 
   // Validate input
   if (!email || !password) {
@@ -14,7 +15,7 @@ const customerLogginController = asyncHandler(async (req, res) => {
   // Query the database to find the customer by email
   db.query("SELECT * FROM customer WHERE customer_mail = ?", [email], async (err, result) => {
     if (err) {
-      return res.status(500).json({ message: "Database query error" });
+      return res.status(500).json(err);
     }
 
     if (result.length === 0) {

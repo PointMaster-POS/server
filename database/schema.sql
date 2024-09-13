@@ -48,6 +48,8 @@ CREATE TABLE `employee` (
   `salary` FLOAT,
   `photo_url` VARCHAR(2048),
   `status` BOOL NOT NULL,
+  `employee_email` VARCHAR(255),
+  `password` VARCHAR(2048),
   FOREIGN KEY (`branch_id`) REFERENCES `business_branch`(`branch_id`)
 );
 
@@ -181,10 +183,10 @@ VALUES
 ((SELECT business_id FROM business WHERE business_mail = 'owner2@example.com'), 'Branch 2', 'Uptown', NULL, 'Manager 2', 'manager2@example.com', 'hashedmanagerpassword2', true);
 
 -- Insert data into employee table
-INSERT INTO employee (branch_id, employee_name, role, salary, photo_url, status)
+INSERT INTO employee (branch_id, employee_name, role, salary, photo_url, status, email, password)
 VALUES 
-((SELECT branch_id FROM business_branch WHERE branch_name = 'Branch 1'), 'Employee 1', 'Cashier', 3000, 'employee1.png', true),
-((SELECT branch_id FROM business_branch WHERE branch_name = 'Branch 2'), 'Employee 2', 'Sales', 3500, 'employee2.png', true);
+((SELECT branch_id FROM business_branch WHERE branch_name = 'Branch 1'), 'Employee 1', 'Cashier', 3000, 'employee1.png', true, 'john.doe@example.com', 'himindu123'),
+((SELECT branch_id FROM business_branch WHERE branch_name = 'Branch 2'), 'Employee 2', 'Sales', 3500, 'employee2.png', true, 'joane.doe@example.com', 'hashedpassword4');
 
 -- Insert data into loyalty_programs table
 INSERT INTO loyalty_programs (business_id, loyalty_program_name, points_per_hundred, redeem_value, by_sales, minimum_eligibility_value, start_date)
@@ -195,7 +197,7 @@ VALUES
 -- Insert data into customer table
 INSERT INTO customer (customer_name, customer_mail, customer_phone, birthday, gender, password)
 VALUES 
-('John Doe', 'john.doe@example.com', '123456789', '1990-01-01', 'Male', 'hashedpassword123'),
+('John Doe', 'john.doe@example.com', '123456789', '1990-01-01', 'Male', '$2a$12$YiVwORUpdUpZQSK5nbAf5uLoc3quatyJX1d4gjmFKe.QftSYFOelW'),
 ('Jane Smith', 'jane.smith@example.com', '987654321', '1985-05-15', 'Female', 'hashedpassword456');
 
 -- Insert data into bill table

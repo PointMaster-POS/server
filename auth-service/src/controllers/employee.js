@@ -7,7 +7,7 @@ const employeeLogginController = asyncHandler(async (req, res) => {
     const { email, hashed_password } = req.body;
     db.query("SELECT * FROM employee WHERE email = ?", [email], (err, result) => {
       if (err) {
-        res.status(400).json({ message: "error" });
+        res.status(400).json(err);
         console.log(err);
       } else {
         console.log(result);
