@@ -1,69 +1,71 @@
-version: '3.8'
+# version: '3.8'
 
 services:
-  mysql:
-    image: mysql:8.0
+  database:
+    image: mysql
     environment:
-      MYSQL_ROOT_PASSWORD: 
+      MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: pointmaster
-      MYSQL_USER: root
-      MYSQL_PASSWORD: 
     ports:
-      - "3306:3306"
-    volumes:
-      - mysql-data:/var/lib/mysql
-  
-  admin-service:
-    build:
-      context: ./admin-service
-    ports:
-      - "3001:3001"
-    environment:
-      - ACCESS_TOKEN_SECRET=panadura
-      - DB_HOST=localhost
-      - DB_PORT=3306
-      - DB_USER=root
-      - DB_PASSWOR=
-      - DB_NAME=pointmaster
-  
-  auth-service:
-    build:
-      context: ./auth-service
-    ports:
-      - "3002:3002"
-    environment:
-      - ACCESS_TOKEN_SECRET=panadura
-      - DB_HOST=localhost
-      - DB_PORT=3306
-      - DB_USER=root
-      - DB_PASSWOR=
-      - DB_NAME=pointmaster
+      - "3308:3306" # External port 3308, internal port 3307
+    restart: always
 
-  cashier-service:
-    build:
-      context: ./cashier-service
-    ports:
-      - "3003:3003"
-    environment:
-      - ACCESS_TOKEN_SECRET=panadura
-      - DB_HOST=localhost
-      - DB_PORT=3306
-      - DB_USER=root
-      - DB_PASSWOR=
-      - DB_NAME=pointmaster
-  
-  customer-service:
-    build:
-      context: ./customer-service
-    ports:
-      - "3004:3004"
-    environment:
-      - ACCESS_TOKEN_SECRET=panadura
-      - DB_HOST=localhost
-      - DB_PORT=3306
-      - DB_USER=root
-      - DB_PASSWOR=
-      - DB_NAME=pointmaster
+  # admin-service:
+  #   build:
+  #     context: ./admin-service
+  #   ports:
+  #     - "3001:3001"
+  #   environment:
+  #     - ACCESS_TOKEN_SECRET=panadura
+  #     - DB_HOST=db               # Use 'db' instead of 'localhost'
+  #     - DB_PORT=3306             # Use correct port (3307)
+  #     - DB_USER=root
+  #     - DB_PASSWORD=password     # Correct the spelling of 'DB_PASSWORD'
+  #     - DB_NAME=pointmaster
+  #   depends_on:
+  #     - db
 
-volumes:
-  mysql-data:
+  # auth-service:
+  #   build:
+  #     context: ./auth-service
+  #   ports:
+  #     - "3002:3002"
+  #   environment:
+  #     - ACCESS_TOKEN_SECRET=panadura
+  #     - DB_HOST=db
+  #     - DB_PORT=3306             # Ensure correct port
+  #     - DB_USER=root
+  #     - DB_PASSWORD=password     # Correct the spelling of 'DB_PASSWORD'
+  #     - DB_NAME=pointmaster
+  #   depends_on:
+  #     - db
+
+  # cashier-service:
+  #   build:
+  #     context: ./cashier-service
+  #   ports:
+  #     - "3003:3003"
+  #   environment:
+  #     - ACCESS_TOKEN_SECRET=panadura
+  #     - DB_HOST=db
+  #     - DB_PORT=3306             # Ensure correct port
+  #     - DB_USER=root
+  #     - DB_PASSWORD=password
+  #     - DB_NAME=pointmaster
+  #   depends_on:
+  #     - db
+
+  # customer-service:
+  #   build:
+  #     context: ./customer-service
+  #   ports:
+  #     - "3004:3004"
+  #   environment:
+  #     - ACCESS_TOKEN_SECRET=panadura
+  #     - DB_HOST=db               # Use 'db' instead of 'localhost'
+  #     - DB_PORT=3306             # Use correct port
+  #     - DB_USER=root
+  #     - DB_PASSWORD=password     # Correct the spelling of 'DB_PASSWORD'
+  #     - DB_NAME=pointmaster
+  #   depends_on:
+  #     - db

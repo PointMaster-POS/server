@@ -4,19 +4,26 @@ const jwt = require('jsonwebtoken');
 const asyncHandler = require('express-async-handler');
 const db = require('../config/db');
 
+
+//need to check error
 const branchAccess = asyncHandler(async (req, res, next) => {
-    console.log("cashier" +req.cashier);
+    
     const query = `
     SELECT branch_id From employee WHERE employee_id = ?
     `
     const cashierID = req.cashier.employee_id;
+    console.log(toString(cashierID));
+    
     db.query(query, [cashierID], (err, result) => {
         if (err) {
             return res.status(500).json({ message: err.message });
         } else {
+            console.log({result : result});
             req.branch = result[0];
-            console.log("business" +req.business);
+
+           
             next();
+
         }
     });
 });

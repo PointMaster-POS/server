@@ -15,4 +15,24 @@ const getCustomer = asyncHandler(async (req, res) => {
     });
 });
 
-module.exports = { getCustomer };
+
+
+const getCustomerPoints = asyncHandler(async (req, res) => {
+    //get customer points by calling customer service microservice
+    fetch('http://localhost:3000/customer/points', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            res.status(200).json(data);
+        })
+        .catch((error) => {
+            res.status(500).json({ message: error.message });
+     });
+    
+});
+
+module.exports = { getCustomer, getCustomerPoints };
