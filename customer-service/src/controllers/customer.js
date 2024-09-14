@@ -79,6 +79,8 @@ const updateCustomer = asyncHandler(async (req, res) => {
   const { customer_name, customer_mail, customer_phone, birthday, gender } =
     req.body;
 
+    console.log(req.body);
+
   const query = `UPDATE customer SET customer_name = ?, customer_mail = ?, customer_phone = ?, birthday = ?, gender = ? WHERE customer_id = ?`;
 
   const customer_id = req.customer.customer_id;
@@ -122,9 +124,21 @@ const getCustomerPhone = asyncHandler(async (req, res) => {
     if (err) {
       return res.status(500).json({ message: err.message });
     }
-    return res.status(200).json(results);
+    return res.status(200).json(results[0]);
   });
 });
+
+const getCustomerDetails = asyncHandler(async (req, res) => {
+  const customer_id = req.customer.customer_id;
+  const query = `SELECT * FROM customer WHERE customer_id = ?`;
+  db.query(query, [customer_id], (err, results) => {
+    if (err) {
+      return res.status(500).json({ message: err.message });
+    }
+    return res.status(200).json(results[0]);
+  });
+});
+
 
 module.exports = {
   registerCustomer,
@@ -132,4 +146,5 @@ module.exports = {
   updateCustomer,
   deleteCustomer,
   getCustomerPhone,
+  getCustomerDetails,
 };

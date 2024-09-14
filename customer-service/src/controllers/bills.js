@@ -41,10 +41,11 @@ const getBillByID = asyncHandler(async (req, res) => {
     if (err) {
       return res.status(500).json({ message: err.message });
     } else {
-      return res.status(200).json(results);
+      return res.status(200).json(results[0]);
     }
   });
 });
+
 
 // Get all bills by business id
 const getAllBillsByBusinessID = asyncHandler(async (req, res) => {

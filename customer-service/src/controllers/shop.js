@@ -5,7 +5,7 @@ const db = require("../config/db");
 const getAllShops = asyncHandler(async (req, res) => {
   const customer_id = req.customer.customer_id;
 
-  const getShopsQuery = `SELECT b.*
+  const getShopsQuery = `SELECT b.business_id, b.business_mail , b.business_description , b.logo_location
         FROM business b
         JOIN loyalty_programs lp ON b.business_id = lp.business_id
         JOIN customer_loyalty cl ON lp.loyalty_program_id = cl.loyalty_program_id
@@ -30,7 +30,7 @@ const getShopByID = asyncHandler(async (req, res) => {
     if (err) {
       return res.status(500).json({ message: err.message });
     } else {
-      return res.status(200).json(results);
+      return res.status(200).json(results[0]);
     }
   });
 });
