@@ -5,6 +5,7 @@ const db = require('../config/db');
 
 const getCategories = asyncHandler(async (req, res) => {
     const query = "SELECT * FROM categories Where branch_id = ? ";
+   
     const branch_id = req.branch.branch_id;
 
     db.query(query, [branch_id], (err, result) => {

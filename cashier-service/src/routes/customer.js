@@ -7,14 +7,13 @@ const customerRouter = express.Router();
 const verifyCashier = require('../middleware/verifyCashier');
 
 const {getCustomer, 
-   // getCustomerPoints,
-   // checkElegibility, 
+     getCustomerPoints,
+     checkElegibility, 
     } = require('../controllers/customer');
 
 //this update customer points should implement at customer service using a middleware need to implement
-
 customerRouter.get('/:phone', verifyCashier, getCustomer);
-// customerRouter.get('/:phone/points', getCustomerPoints); //should call to the customer service
-// customerRouter.get('/:phone/redeem', checkElegibility); 
+customerRouter.get('/:phone/points',verifyCashier, getCustomerPoints); //should call to the customer service
+customerRouter.get('/:phone/redeem', checkElegibility, redeemPoints); //should call to the customer service
 
 module.exports = customerRouter;
