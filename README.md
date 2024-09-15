@@ -27,7 +27,7 @@
     <li><a href="#managing-services">Managing Services</a></li>
     <li><a href="#troubleshooting">Troubleshooting</a></li>
     <li><a href="#swagger-intro">Introduction Swagger</a></li>
-    <li><a href="#how-swagger-word">
+    <li><a href="#how-swagger-work">How to Access End Points Using Swagger</a>
     <li><a href="#license">License</a></li>
     
 </ul>
@@ -189,6 +189,31 @@ docker-compose --version</code></pre>
 </ul>
 
 <p>For more information, visit the <a href="https://swagger.io/" target="_blank">Swagger official website</a>.</p>
+
+<h2 id="how-swagger-work">Accessing Endpoints Using Swagger</h2>
+<p>Swagger provides an interactive interface to explore and interact with your API endpoints. Here’s how you can use Swagger to access and test your API endpoints:</p>
+
+<ol>
+    <li><strong>Open the Swagger UI:</strong> Navigate to the URL where Swagger UI is hosted. This is typically served from the <code>/api-docs</code> path of your application. For example:
+        <pre><code>http://localhost:3002/api-docs</code></pre>
+    </li>
+    <img width="1440" alt="Screenshot 2024-09-15 at 18 00 18" src="https://github.com/user-attachments/assets/302d44d3-2133-4414-bdaf-225e38757ff3">
+
+ <li><strong>Explore the API Documentation:</strong> The Swagger UI will display a list of available API endpoints organized by their categories. You can expand each category to view the detailed documentation of the endpoints, including descriptions, request parameters, and response formats.</li>
+    
+<li><strong>Interact with Endpoints:</strong> To test an endpoint, follow these steps:
+    <ul>
+        <li>Select the endpoint you want to test from the list.</li>
+        <li>Click on the endpoint to expand it and view its details.</li>
+        <li>Enter any required parameters or request body in the provided fields.</li>
+        <li>Click the <strong>Execute</strong> button to send the request to the server.</li>
+    </ul>
+</li>
+
+<li><strong>View Response:</strong> After executing the request, Swagger UI will display the response from the server, including the status code, response headers, and the response body. This allows you to verify that the endpoint behaves as expected.</li>
+</ol>
+
+<p>Using Swagger UI makes it easy to understand and test your API endpoints interactively, helping you ensure that your API works correctly and is well-documented.</p>
 
 <h2 id="license">License</h2>
 <p>This project is licensed under the MIT License. See the <a href="LICENSE">LICENSE</a> file for more details.</p>
