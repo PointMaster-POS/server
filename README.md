@@ -1,9 +1,7 @@
-<h1>Docker Compose Setup for Pointmaster</h1>
-    
-    <p>This document provides an overview of the Docker Compose setup for the Pointmaster application, which includes various services and a MySQL database.</p>
+<div><h1>Docker Compose Setup for Pointmaster</h1>
 
-    <h2>Services</h2>
-    
+<p>This document provides an overview of the Docker Compose setup for the Pointmaster application, which includes various services and a MySQL database.</p>
+ <h2>Services</h2>
     <h3>1. Database Service (db)</h3>
     <p>This service uses the MySQL image to provide the database for the application.</p>
     <pre>
@@ -17,7 +15,6 @@
       restart: always
     </code>
     </pre>
-    
     <h3>2. Admin Service (admin-service)</h3>
     <p>This service is responsible for admin functionalities and is built from the <code>./admin-service</code> directory.</p>
     <pre>
@@ -39,7 +36,6 @@
       restart: on-failure
     </code>
     </pre>
-    
     <h3>3. Authentication Service (auth-service)</h3>
     <p>This service handles authentication and is built from the <code>./auth-service</code> directory.</p>
     <pre>
@@ -61,7 +57,6 @@
       restart: on-failure
     </code>
     </pre>
-    
     <h3>4. Cashier Service (cashier-service)</h3>
     <p>This service manages cashier-related functionalities and is built from the <code>./cashier-service</code> directory.</p>
     <pre>
@@ -83,8 +78,7 @@
       restart: on-failure
     </code>
     </pre>
-    
-    <h3>5. Customer Service (customer-service)</h3>
+     <h3>5. Customer Service (customer-service)</h3>
     <p>This service handles customer interactions and is built from the <code>./customer-service</code> directory.</p>
     <pre>
     <code>
@@ -105,27 +99,25 @@
       restart: on-failure
     </code>
     </pre>
-
-    <h2>Configuration Notes</h2>
+<h2>Configuration Notes</h2>
     <ul>
         <li>Ensure that the MySQL port is correctly mapped to avoid conflicts.</li>
         <li>Check the environment variables for each service to ensure they are correctly configured to connect to the database.</li>
         <li>The <code>depends_on</code> directive ensures that the database service starts before the other services that depend on it.</li>
     </ul>
-
-    <h2>Usage</h2>
+<h2>Usage</h2>
     <p>To start the services, run the following command:</p>
     <pre>
     <code>
       docker-compose up
     </code>
     </pre>
-
-    <p>To stop the services, use:</p>
+<p>To stop the services, use:</p>
     <pre>
     <code>
       docker-compose down
     </code>
     </pre>
     
-    <p>For more information on Docker Compose, refer to the <a href="https://docs.docker.com/compose/">official documentation</a>.</p>
+ <p>For more information on Docker Compose, refer to the <a href="https://docs.docker.com/compose/">official documentation</a>.</p>
+</div>
