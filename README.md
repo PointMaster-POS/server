@@ -1,6 +1,20 @@
 # PointMaster Services
 
 This project includes multiple services for the PointMaster system, built with Node.js and MySQL, and containerized using Docker. Docker Compose is used to orchestrate and manage these services.
+<p align="center">
+  <a href="https://badge.fury.io/js/electron-markdownify">
+    ![P](https://github.com/user-attachments/assets/69ef0349-09d8-4085-a87a-8cfcd8f69852)
+
+  </a>
+  <a href="https://gitter.im/amitmerchant1990/electron-markdownify"><img src="https://badges.gitter.im/amitmerchant1990/electron-markdownify.svg"></a>
+  <a href="https://saythanks.io/to/bullredeyes@gmail.com">
+      <img src="https://img.shields.io/badge/SayThanks.io-%E2%98%BC-1EAEDB.svg">
+  </a>
+  <a href="https://www.paypal.me/AmitMerchant">
+    <img src="https://img.shields.io/badge/$-donate-ff69b4.svg?maxAge=2592000&amp;style=flat">
+  </a>
+</p>
+
 
 ## Table of Contents
 
@@ -33,11 +47,13 @@ then you can see four services and one database folders
 
 ##service-details
 
-Service Details
-db
-Image: mysql
-Ports: Exposes port 3306
-Environment Variables:
+###Service Details
+
+##db
+
+#Image: mysql
+#Ports: Exposes port 3306
+#Environment Variables:
 MYSQL_ROOT_PASSWORD: Password for the root user
 MYSQL_DATABASE: Database name to create
 admin-service
