@@ -126,6 +126,6 @@ customerRouter.get('/:phone', verifyCashier, getCustomer);
 customerRouter.get('/:phone/points', verifyCashier, getCustomerPoints);
 
 // Check eligibility for points redemption
-customerRouter.get('/:phone/redeem', verifyCashier, checkElegibility);
+// customerRouter.get('/:phone/redeem', verifyCashier, checkElegibility);
 
 module.exports = customerRouter;
