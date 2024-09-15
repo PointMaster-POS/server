@@ -41,7 +41,7 @@ cd <repository-directory>
 then you can see four services and one database folders
 <img width="321" alt="Screenshot 2024-09-15 at 16 18 06" src="https://github.com/user-attachments/assets/53f075b4-ea6f-470c-b56a-13881224d1f0">
 
-##service-details
+## Service Details
 
 ###Service Details
 
