@@ -157,6 +157,11 @@ docker-compose --version</code></pre>
     </li>
 </ul>
 
+
+<div align= "center">
+ <img width="1428" alt="Screenshot 2024-09-15 at 17 43 44" src="https://github.com/user-attachments/assets/bd9d4d74-aba7-4be7-bf37-b71d84df972b">
+</div>
+
 <h2 id="troubleshooting">Troubleshooting</h2>
 <p>If you encounter issues:</p>
 <ul>
