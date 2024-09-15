@@ -1,13 +1,15 @@
-# version: '3.8'
+version: '3.8'
 
 services:
   db:
-    image: mysql
+    image: mysql:8.1
     environment:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: pointmaster
     ports:
-      - "3308:3306" # External port 3308, internal port 3307
+      - "3308:3306"
+    volumes:
+      - ./database:/docker-entrypoint-initdb.d/ 
     restart: always
 
   admin-service:
@@ -18,15 +20,14 @@ services:
       - "3001:3001"
     environment:
       - ACCESS_TOKEN_SECRET=panadura
-      - DB_HOST=db               # Use 'db' instead of 'localhost'
-      - DB_PORT=3306             # Use correct port (3307)
+      - DB_HOST=db
+      - DB_PORT=3306
       - DB_USER=root
-      - DB_PASSWORD=password     # Correct the spelling of 'DB_PASSWORD'
+      - DB_PASSWORD=password
       - DB_NAME=pointmaster
     depends_on:
       - db
     restart: on-failure
-    
 
   auth-service:
     build:
@@ -37,13 +38,13 @@ services:
     environment:
       - ACCESS_TOKEN_SECRET=panadura
       - DB_HOST=db
-      - DB_PORT=3306             # Ensure correct port
+      - DB_PORT=3306
       - DB_USER=root
-      - DB_PASSWORD=password     # Correct the spelling of 'DB_PASSWORD'
+      - DB_PASSWORD=password
       - DB_NAME=pointmaster
     depends_on:
       - db
-    restart : on-failure
+    restart: on-failure
 
   cashier-service:
     build:
@@ -54,13 +55,13 @@ services:
     environment:
       - ACCESS_TOKEN_SECRET=panadura
       - DB_HOST=db
-      - DB_PORT=3306             # Ensure correct port
+      - DB_PORT=3306
       - DB_USER=root
       - DB_PASSWORD=password
       - DB_NAME=pointmaster
     depends_on:
       - db
-    restart: on-failure 
+    restart: on-failure
 
   customer-service:
     build:
@@ -70,11 +71,13 @@ services:
       - "3004:3004"
     environment:
       - ACCESS_TOKEN_SECRET=panadura
-      - DB_HOST=db               # Use 'db' instead of 'localhost'
-      - DB_PORT=3306             # Use correct port
+      - DB_HOST=db
+      - DB_PORT=3306
       - DB_USER=root
-      - DB_PASSWORD=password     # Correct the spelling of 'DB_PASSWORD'
+      - DB_PASSWORD=password
       - DB_NAME=pointmaster
     depends_on:
       - db
     restart: on-failure
+
+
