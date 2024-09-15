@@ -157,11 +157,14 @@ docker-compose --version</code></pre>
     </li>
 </ul>
 
-
+<p>When all services are running it will be shown like this:</p>
 <div align= "center">
  <img width="1428" alt="Screenshot 2024-09-15 at 17 43 44" src="https://github.com/user-attachments/assets/bd9d4d74-aba7-4be7-bf37-b71d84df972b">
 </div>
 
+<div>
+<img width="899" alt="Screenshot 2024-09-15 at 17 45 46" src="https://github.com/user-attachments/assets/ea7a1cac-2053-4d74-9170-f3eab72c2495">
+</div>
 <h2 id="troubleshooting">Troubleshooting</h2>
 <p>If you encounter issues:</p>
 <ul>
