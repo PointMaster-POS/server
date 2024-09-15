@@ -23,7 +23,7 @@
         <img src="https://img.shields.io/badge/Express.js-%E2%9C%94%EF%B8%8F-blue" alt="Express.js">
     </a>
     <a href="https://jwt.io/">
-        <img src="https://img.shields.io/badge/JWT-%E2%9C%94%EF%B8%8F-yellow](https://worldvectorlogo.com/logo/jwt-3)" alt="JWT">
+        <img src="https://img.shields.io/badge/JWT-%E2%9C%94%EF%B8%8F-yellow" alt="JWT">
     </a>
 </p>
 
