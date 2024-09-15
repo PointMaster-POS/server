@@ -6,26 +6,7 @@
 </div>
 
 
-<p align="center">
-    <a href="https://www.docker.com/">
-        <img src="https://img.shields.io/badge/Docker-%E2%9C%94%EF%B8%8F-blue" alt="Docker">
-    </a>
-    <a href="https://docs.docker.com/compose/">
-        <img src="https://img.shields.io/badge/Docker%20Compose-%E2%9C%94%EF%B8%8F-blue" alt="Docker Compose">
-    </a>
-    <a href="https://swagger.io/">
-        <img src="https://img.shields.io/badge/Swagger-%E2%9C%94%EF%B8%8F-green" alt="Swagger">
-    </a>
-    <a href="https://nodejs.org/">
-        <img src="https://img.shields.io/badge/Node.js-%E2%9C%94%EF%B8%8F-green" alt="Node.js">
-    </a>
-    <a href="https://expressjs.com/">
-        <img src="https://img.shields.io/badge/Express.js-%E2%9C%94%EF%B8%8F-blue" alt="Express.js">
-    </a>
-    <a href="https://jwt.io/">
-        <img src="https://img.shields.io/badge/JWT-%E2%9C%94%EF%B8%8F-yellow" alt="JWT">
-    </a>
-</p>
+
 
 
 <h2>Table of Contents</h2>
