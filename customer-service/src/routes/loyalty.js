@@ -87,7 +87,7 @@ loyalityRouter.get("/:businessID", validateToken, getLoyalityPointsByBusinessID)
  */
 loyalityRouter.get("/", validateToken, getLoyalityPointsByCustomerID);
 
-// Uncomment and update the following route if it will be implemented in the future
+// still endpoint is not fully created
 // /**
 //  * @swagger
 //  * /loyalty/redeem/{customerID}/{businessID}:
