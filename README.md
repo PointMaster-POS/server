@@ -1,12 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Docker Compose Setup for Pointmaster</title>
-</head>
-<body>
-    <h1>Docker Compose Setup for Pointmaster</h1>
+<h1>Docker Compose Setup for Pointmaster</h1>
     
     <p>This document provides an overview of the Docker Compose setup for the Pointmaster application, which includes various services and a MySQL database.</p>
 
@@ -137,5 +129,3 @@
     </pre>
     
     <p>For more information on Docker Compose, refer to the <a href="https://docs.docker.com/compose/">official documentation</a>.</p>
-</body>
-</html>
