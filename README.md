@@ -1,4 +1,15 @@
-<h1>Smart POS Server Configuration</h1>
+<body>
+    <h1>Smart POS Server Configuration</h1>
+
+<h2>Badges</h2>
+<p>
+    <a href="https://www.docker.com/">
+        <img src="https://img.shields.io/badge/Docker-%E2%9C%94%EF%B8%8F-blue" alt="Docker">
+    </a>
+    <a href="https://docs.docker.com/compose/">
+        <img src="https://img.shields.io/badge/Docker%20Compose-%E2%9C%94%EF%B8%8F-blue" alt="Docker Compose">
+    </a>
+</p>
 
 <h2>Table of Contents</h2>
 <ul>
@@ -154,3 +165,4 @@ docker-compose --version</code></pre>
 
 <h2 id="license">License</h2>
 <p>This project is licensed under the MIT License. See the <a href="LICENSE">LICENSE</a> file for more details.</p>
+</body>
