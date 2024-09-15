@@ -1,83 +1,156 @@
-<body>
-    <h1>Smart POS Server Configuration</h1>
+<h1>Smart POS Server Configuration</h1>
 
 <h2>Table of Contents</h2>
 <ul>
     <li><a href="#overview">Overview</a></li>
     <li><a href="#docker-setup">Docker Setup</a></li>
     <ul>
-        <li><a href="#mysql-database">MySQL Database</a></li>
-        <li><a href="#admin-service">Admin Service</a></li>
-        <li><a href="#auth-service">Auth Service</a></li>
-        <li><a href="#cashier-service">Cashier Service</a></li>
-        <li><a href="#customer-service">Customer Service</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#configuration">Configuration</a></li>
     </ul>
-    <li><a href="#how-to-restart-services">How to Restart Services</a></li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#how-to-initiate-docker">How to Initiate Docker</a></li>
-    <li><a href="#contributing">Contributing</a></li>
+    <li><a href="#starting-docker">Starting Docker</a></li>
+    <li><a href="#managing-services">Managing Services</a></li>
+    <li><a href="#troubleshooting">Troubleshooting</a></li>
     <li><a href="#license">License</a></li>
 </ul>
 
 <h2 id="overview">Overview</h2>
-<p>The Smart POS system uses Docker Compose to orchestrate several microservices and a MySQL database. This setup enables easy management of services, allowing them to interact seamlessly while being isolated in separate containers.</p>
+<p>The Smart POS system leverages Docker Compose to manage and orchestrate multiple microservices alongside a MySQL database. This setup ensures a streamlined and modular architecture, facilitating ease of development, testing, and deployment.</p>
 
 <h2 id="docker-setup">Docker Setup</h2>
 
-<h3 id="mysql-database">MySQL Database</h3>
-<p>The MySQL database is configured to manage data for the Smart POS system. It listens on port 3308 externally and maps to port 3306 internally within the Docker network.</p>
+<h3 id="services">Services</h3>
+<p>The system is composed of the following services:</p>
+<ul>
+    <li><strong>MySQL Database:</strong> Manages the data for the Smart POS system.</li>
+    <li><strong>Admin Service:</strong> Handles administrative functions.</li>
+    <li><strong>Auth Service:</strong> Manages authentication and authorization.</li>
+    <li><strong>Cashier Service:</strong> Manages cashier-related operations.</li>
+    <li><strong>Customer Service:</strong> Handles customer interactions and functionalities.</li>
+</ul>
 
-<h3 id="admin-service">Admin Service</h3>
-<p>The Admin Service handles administrative tasks and is built from the <code>./admin-service</code> directory. It listens on port 3001 and connects to the MySQL database.</p>
+<h3 id="configuration">Configuration</h3>
+<p>The Docker Compose file defines the following configuration:</p>
+<pre><code>
+version: '3.8'
 
-<h3 id="auth-service">Auth Service</h3>
-<p>The Auth Service manages authentication and is built from the <code>./auth-service</code> directory. It listens on port 3002 and also connects to the MySQL database.</p>
+services:
+  db:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: pointmaster
+    ports:
+      - "3308:3306"
+    restart: always
 
-<h3 id="cashier-service">Cashier Service</h3>
-<p>The Cashier Service manages cashier operations and is built from the <code>./cashier-service</code> directory. It listens on port 3003 and connects to the MySQL database.</p>
+  admin-service:
+    build:
+      context: ./admin-service
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    environment:
+      - ACCESS_TOKEN_SECRET=panadura
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_USER=root
+      - DB_PASSWORD=password
+      - DB_NAME=pointmaster
+    depends_on:
+      - db
+    restart: on-failure
 
-<h3 id="customer-service">Customer Service</h3>
-<p>The Customer Service handles customer interactions and is built from the <code>./customer-service</code> directory. It listens on port 3004 and connects to the MySQL database.</p>
+  auth-service:
+    build:
+      context: ./auth-service
+      dockerfile: Dockerfile
+    ports:
+      - "3002:3002"
+    environment:
+      - ACCESS_TOKEN_SECRET=panadura
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_USER=root
+      - DB_PASSWORD=password
+      - DB_NAME=pointmaster
+    depends_on:
+      - db
+    restart: on-failure
 
-<h2 id="how-to-restart-services">How to Restart Services</h2>
-<p>To restart the services, use the following Docker Compose command:</p>
-<pre><code>docker-compose restart</code></pre>
-<p>This will restart all services defined in the <code>docker-compose.yml</code> file. For a complete restart, you can stop and then start the services using:</p>
-<pre><code>docker-compose down
-docker-compose up</code></pre>
+  cashier-service:
+    build:
+      context: ./cashier-service
+      dockerfile: Dockerfile
+    ports:
+      - "3003:3003"
+    environment:
+      - ACCESS_TOKEN_SECRET=panadura
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_USER=root
+      - DB_PASSWORD=password
+      - DB_NAME=pointmaster
+    depends_on:
+      - db
+    restart: on-failure
 
-<h2 id="usage">Usage</h2>
-<p>To start all services defined in the <code>docker-compose.yml</code> file, run:</p>
-<pre><code>docker-compose up</code></pre>
-<p>To rebuild the services if you make changes, use:</p>
-<pre><code>docker-compose up --build</code></pre>
+  customer-service:
+    build:
+      context: ./customer-service
+      dockerfile: Dockerfile
+    ports:
+      - "3004:3004"
+    environment:
+      - ACCESS_TOKEN_SECRET=panadura
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_USER=root
+      - DB_PASSWORD=password
+      - DB_NAME=pointmaster
+    depends_on:
+      - db
+    restart: on-failure
+</code></pre>
 
-<h2 id="how-to-initiate-docker">How to Initiate Docker</h2>
-<p>Before you can use Docker Compose to manage your services, you need to have Docker and Docker Compose installed on your system. Follow these steps to get started:</p>
+<h2 id="starting-docker">Starting Docker</h2>
+<p>Follow these steps to get Docker up and running:</p>
 <ol>
-    <li>
-        <h3>Install Docker</h3>
-        <p>Download and install Docker Desktop from the <a href="https://www.docker.com/products/docker-desktop">official Docker website</a>. Follow the installation instructions for your operating system.</p>
-    </li>
-    <li>
-        <h3>Install Docker Compose</h3>
-        <p>Docker Compose is included with Docker Desktop, but if you need to install it separately, follow the instructions on the <a href="https://docs.docker.com/compose/install/">Docker Compose installation page</a>.</p>
-    </li>
-    <li>
-        <h3>Verify Installation</h3>
-        <p>Open a terminal or command prompt and run the following commands to ensure Docker and Docker Compose are correctly installed:</p>
+    <li><strong>Install Docker:</strong> Download Docker Desktop from <a href="https://www.docker.com/products/docker-desktop" target="_blank">Docker's official website</a> and follow the installation instructions for your operating system.</li>
+    <li><strong>Install Docker Compose:</strong> Docker Compose is bundled with Docker Desktop. If you're using a different installation, follow the instructions at <a href="https://docs.docker.com/compose/install/" target="_blank">Docker Compose Installation</a>.</li>
+    <li><strong>Verify Installation:</strong> Open a terminal and check the installation by running:
         <pre><code>docker --version
 docker-compose --version</code></pre>
         </li>
-        <li>
-            <h3>Start Docker</h3>
-            <p>Launch Docker Desktop. Docker should now be running on your system.</p>
-        </li>
+        <li><strong>Start Docker:</strong> Launch Docker Desktop to start the Docker engine.</li>
     </ol>
 
-<h2 id="contributing">Contributing</h2>
-<p>Contributions to the Smart POS project are welcome. Please open an issue or submit a pull request to improve the setup or functionality.</p>
+<h2 id="managing-services">Managing Services</h2>
+<p>To manage the services, use Docker Compose commands:</p>
+<ul>
+    <li><strong>Start Services:</strong> To start all services, run:
+        <pre><code>docker-compose up</code></pre>
+    </li>
+    <li><strong>Rebuild Services:</strong> If you make changes to the services, rebuild them with:
+        <pre><code>docker-compose up --build</code></pre>
+    </li>
+    <li><strong>Restart Services:</strong> To restart all services, use:
+        <pre><code>docker-compose restart</code></pre>
+    </li>
+    <li><strong>Stop Services:</strong> To stop all services, run:
+        <pre><code>docker-compose down</code></pre>
+    </li>
+</ul>
+
+<h2 id="troubleshooting">Troubleshooting</h2>
+<p>If you encounter issues:</p>
+<ul>
+    <li><strong>Check Logs:</strong> View logs for a specific service to diagnose problems:
+        <pre><code>docker-compose logs [service-name]</code></pre>
+    </li>
+    <li><strong>Verify Configuration:</strong> Ensure your <code>docker-compose.yml</code> file is correctly configured and all necessary environment variables are set.</li>
+    <li><strong>Restart Docker:</strong> Sometimes, restarting Docker Desktop can resolve issues.</li>
+</ul>
 
 <h2 id="license">License</h2>
-<p>This project is licensed under the MIT License. See the <a href="LICENSE">LICENSE</a> file for details.</p>
-</body>
+<p>This project is licensed under the MIT License. See the <a href="LICENSE">LICENSE</a> file for more details.</p>
