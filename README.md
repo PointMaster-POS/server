@@ -2,11 +2,10 @@
 <div>
 This project includes multiple services for the PointMaster system, built with Node.js and MySQL, and containerized using Docker. Docker Compose is used to orchestrate and manage these services.
 </div>
-#hello
-![P](https://github.com/user-attachments/assets/69ef0349-09d8-4085-a87a-8cfcd8f69852)
+
 <p align="center">
   <a href="https://badge.fury.io/js/electron-markdownify">
-    
+      <img src="https://github.com/user-attachments/assets/69ef0349-09d8-4085-a87a-8cfcd8f69852" >
 
   </a>
   <a href="https://gitter.im/amitmerchant1990/electron-markdownify"><img src="https://badges.gitter.im/amitmerchant1990/electron-markdownify.svg"></a>
