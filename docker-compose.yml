@@ -25,6 +25,7 @@ services:
       - DB_NAME=pointmaster
     depends_on:
       - db
+    restart: on-failure
     
 
   auth-service:
@@ -42,6 +43,7 @@ services:
       - DB_NAME=pointmaster
     depends_on:
       - db
+    restart : on-failure
 
   cashier-service:
     build:
@@ -58,6 +60,7 @@ services:
       - DB_NAME=pointmaster
     depends_on:
       - db
+    restart: on-failure 
 
   customer-service:
     build:
@@ -74,3 +77,4 @@ services:
       - DB_NAME=pointmaster
     depends_on:
       - db
+    restart: on-failure
