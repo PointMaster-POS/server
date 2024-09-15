@@ -43,4 +43,17 @@ const getProductByID = asyncHandler(async (req, res) => {
     });
 });
 
-module.exports = { getCategories, getProducts, getProductByID };
+const getProductByBarcode = asyncHandler(async (req, res) => {
+    const query = "SELECT * FROM items Where barcode = ? ";
+    const barcode = req.params.barcode;
+
+    db.query(query, [barcode], (err, result) => {
+        if (err) {
+            return res.status(500).json({ message: err.message });
+        } else {
+            res.status(200).json(result[0]);
+        }
+    });
+});
+
+module.exports = { getCategories, getProducts, getProductByID, getProductByBarcode };

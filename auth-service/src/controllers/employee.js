@@ -5,6 +5,11 @@ const db = require('../config/db');
 
 const employeeLogginController = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
+
+
+    if (!email || !password) {
+      return res.status(400).json({ message: "Email and password are required" });
+    }
     db.query("SELECT * FROM employee WHERE employee_email = ?", [email], async (err, result) => {
       if (err) {
         res.status(400).json(err);
@@ -17,6 +22,7 @@ const employeeLogginController = asyncHandler(async (req, res) => {
         const employee = result[0];
         console.log(employee);
         let isMatch = false;
+
 
         if (!employee) {
           return res.status(401).json({ message: "Invalid email or password" });
@@ -40,6 +46,9 @@ const employeeLogginController = asyncHandler(async (req, res) => {
               { expiresIn: "30m" }
             );
             res.status(200).json(accessToken);
+          }
+          else {
+            res.status(401).json({ message: "Invalid email or password" });
           }
         } catch (error) {
           console.log(error);

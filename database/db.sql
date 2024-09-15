@@ -1,3 +1,6 @@
+drop schema if exists pointmaster;
+create database pointmaster;
+use pointmaster;
 
 CREATE TABLE `business` (
   `business_id` VARCHAR(36) NOT NULL PRIMARY KEY,
