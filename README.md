@@ -16,7 +16,6 @@
      </ul>
      <li><a href="#how-to-restart-services">How to Restart Services</a></li>
      <li><a href="#usage">Usage</a></li>
-     <li><a href="#contributing">Contributing</a></li>
      <li><a href="#license">License</a></li>
  </ul>
 
@@ -53,8 +52,7 @@ docker-compose up</code></pre>
  <p>To rebuild the services if you make changes, use:</p>
  <pre><code>docker-compose up --build</code></pre>
 
- <h2 id="contributing">Contributing</h2>
- <p>Contributions to the Smart POS project are welcome. Please open an issue or submit a pull request to improve the setup or functionality.</p>
+
 
  <h2 id="license">License</h2>
  <p>This project is licensed under the MIT License. See the <a href="LICENSE">LICENSE</a> file for details.</p>
