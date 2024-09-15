@@ -10,6 +10,7 @@ const {
   getCategories,
   getProducts,
   getProductByID,
+  getProductByBarcode,
 } = require("../controllers/inventory");
 
 //get all categories program of the business
@@ -17,5 +18,6 @@ const {
 inventoryRouter.get("/categories", verifyCashier, branchAccess, getCategories);
 inventoryRouter.get("/products/:categoryID", verifyCashier, getProducts);
 inventoryRouter.get("/product/:productID", verifyCashier, getProductByID);
+inventoryRouter.get("/product/barcode/:barcode", verifyCashier, getProductByBarcode);
 
 module.exports = inventoryRouter;
