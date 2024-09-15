@@ -26,7 +26,10 @@
     <li><a href="#starting-docker">Starting Docker</a></li>
     <li><a href="#managing-services">Managing Services</a></li>
     <li><a href="#troubleshooting">Troubleshooting</a></li>
+    <li><a href="#swagger-intro">Introduction Swagger</a></li>
+    <li><a href="#how-swagger-word">
     <li><a href="#license">License</a></li>
+    
 </ul>
 
 <h2 id="overview">Overview</h2>
@@ -174,6 +177,18 @@ docker-compose --version</code></pre>
     <li><strong>Verify Configuration:</strong> Ensure your <code>docker-compose.yml</code> file is correctly configured and all necessary environment variables are set.</li>
     <li><strong>Restart Docker:</strong> Sometimes, restarting Docker Desktop can resolve issues.</li>
 </ul>
+
+<h2 id= "#swagger-intro">Introduction to Swagger</h2>
+<p>Swagger is a powerful tool for designing, building, documenting, and consuming RESTful APIs. It provides a standardized way to describe your API's endpoints, methods, and data models. With Swagger, you can generate interactive API documentation that allows developers to understand and test the API directly from the documentation.</p>
+
+<p>Key benefits of using Swagger include:</p>
+<ul>
+    <li><strong>Interactive Documentation:</strong> Users can interact with the API directly from the documentation, making it easier to understand and test the API.</li>
+    <li><strong>Code Generation:</strong> Swagger can generate client libraries, server stubs, and API documentation in various programming languages.</li>
+    <li><strong>Standardized API Description:</strong> Swagger uses a standardized format (OpenAPI Specification) to describe APIs, making it easier to share and understand API specifications.</li>
+</ul>
+
+<p>For more information, visit the <a href="https://swagger.io/" target="_blank">Swagger official website</a>.</p>
 
 <h2 id="license">License</h2>
 <p>This project is licensed under the MIT License. See the <a href="LICENSE">LICENSE</a> file for more details.</p>
