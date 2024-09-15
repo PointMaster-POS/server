@@ -1,144 +1,59 @@
+<body>
+    <h1>Smart POS Server Configuration</h1>
 
-   <h1>Pointmaster System Overview</h1>
-    
-   <p><strong>Pointmaster</strong> is a comprehensive Point of Sale (POS) system designed to manage various aspects of retail operations. It includes a range of services to handle different functionalities, from customer management to inventory control.</p>
+ <h2>Table of Contents</h2>
+ <ul>
+     <li><a href="#overview">Overview</a></li>
+     <li><a href="#docker-setup">Docker Setup</a></li>
+     <ul>
+         <li><a href="#mysql-database">MySQL Database</a></li>
+         <li><a href="#admin-service">Admin Service</a></li>
+         <li><a href="#auth-service">Auth Service</a></li>
+         <li><a href="#cashier-service">Cashier Service</a></li>
+         <li><a href="#customer-service">Customer Service</a></li>
+     </ul>
+     <li><a href="#how-to-restart-services">How to Restart Services</a></li>
+     <li><a href="#usage">Usage</a></li>
+     <li><a href="#contributing">Contributing</a></li>
+     <li><a href="#license">License</a></li>
+ </ul>
 
-   <h2>System Architecture</h2>
-   <p>The Pointmaster system is built using a microservices architecture, allowing for modular development and deployment. The core components of the system include:</p>
-   <ul>
-       <li><strong>Database Service:</strong> Manages data storage and retrieval using MySQL.</li>
-       <li><strong>Admin Service:</strong> Handles administrative tasks and interfaces.</li>
-       <li><strong>Authentication Service:</strong> Manages user authentication and authorization.</li>
-       <li><strong>Cashier Service:</strong> Manages transactions and cashier operations.</li>
-       <li><strong>Customer Service:</strong> Manages customer interactions and loyalty programs.</li>
-   </ul>
+ <h2 id="overview">Overview</h2>
+ <p>The Smart POS system uses Docker Compose to orchestrate several microservices and a MySQL database. This setup enables easy management of services, allowing them to interact seamlessly while being isolated in separate containers.</p>
 
-   <h2>Docker Setup</h2>
-   <p>The system is containerized using Docker, which simplifies deployment and ensures consistency across different environments. Below is the Docker Compose configuration used to set up the various services:</p>
-   
-   <h3>Docker Compose Configuration</h3>
-   <pre>
-   <code>
-   version: '3.8'
+ <h2 id="docker-setup">Docker Setup</h2>
 
-   services:
-     db:
-       image: mysql
-       environment:
-         MYSQL_ROOT_PASSWORD: password
-         MYSQL_DATABASE: pointmaster
-       ports:
-         - "3308:3306"  # External port 3308, internal port 3306
-       restart: always
+ <h3 id="mysql-database">MySQL Database</h3>
+ <p>The MySQL database is configured to manage data for the Smart POS system. It listens on port 3308 externally and maps to port 3306 internally within the Docker network.</p>
 
-  admin-service:
-       build:
-         context: ./admin-service
-         dockerfile: Dockerfile
-       ports:
-         - "3001:3001"
-       environment:
-         - ACCESS_TOKEN_SECRET=panadura
-         - DB_HOST=db
-         - DB_PORT=3306
-         - DB_USER=root
-         - DB_PASSWORD=password
-         - DB_NAME=pointmaster
-       depends_on:
-         - db
-       restart: on-failure
+ <h3 id="admin-service">Admin Service</h3>
+ <p>The Admin Service handles administrative tasks and is built from the <code>./admin-service</code> directory. It listens on port 3001 and connects to the MySQL database.</p>
 
-   auth-service:
-       build:
-         context: ./auth-service
-         dockerfile: Dockerfile
-       ports:
-         - "3002:3002"
-       environment:
-         - ACCESS_TOKEN_SECRET=panadura
-          - DB_HOST=db
-          - DB_PORT=3306
-          - DB_USER=root
-          - DB_PASSWORD=password
-          - DB_NAME=pointmaster
-        depends_on:
-          - db
-        restart: on-failure
+ <h3 id="auth-service">Auth Service</h3>
+ <p>The Auth Service manages authentication and is built from the <code>./auth-service</code> directory. It listens on port 3002 and also connects to the MySQL database.</p>
 
-   cashier-service:
-        build:
-          context: ./cashier-service
-          dockerfile: Dockerfile
-        ports:
-          - "3003:3003"
-        environment:
-          - ACCESS_TOKEN_SECRET=panadura
-          - DB_HOST=db
-          - DB_PORT=3306
-          - DB_USER=root
-          - DB_PASSWORD=password
-          - DB_NAME=pointmaster
-        depends_on:
-          - db
-        restart: on-failure
+ <h3 id="cashier-service">Cashier Service</h3>
+ <p>The Cashier Service manages cashier operations and is built from the <code>./cashier-service</code> directory. It listens on port 3003 and connects to the MySQL database.</p>
 
-   customer-service:
-        build:
-          context: ./customer-service
-          dockerfile: Dockerfile
-        ports:
-          - "3004:3004"
-        environment:
-          - ACCESS_TOKEN_SECRET=panadura
-          - DB_HOST=db
-          - DB_PORT=3306
-          - DB_USER=root
-          - DB_PASSWORD=password
-          - DB_NAME=pointmaster
-        depends_on:
-          - db
-        restart: on-failure
-    </code>
-    </pre>
+ <h3 id="customer-service">Customer Service</h3>
+ <p>The Customer Service handles customer interactions and is built from the <code>./customer-service</code> directory. It listens on port 3004 and connects to the MySQL database.</p>
 
-   <h3>Service Descriptions</h3>
-   <h4>Database Service (db)</h4>
-   <p>Uses the MySQL image to provide the database backend. It stores all the data related to the POS system, including transaction records, inventory data, and customer information.</p>
+ <h2 id="how-to-restart-services">How to Restart Services</h2>
+ <p>To restart the services, use the following Docker Compose command:</p>
+ <pre><code>docker-compose restart</code></pre>
+ <p>This will restart all services defined in the <code>docker-compose.yml</code> file. For a complete restart, you can stop and then start the services using:</p>
+ <pre><code>docker-compose down
+docker-compose up</code></pre>
 
-   <h4>Admin Service (admin-service)</h4>
-   <p>Handles administrative functionalities such as user management, system settings, and configuration. It is built from the <code>./admin-service</code> directory.</p>
+ <h2 id="usage">Usage</h2>
+ <p>To start all services defined in the <code>docker-compose.yml</code> file, run:</p>
+ <pre><code>docker-compose up</code></pre>
+ <p>To rebuild the services if you make changes, use:</p>
+ <pre><code>docker-compose up --build</code></pre>
 
-   <h4>Authentication Service (auth-service)</h4>
-   <p>Manages authentication and authorization, providing secure access to the system. It is built from the <code>./auth-service</code> directory.</p>
+ <h2 id="contributing">Contributing</h2>
+ <p>Contributions to the Smart POS project are welcome. Please open an issue or submit a pull request to improve the setup or functionality.</p>
 
-   <h4>Cashier Service (cashier-service)</h4>
-   <p>Handles all cashier-related operations, including transactions, bill processing, and receipt generation. It is built from the <code>./cashier-service</code> directory.</p>
-
-   <h4>Customer Service (customer-service)</h4>
-   <p>Manages customer interactions, loyalty programs, and account details. It is built from the <code>./customer-service</code> directory.</p>
-
-   <h2>Configuration Notes</h2>
-   <ul>
-       <li>Ensure the MySQL port is correctly mapped to avoid conflicts with other services.</li>
-       <li>Verify the environment variables for each service to ensure they correctly reference the database service.</li>
-       <li>Utilize the <code>depends_on</code> directive to ensure proper startup order of services.</li>
-   </ul>
-
-   <h2>Usage</h2>
-   <p>To start the services, use the following command:</p>
-   <pre>
-   <code>
-     docker-compose up
-   </code>
-   </pre>
-
-   <p>To stop the services, use:</p>
-   <pre>
-   <code>
-     docker-compose down
-   </code>
-   </pre>
-
-   <h2>Additional Resources</h2>
-   <p>For more information on Docker Compose and managing containers, refer to the <a href="https://docs.docker.com/compose/">official documentation</a>.</p>
-
+ <h2 id="license">License</h2>
+ <p>This project is licensed under the MIT License. See the <a href="LICENSE">LICENSE</a> file for details.</p>
+</body>
