@@ -1,6 +1,10 @@
 <body>
     <h1>Smart POS Server Configuration</h1>
 
+<div align = "center">
+    <img src="https://github.com/user-attachments/assets/31ad211f-fd99-4ef8-bb98-50261317dc95" />
+</div>
+
 <h2>Badges</h2>
 <p>
     <a href="https://www.docker.com/">
