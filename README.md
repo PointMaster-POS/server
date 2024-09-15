@@ -1,5 +1,6 @@
 <body>
     <h1>Smart POS Server Configuration</h1>
+![P](https://github.com/user-attachments/assets/21476550-9936-4b9c-81f6-f26e5857f97c)
 
  <h2>Table of Contents</h2>
  <ul>
