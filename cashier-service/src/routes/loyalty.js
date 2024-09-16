@@ -1,9 +1,14 @@
-const express = require('express');
+const express = require("express");
 const loyaltyRouter = express.Router();
-const { getLoyalityProgram } = require('../controllers/loyalty');
-const verifyCashier = require('../middleware/verifyCashier');
-const { businessAccess, branchAccess } = require('../middleware/businessAccess');
-
+const {
+  getLoyalityProgram,
+  checkElegibility,
+} = require("../controllers/loyalty");
+const verifyCashier = require("../middleware/verifyCashier");
+const {
+  businessAccess,
+  branchAccess,
+} = require("../middleware/businessAccess");
 
 /**
  * @swagger
@@ -46,8 +51,25 @@ const { businessAccess, branchAccess } = require('../middleware/businessAccess')
  */
 
 
-
 // Get loyalty program details of the business
-loyaltyRouter.get('/', verifyCashier, branchAccess, businessAccess, getLoyalityProgram);
+loyaltyRouter.get(
+  "/",
+  verifyCashier,
+  branchAccess,
+  businessAccess,
+  getLoyalityProgram
+);
+
+
+
+//check the eligibility of the customer
+loyaltyRouter.post(
+  "/eligibility",
+  verifyCashier,
+  branchAccess,
+  businessAccess,
+  checkElegibility
+);
 
 module.exports = loyaltyRouter;
+
