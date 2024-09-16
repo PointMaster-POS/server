@@ -12,6 +12,7 @@ const customerLogginController = asyncHandler(async (req, res) => {
     return res.status(400).json({ message: 'Email and password are required' });
   }
 
+  
   // Query the database to find the customer by email
   db.query("SELECT * FROM customer WHERE customer_mail = ?", [email], async (err, result) => {
     if (err) {
