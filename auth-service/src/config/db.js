@@ -6,7 +6,6 @@ const db = mysql.createConnection({
     password: process.env.DB_PASSWORD || 'password',
     database: process.env.DB_NAME || 'pointmaster',
     port: process.env.DB_PORT || 3308,
-
 });
 
 db.connect((err) => {
