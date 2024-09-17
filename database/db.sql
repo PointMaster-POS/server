@@ -4,6 +4,7 @@ use pointmaster;
 
 CREATE TABLE `business` (
   `business_id` VARCHAR(36) NOT NULL PRIMARY KEY,
+  `business_name` VARCHAR(255) NOT NULL,
   `business_mail` VARCHAR(255) NOT NULL,
   `business_url` VARCHAR(2048),
   `business_hotline` VARCHAR(64),
@@ -13,7 +14,6 @@ CREATE TABLE `business` (
   `business_owner_mail` VARCHAR(255) NOT NULL,
   `business_password` VARCHAR(2048) NOT NULL,
   `logo_location` VARCHAR(255),
-  `business_hours` JSON,
   `business_registration_number` VARCHAR(100),
   `business_type` VARCHAR(50),
   `business_registration_date` DATE,
@@ -174,10 +174,10 @@ SET NEW.`item_id` = UUID();
 
 
 -- Insert data into business table
-INSERT INTO business (business_mail, business_url, business_hotline, business_description, business_address, business_owner_name, business_owner_mail, business_password, logo_location, business_hours, business_registration_number, business_type, business_registration_date, status)
+INSERT INTO business (business_name, business_mail, business_url, business_hotline, business_description, business_address, business_owner_name, business_owner_mail, business_password, logo_location,  business_registration_number, business_type, business_registration_date, status)
 VALUES 
-('owner1@example.com', 'http://examplebusiness1.com', '123456789', 'A description of business 1', '123 Business St, City, Country', 'Owner 1', 'owner1@example.com', 'hashedpassword1', 'logo1.png', '{"monday":"9:00-17:00","tuesday":"9:00-17:00"}', 'BRN123456', 'Retail', '2022-01-01', true),
-('owner2@example.com', 'http://examplebusiness2.com', '987654321', 'A description of business 2', '456 Market Rd, City, Country', 'Owner 2', 'owner2@example.com', 'hashedpassword2', 'logo2.png', '{"monday":"10:00-18:00","tuesday":"10:00-18:00"}', 'BRN654321', 'Service', '2023-05-15', true);
+('Lassana Flora', 'owner1@example.com', 'http://examplebusiness1.com', '123456789', 'A description of business 1', '123 Business St, City, Country', 'Owner 1', 'owner1@example.com', 'hashedpassword1', 'logo1.png',  'BRN123456', 'Retail', '2022-01-01', true),
+('Perera & Sons', 'owner2@example.com', 'http://examplebusiness2.com', '987654321', 'A description of business 2', '456 Market Rd, City, Country', 'Owner 2', 'owner2@example.com', 'hashedpassword2', 'logo2.png',  'BRN654321', 'Service', '2023-05-15', true);
 
 -- Insert data into business_branch table
 INSERT INTO business_branch (business_id, branch_name, branch_location, branch_manager_id, branch_manager_name, branch_manager_mail, branch_manager_password, status)

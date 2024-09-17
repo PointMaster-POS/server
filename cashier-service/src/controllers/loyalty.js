@@ -29,7 +29,7 @@ const checkElegibility = asyncHandler(async (req, res) => {
     }
     const loyalityProgram = result[0];
     const loyalityPointsQuery = "SELECT * FROM customer_loyalty WHERE customer_id = ? AND loyalty_program_id = ? ";
-    console.log(loyalityProgram);
+  
 
   if (!loyalityProgram) {
     return res.status(404).json({ message: "Loyality Program not found" });
@@ -50,8 +50,6 @@ const checkElegibility = asyncHandler(async (req, res) => {
   }});
   });
   
-  
-
 });
 
 
