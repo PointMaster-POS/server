@@ -225,7 +225,7 @@ VALUES
 INSERT INTO categories (branch_id, category_name, category_location)
 VALUES 
 ((SELECT branch_id FROM business_branch WHERE branch_name = 'Branch 1'), 'Electronics', 'Aisle 1'),
-((SELECT branch_id FROM business_branch WHERE branch_name = 'Branch 2'), 'Clothing', 'Aisle 2');
+((SELECT branch_id FROM business_branch WHERE branch_name = 'Branch 1'), 'Clothing', 'Aisle 2');
 
 -- Insert data into items table
 INSERT INTO items (category_id, item_name, minimum_stock, barcode, stock, image_url, exp_date, discount, supplier_name)
