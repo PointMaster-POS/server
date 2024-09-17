@@ -3,15 +3,15 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const categoryRouter = require('./routes/category');
 const dotenv = require('dotenv').config();
+const createBusinessRouter = require('./routes/registration');
 const app = express();
 
 // Swagger
 const swaggerJsDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 
-
+// Constants
 const PORT =  3001;
-
 const swaggerOptions = {
     swaggerDefinition: {
       openapi: '3.0.0', 
@@ -39,16 +39,20 @@ const swaggerOptions = {
     apis: ['./routes/*.js'], 
   };
 
+
+// Swagger
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
-
-
+// Middleware
 app.use(cors());
 app.use(bodyParser.json());
 
+// Routes
 app.use('/category', categoryRouter);
+app.use('/registration', createBusinessRouter);
 
+// Start server
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
