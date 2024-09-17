@@ -1,6 +1,24 @@
 version: '3.8'
 
 services:
+  redis:
+    image: redis:6.0.7
+    container_name: redis
+    restart: always
+    environment:
+      - REDIS_URL=redis://redis:6379
+    volumes:
+      - redis_volume_data:/data
+    ports:
+      - 6380:6379
+  redis_insight:
+    image: redislabs/redisinsight:1.14.0
+    container_name: redis_insight
+    restart: always
+    ports:
+      - 8001:8001
+    volumes:
+      - redis_insight_volume_data:/db
   db:
     image: mysql:8.1
     environment:
@@ -25,8 +43,10 @@ services:
       - DB_USER=root
       - DB_PASSWORD=password
       - DB_NAME=pointmaster
+      - REDIS_URL=redis://redis:6379
     depends_on:
       - db
+      - redis
     restart: on-failure
 
   auth-service:
@@ -80,4 +100,6 @@ services:
       - db
     restart: on-failure
 
-
+volumes:
+  redis_volume_data:
+  redis_insight_volume_data:
