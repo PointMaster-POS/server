@@ -44,6 +44,7 @@ services:
       - DB_PASSWORD=password
       - DB_NAME=pointmaster
       - REDIS_URL=redis://redis:6379
+      - REGISTRATION_SECRET=panadura
     depends_on:
       - db
       - redis
