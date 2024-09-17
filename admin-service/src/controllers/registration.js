@@ -33,11 +33,10 @@ const registerBusiness = asyncHandler(async (req, res) => {
         business_description,
         business_address,
         logo_location,
-        business_hours,
         business_registration_number,
         business_type,
         business_registration_date,
-        status: "pending"
+        status: 0,
     };
 
     const client = getRedisClient();
@@ -89,16 +88,25 @@ const submitOwnerDetails = asyncHandler(async (req, res) => {
         // Parse business data from Redis
         const parsedBusinessData = JSON.parse(businessData);
 
+        // Ensure business_hours is a valid object
+        // let business_hours;
+        // try {
+        //     business_hours = JSON.stringify(parsedBusinessData.business_hours);
+        // } catch (err) {
+        //     return res.status(400).json({ message: 'Invalid business_hours format', error: err });
+        // }
+
         // Combine business data and owner data
         const fullBusinessData = {
             ...parsedBusinessData,
             business_owner_name,
             business_owner_mail,
             business_password: await bcrypt.hash(business_password, 10), // Hash the password
-            status: "approved"
+            status: 1,
+        
         };
 
-        // Insert into the database
+        // Insert into the database set data column by column
         db.query('INSERT INTO business SET ?', fullBusinessData, (error, results) => {
             if (error) {
                 return res.status(500).json({ message: 'Database error', error });

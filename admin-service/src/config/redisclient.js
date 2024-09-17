@@ -6,7 +6,7 @@ let client;
 const getRedisClient = () => {
     if (!client) {
         client = redis.createClient({
-            url: process.env.REDIS_URL
+            url: process.env.REDIS_URL || 'redis://localhost:6380',
         });
 
         // Handle connection errors
