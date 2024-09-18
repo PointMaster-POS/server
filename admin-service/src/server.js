@@ -49,7 +49,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // Routes
-app.use('/category', categoryRouter);
+// app.use('/category', categoryRouter);
 app.use('/registration', createBusinessRouter);
 
 // Start server

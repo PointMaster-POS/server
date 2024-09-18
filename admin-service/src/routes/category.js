@@ -1,7 +1,7 @@
 const categoryRouter = require("express").Router();
 const validateToken = require("../middleware/validateToken");
 const {
-  createCategoryInventoryManager,
+  createCategory,
 } = require("../controllers/category");
 const { branchAccess } = require("../middleware/businessAccess");
 
@@ -35,6 +35,20 @@ const { branchAccess } = require("../middleware/businessAccess");
  *       401:
  *         description: Unauthorized
  */
-categoryRouter.post("/manager", validateToken, branchAccess, createCategoryInventoryManager);
+//if manager the branch_id is in the token if owner the branch_id is in the body
+// categoryRouter.post("/manager", validateToken, branchAccess, createCategory);
+categoryRouter.post("/owner", validateToken, createCategory);
+
+categoryRouter.get("/owner/:branch_id", validateToken, gatALLCategoryInventoryManager);
+//branch id is in the token if manager is creating item
+categoryRouter.get("/manager", validateToken, branchAccess, gatALLCategoryInventoryManager);
+
+// categoryRouter.put("/manager", validateToken, branchAccess, updateCategoryInventoryManager);
+categoryRouter.put("/owner/branch_id", validateToken, updateCategoryInventoryManager);
+
+
+// categoryRouter.delete("/manager", validateToken, branchAccess, deleteCategoryInventoryManager);
+categoryRouter.delete("/owner/:branch_id", validateToken, deleteCategoryInventoryManager);
+
 
 module.exports = categoryRouter;
