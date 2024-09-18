@@ -84,14 +84,15 @@ CREATE TABLE `bill` (
   `employee_id` VARCHAR(36) NOT NULL,
   `payment_method` VARCHAR(32),
   `total_price` FLOAT NOT NULL,
+  `discount` FLOAT,
   `received` FLOAT,
   `status` BOOL NOT NULL,
   `notes` VARCHAR(4096),
   `date_time` DATETIME NOT NULL,
-  `customer_id` VARCHAR(36),
+  `customer_phone` VARCHAR(36),
   FOREIGN KEY (`branch_id`) REFERENCES `business_branch`(`branch_id`),
   FOREIGN KEY (`employee_id`) REFERENCES `employee`(`employee_id`),
-  FOREIGN KEY (`customer_id`) REFERENCES `customer`(`customer_id`)
+  FOREIGN KEY (`customer_id`) REFERENCES `customer`(`customer_phone`)
 );
 
 CREATE TRIGGER before_insert_bill
