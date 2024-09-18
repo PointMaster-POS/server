@@ -176,7 +176,7 @@ SET NEW.`item_id` = UUID();
 -- Insert data into business table
 INSERT INTO business (business_name, business_mail, business_url, business_hotline, business_description, business_address, business_owner_name, business_owner_mail, business_password, logo_location,  business_registration_number, business_type, business_registration_date, status)
 VALUES 
-('Lassana Flora', 'owner1@example.com', 'http://examplebusiness1.com', '123456789', 'A description of business 1', '123 Business St, City, Country', 'Owner 1', 'owner1@example.com', 'hashedpassword1', 'logo1.png',  'BRN123456', 'Retail', '2022-01-01', true),
+('Lassana Flora', 'owner1@example.com', 'http://examplebusiness1.com', '123456789', 'A description of business 1', '123 Business St, City, Country', 'Owner 1', 'owner1@example.com', '$2a$12$YiVwORUpdUpZQSK5nbAf5uLoc3quatyJX1d4gjmFKe.QftSYFOelW', 'logo1.png',  'BRN123456', 'Retail', '2022-01-01', true),
 ('Perera & Sons', 'owner2@example.com', 'http://examplebusiness2.com', '987654321', 'A description of business 2', '456 Market Rd, City, Country', 'Owner 2', 'owner2@example.com', 'hashedpassword2', 'logo2.png',  'BRN654321', 'Service', '2023-05-15', true);
 
 -- Insert data into business_branch table
