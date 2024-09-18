@@ -24,7 +24,7 @@ const registerBusiness = asyncHandler(async (req, res) => {
     if (!business_name || !business_mail) {
         return res.status(400).json({ message: 'Business name and mail are required' });
     }
-
+    
     const businessData = {
         business_name,
         business_mail,
