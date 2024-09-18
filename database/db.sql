@@ -29,11 +29,6 @@ CREATE TABLE `business_branch` (
   `branch_id` VARCHAR(36) NOT NULL PRIMARY KEY,
   `business_id` VARCHAR(36) NOT NULL,
   `branch_name` VARCHAR(255) NOT NULL,
-  `branch_location` VARCHAR(255),
-  `branch_manager_id` VARCHAR(36),
-  `branch_manager_name` VARCHAR(255),
-  `branch_manager_mail` VARCHAR(255),
-  `branch_manager_password` VARCHAR(1048),
   `status` BOOL NOT NULL,
   FOREIGN KEY (`business_id`) REFERENCES `business`(`business_id`)
 );
@@ -180,10 +175,10 @@ VALUES
 ('Perera & Sons', 'owner2@example.com', 'http://examplebusiness2.com', '987654321', 'A description of business 2', '456 Market Rd, City, Country', 'Owner 2', 'owner2@example.com', 'hashedpassword2', 'logo2.png',  'BRN654321', 'Service', '2023-05-15', true);
 
 -- Insert data into business_branch table
-INSERT INTO business_branch (business_id, branch_name, branch_location, branch_manager_id, branch_manager_name, branch_manager_mail, branch_manager_password, status)
+INSERT INTO business_branch (business_id, branch_name, branch_location, status)
 VALUES 
-((SELECT business_id FROM business WHERE business_mail = 'owner1@example.com'), 'Branch 1', 'Downtown', NULL, 'Manager 1', 'manager1@example.com', 'hashedmanagerpassword1', true),
-((SELECT business_id FROM business WHERE business_mail = 'owner2@example.com'), 'Branch 2', 'Uptown', NULL, 'Manager 2', 'manager2@example.com', 'hashedmanagerpassword2', true);
+((SELECT business_id FROM business WHERE business_mail = 'owner1@example.com'), 'Branch 1', 'Downtown', true),
+((SELECT business_id FROM business WHERE business_mail = 'owner2@example.com'), 'Branch 2', 'Uptown', true);
 
 -- Insert data into employee table
 INSERT INTO employee (branch_id, employee_name, role, salary, photo_url, status, employee_email, password)

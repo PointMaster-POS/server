@@ -52,7 +52,7 @@ const employeeLogginController = asyncHandler(async (req, res) => {
                                 if (isMatch) {
                                   const accessToken = jwt.sign(
                                     {
-                                      business: {
+                                      owner: {
                                         business_name: business.business_name,
                                         business_id: business.business_id,
                                         email: business.business_owner_mail,
@@ -90,7 +90,7 @@ const employeeLogginController = asyncHandler(async (req, res) => {
                           if (isMatch) {
                             const accessToken = jwt.sign(
                               {
-                                business: {
+                                owner: {
                                   business_name: business.business_name,
                                   business_id: business.business_id,
                                   email: business.business_owner_mail,
