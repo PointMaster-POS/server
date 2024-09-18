@@ -1,8 +1,8 @@
 const express = require('express');
 const billRouter = express.Router();
 const { newBill, getBillItems } = require('../controllers/bill');
-const validateToken = require('../middleware/validateToken');
 const { branchAccess, businessAccess } = require('../middleware/businessAccess');
+const verifyCashier = require('../middleware/verifyCashier');
 
 /**
  * @swagger
@@ -62,7 +62,7 @@ const { branchAccess, businessAccess } = require('../middleware/businessAccess')
  */
 
 // Post a new bill
-billRouter.post('/bill', validateToken, branchAccess,businessAccess,newBill);
+billRouter.post('/new-bill', verifyCashier, branchAccess,businessAccess,newBill);
 
 /**
  * @swagger
@@ -110,6 +110,7 @@ billRouter.post('/bill', validateToken, branchAccess,businessAccess,newBill);
 
 
 // Get all items in a bill by bill ID
-billRouter.get('/bill/:billId', validateToken, getBillItems);
+// billRouter.get('/bill/:billId', verifyCashier, getBillItems);
 
 module.exports = billRouter;
+

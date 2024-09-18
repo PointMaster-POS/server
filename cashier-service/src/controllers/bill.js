@@ -15,12 +15,15 @@ const newBill = asyncHandler(async (req, res) => {
     total_amount,
     items_list,
     loyalty_points_redeemed,
-    customer_id,
+    discount,
+    received,
+    notes,
+    customer_phone,
   } = req.body;
-  const cashier_id = req.employee.employee_id;
+  const cashier_id = req.cashier.employee_id;
   const branch_id = req.branch.branch_id;
   const business_id = req.business.business_id;
-
+  
   //get loyality program for the business
   const loyalityProgramQuery = `SELECT * FROM loyalty_programs WHERE business_id = ? `;
   db.query(loyalityProgramQuery, [business_id], (err, result) => {
@@ -32,6 +35,8 @@ const newBill = asyncHandler(async (req, res) => {
         return res.status(404).json({ message: "Loyality Program not found" });
       }
       if (loyalty_points_redeemed) {
+        console.log(customer_id, loyalityProgram.loyalty_program_id);
+    
         const loyalityPointsQuery = `SELECT * FROM customer_loyalty WHERE customer_id = ? AND loyalty_program_id = ? `;
         db.query(
           loyalityPointsQuery,
@@ -40,6 +45,7 @@ const newBill = asyncHandler(async (req, res) => {
             if (err) {
               return res.status(500).json({ message: err.message });
             }
+            
             if (result.length > 0) {
               const customerLoyalityDetails = result[0];
               if (
@@ -64,14 +70,15 @@ const newBill = asyncHandler(async (req, res) => {
                       }
                     }
                   );
-                  const createBillQuery = `INSERT INTO bills (payment_method, total_amount, loyalty_points_redeemed, customer_id, cashier_id, branch_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+                  const createBillQuery = `INSERT INTO bills (payment_method, total_amount, discount, loyalty_points_redeemed, customer_id, cashier_id, branch_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
                   db.query(
                     createBillQuery,
                     [
                       customer_phone,
                       payment_method,
                       total_amount,
-                      items_list,
+
+                        discount,
                       loyalty_points_redeemed,
                       customer_id,
                       cashier_id,
@@ -149,18 +156,35 @@ const newBill = asyncHandler(async (req, res) => {
           }
         );
       } else {
-        const createBillQuery = `INSERT INTO bills (payment_method, total_amount, loyalty_points_redeemed, customer_id, cashier_id, branch_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+        /*
+                                `bill_id` VARCHAR(36) NOT NULL PRIMARY KEY,
+                                `branch_id` VARCHAR(36) NOT NULL,
+                                `employee_id` VARCHAR(36) NOT NULL,
+                                `payment_method` VARCHAR(32),
+                                `total_price` FLOAT NOT NULL,
+                                `discount` FLOAT,
+                                `received` FLOAT,
+                                `status` BOOL NOT NULL,
+                                `notes` VARCHAR(4096),
+                                `date_time` DATETIME NOT NULL,
+                                `customer_phone` VARCHAR(36),
+
+        */
+        const createBillQuery = `INSERT INTO bill (date_time, payment_method, total_price, discount, received, customer_id, employee_id, notes, branch_id,status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+        const timestamp = new Date().toISOString().slice(0, 19).replace("T", " ");
         db.query(
           createBillQuery,
           [
-            customer_phone,
+            timestamp,  
             payment_method,
             total_amount,
-            items_list,
-            loyalty_points_redeemed,
-            customer_id,
+            discount,
+            received,
+            customer_phone,
             cashier_id,
+            notes,
             branch_id,
+            1,
           ],
           (err, result) => {
             if (err) {

@@ -69,10 +69,10 @@ CREATE TABLE `loyalty_programs` (
 );
 
 CREATE TABLE `customer` (
-  `customer_id` VARCHAR(36) NOT NULL PRIMARY KEY,
+  `customer_id` VARCHAR(36) ,
   `customer_name` VARCHAR(255) NOT NULL,
   `customer_mail` VARCHAR(255),
-  `customer_phone` VARCHAR(55),
+  `customer_phone` VARCHAR(55) NOT NULL PRIMARY,
   `birthday` DATE,
   `gender` VARCHAR(55),
   `password` VARCHAR(2048)
