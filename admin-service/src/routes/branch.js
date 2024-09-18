@@ -9,7 +9,7 @@ const { createBranch, getBranch, updateBranch, deleteBranch ,getAllBranches} = r
 branchRouter.post('/', validateToken, createBranch);
 branchRouter.get('/:branch_id', validateToken, getBranch);
 branchRouter.get('/', validateToken, getAllBranches);
-branchRouter.put('/', validateToken, updateBranch);
-branchRouter.delete('/', validateToken, deleteBranch);
+branchRouter.put('/:branch_id', validateToken, updateBranch);
+branchRouter.delete('/:branch_id', validateToken, deleteBranch);
 
 module.exports = branchRouter;
