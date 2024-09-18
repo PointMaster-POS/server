@@ -29,11 +29,6 @@ CREATE TABLE `business_branch` (
   `branch_id` VARCHAR(36) NOT NULL PRIMARY KEY,
   `business_id` VARCHAR(36) NOT NULL,
   `branch_name` VARCHAR(255) NOT NULL,
-  `branch_location` VARCHAR(255),
-  `branch_manager_id` VARCHAR(36),
-  `branch_manager_name` VARCHAR(255),
-  `branch_manager_mail` VARCHAR(255),
-  `branch_manager_password` VARCHAR(1048),
   `status` BOOL NOT NULL,
   FOREIGN KEY (`business_id`) REFERENCES `business`(`business_id`)
 );
@@ -89,14 +84,15 @@ CREATE TABLE `bill` (
   `employee_id` VARCHAR(36) NOT NULL,
   `payment_method` VARCHAR(32),
   `total_price` FLOAT NOT NULL,
+  `discount` FLOAT,
   `received` FLOAT,
   `status` BOOL NOT NULL,
   `notes` VARCHAR(4096),
   `date_time` DATETIME NOT NULL,
-  `customer_id` VARCHAR(36),
+  `customer_phone` VARCHAR(36),
   FOREIGN KEY (`branch_id`) REFERENCES `business_branch`(`branch_id`),
   FOREIGN KEY (`employee_id`) REFERENCES `employee`(`employee_id`),
-  FOREIGN KEY (`customer_id`) REFERENCES `customer`(`customer_id`)
+  FOREIGN KEY (`customer_id`) REFERENCES `customer`(`customer_phone`)
 );
 
 CREATE TRIGGER before_insert_bill
@@ -176,14 +172,14 @@ SET NEW.`item_id` = UUID();
 -- Insert data into business table
 INSERT INTO business (business_name, business_mail, business_url, business_hotline, business_description, business_address, business_owner_name, business_owner_mail, business_password, logo_location,  business_registration_number, business_type, business_registration_date, status)
 VALUES 
-('Lassana Flora', 'owner1@example.com', 'http://examplebusiness1.com', '123456789', 'A description of business 1', '123 Business St, City, Country', 'Owner 1', 'owner1@example.com', 'hashedpassword1', 'logo1.png',  'BRN123456', 'Retail', '2022-01-01', true),
+('Lassana Flora', 'owner1@example.com', 'http://examplebusiness1.com', '123456789', 'A description of business 1', '123 Business St, City, Country', 'Owner 1', 'owner1@example.com', '$2a$12$YiVwORUpdUpZQSK5nbAf5uLoc3quatyJX1d4gjmFKe.QftSYFOelW', 'logo1.png',  'BRN123456', 'Retail', '2022-01-01', true),
 ('Perera & Sons', 'owner2@example.com', 'http://examplebusiness2.com', '987654321', 'A description of business 2', '456 Market Rd, City, Country', 'Owner 2', 'owner2@example.com', 'hashedpassword2', 'logo2.png',  'BRN654321', 'Service', '2023-05-15', true);
 
 -- Insert data into business_branch table
-INSERT INTO business_branch (business_id, branch_name, branch_location, branch_manager_id, branch_manager_name, branch_manager_mail, branch_manager_password, status)
+INSERT INTO business_branch (business_id, branch_name, branch_location, status)
 VALUES 
-((SELECT business_id FROM business WHERE business_mail = 'owner1@example.com'), 'Branch 1', 'Downtown', NULL, 'Manager 1', 'manager1@example.com', 'hashedmanagerpassword1', true),
-((SELECT business_id FROM business WHERE business_mail = 'owner2@example.com'), 'Branch 2', 'Uptown', NULL, 'Manager 2', 'manager2@example.com', 'hashedmanagerpassword2', true);
+((SELECT business_id FROM business WHERE business_mail = 'owner1@example.com'), 'Branch 1', 'Downtown', true),
+((SELECT business_id FROM business WHERE business_mail = 'owner2@example.com'), 'Branch 2', 'Uptown', true);
 
 -- Insert data into employee table
 INSERT INTO employee (branch_id, employee_name, role, salary, photo_url, status, employee_email, password)

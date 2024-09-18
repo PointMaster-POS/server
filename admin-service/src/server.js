@@ -4,6 +4,7 @@ const cors = require('cors');
 const categoryRouter = require('./routes/category');
 const dotenv = require('dotenv').config();
 const createBusinessRouter = require('./routes/registration');
+const branchRouter = require('./routes/branch');
 const app = express();
 
 // Swagger
@@ -49,8 +50,9 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // Routes
-app.use('/category', categoryRouter);
+// app.use('/category', categoryRouter);
 app.use('/registration', createBusinessRouter);
+app.use('/branch', branchRouter); 
 
 // Start server
 app.listen(PORT, () => {
