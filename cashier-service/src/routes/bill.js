@@ -110,7 +110,7 @@ billRouter.post('/new-bill', verifyCashier, branchAccess,businessAccess,newBill)
 // billRouter.get('/bill/:billId', verifyCashier, getBillItems);
 
 
-billRouter.put ('/new-bill', verifyCashier, branchAccess,businessAccess, updateBill);
+billRouter.put('/update', verifyCashier, branchAccess,businessAccess, updateBill);
 
 
 module.exports = billRouter;

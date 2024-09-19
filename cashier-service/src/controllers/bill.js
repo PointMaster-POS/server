@@ -193,14 +193,14 @@ const updateBill = asyncHandler(async (req, res) => {
     const cashier_id = req.cashier.employee_id;
     const branch_id = req.branch.branch_id;
     const business_id = req.business.business_id;
-  
+    console.log("Items list: ", bill_id);
     // Check if the bill exists and is on hold
-    const billQuery = "SELECT * FROM bill WHERE bill_id = ? AND status = 'hold'";
-    db.query(billQuery, [bill_id], async (err, billResult) => {
+    const billQuery = "SELECT * FROM bill WHERE bill_id = ? and status = ?";
+    db.query(billQuery, [bill_id, 0], async (err, billResult) => {
       if (err) {
         return res.status(500).json({ message: err.message });
       } else if (billResult.length === 0) {
-        return res.status(404).json({ message: "Held bill not found" });
+        return res.status(404).json({ message: "Held bill not found or That bill is completed successfully" });
       } else {
         // Proceed to update the held bill with new items and details
         const existingBill = billResult[0];
