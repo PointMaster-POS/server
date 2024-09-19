@@ -15,6 +15,4 @@ const getEmployee = asyncHandler(async (req, res) => {
         }
     });
 });
-
-
 module.exports = { getEmployee };
