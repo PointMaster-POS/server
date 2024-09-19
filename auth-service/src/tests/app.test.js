@@ -2,7 +2,7 @@ const request = require('supertest');
 const app = require('../app'); 
 
 // Increase timeout to handle longer requests
-jest.setTimeout(10000); // 10 seconds
+jest.setTimeout(10000); 
 
 describe('API Tests', () => {
   // Test for customer login route
@@ -10,8 +10,8 @@ describe('API Tests', () => {
     const res = await request(app)
       .post('/customer/login')
       .send({
-        email: 'john.doe@example.com',  // Adjust with valid test data
-        password: 'himindu123'  // Adjust with valid test data
+        email: 'john.doe@example.com',  
+        password: 'himindu123'  
       });
 
     expect(res.statusCode).toBe(200);
@@ -23,8 +23,8 @@ describe('API Tests', () => {
     const res = await request(app)
       .post('/employee/login')
       .send({
-        email: 'john.doe@example.com',  // Adjust with valid test data
-        password: 'himindu123'      // Adjust with valid test data
+        email: 'john.doe@example.com', 
+        password: 'himindu123'    
       });
 
     expect(res.statusCode).toBe(200);
