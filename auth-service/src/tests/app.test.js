@@ -1,5 +1,5 @@
 const request = require('supertest');
-const app = require('./app'); 
+const app = require('../app'); 
 
 // Increase timeout to handle longer requests
 jest.setTimeout(10000); // 10 seconds
@@ -34,7 +34,5 @@ describe('API Tests', () => {
 
 // Cleanup after tests if necessary
 afterAll(async () => {
-  // If you have database connections or other resources, clean them up
-  // Example:
-  // await db.end(); // Ensure this is the actual method to close your database connection
+  
 });
