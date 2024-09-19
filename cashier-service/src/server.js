@@ -8,6 +8,7 @@ const loyaltyRouter = require('./routes/loyalty');
 const swaggerJsDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 const dotenv = require('dotenv').config();
+const billRouter = require('./routes/bill');
 
 const app = express();
 
@@ -56,6 +57,8 @@ app.use('/cashier/inventory', inventoryRouter);
 app.use('/cashier/history', historyRouter);
 app.use('/cashier/customer', customerRouter);
 app.use('/cashier/loyalty', loyaltyRouter);
+app.use('/cashier/bill', billRouter);
+
 
 // Start the server
 app.listen(PORT, () => {

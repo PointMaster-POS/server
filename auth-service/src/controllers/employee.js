@@ -107,6 +107,7 @@ const employeeLogginController = asyncHandler(async (req, res) => {
                           console.log(error);
                           res.status(500).json({ message: "Internal server error" });
                         }
+                        
                       }
                     }
                   }

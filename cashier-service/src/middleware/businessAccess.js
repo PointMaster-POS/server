@@ -12,7 +12,7 @@ const branchAccess = asyncHandler(async (req, res, next) => {
     SELECT branch_id From employee WHERE employee_id = ?
     `
     const cashierID = req.cashier.employee_id;
-    console.log(toString(cashierID));
+    console.log({cashierID : cashierID});
     
     db.query(query, [cashierID], (err, result) => {
         if (err) {

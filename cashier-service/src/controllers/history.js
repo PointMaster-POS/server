@@ -14,4 +14,6 @@ const getHistory = asyncHandler(async (req, res) => {
     });
 });
 
+
 module.exports = { getHistory };
+

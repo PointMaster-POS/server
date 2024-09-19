@@ -110,9 +110,29 @@ const deleteCustomer = asyncHandler(async (req, res) => {
   });
 });
 
+
+const getCustomerByPhone = asyncHandler(async (req, res) => {
+  const phone = req.params.phone;
+
+  
+
+  const query = `SELECT * FROM customer WHERE customer_phone = ?`;
+
+  db.query(query, [phone], (err, results) => {
+    if (err) {
+      return res.status(500).json({ message: err.message });
+    }
+    if (results.length > 0) {
+      return res.status(200).json(results[0]);
+    } else {
+      return res.status(404).json({ message: "Customer not found" });
+    }
+  });
+});
 module.exports = {
   registerCustomer,
   getAllCustomers,
   updateCustomer,
   deleteCustomer,
+  getCustomerByPhone,
 };
