@@ -53,6 +53,7 @@ app.use(bodyParser.json());
 // app.use('/category', categoryRouter);
 app.use('/registration', createBusinessRouter);
 app.use('/branch', branchRouter); 
+app.use('/category', categoryRouter);
 
 // Start server
 app.listen(PORT, () => {

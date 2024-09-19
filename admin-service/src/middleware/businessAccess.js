@@ -7,21 +7,17 @@ const db = require('../config/db');
 
 //need to check error
 const branchAccess = asyncHandler(async (req, res, next) => {
-    
     const query = `
     SELECT branch_id From employee WHERE employee_id = ?
     `
-    const cashierID = req.employee.employee_id;
-    console.log(toString(cashierID));
+    const employeeID = req.employee.employee_id;
+
     
-    db.query(query, [cashierID], (err, result) => {
+    db.query(query, [employeeID], (err, result) => {
         if (err) {
             return res.status(500).json({ message: err.message });
         } else {
-            console.log({result : result});
             req.branch = result[0];
-
-           
             next();
 
         }
