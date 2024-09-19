@@ -9,6 +9,7 @@ const swaggerJsDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 const dotenv = require('dotenv').config();
 const billRouter = require('./routes/bill');
+const employeeRouter = require('./routes/employee');
 
 const app = express();
 
@@ -58,6 +59,7 @@ app.use('/cashier/history', historyRouter);
 app.use('/cashier/customer', customerRouter);
 app.use('/cashier/loyalty', loyaltyRouter);
 app.use('/cashier/bill', billRouter);
+app.use('/employee', employeeRouter);
 
 
 // Start the server

@@ -5,7 +5,7 @@ const db = require('../config/db');
 
 const customerLogginController = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
-  console.log ({email : email, password: password});
+  
 
   // Validate input
   if (!email || !password) {

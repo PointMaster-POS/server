@@ -2,6 +2,7 @@ const express = require('express');
 const customerRouter = express.Router();
 const verifyCashier = require('../middleware/verifyCashier');
 const { getCustomer, getCustomerPoints, checkElegibility } = require('../controllers/customer');
+const { branchAccess, businessAccess } = require('../middleware/businessAccess');
 
 /**
  * @swagger
@@ -120,10 +121,10 @@ const { getCustomer, getCustomerPoints, checkElegibility } = require('../control
 
 
 // Get customer by phone number
-customerRouter.get('/:phone', verifyCashier, getCustomer);
+customerRouter.get('/:phone', verifyCashier, branchAccess , businessAccess, getCustomer);
 
 // Get current customer points
-customerRouter.get('/:phone/points', verifyCashier, getCustomerPoints);
+// customerRouter.get('/:phone/points', verifyCashier, getCustomerPoints);
 
 // Check eligibility for points redemption
 // customerRouter.get('/:phone/redeem', verifyCashier, checkElegibility);

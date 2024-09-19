@@ -1,6 +1,6 @@
 const express = require('express');
 const billRouter = express.Router();
-const { newBill, getBillItems } = require('../controllers/bill');
+const { newBill, getBillItems, updateBill } = require('../controllers/bill');
 const { branchAccess, businessAccess } = require('../middleware/businessAccess');
 const verifyCashier = require('../middleware/verifyCashier');
 
@@ -106,11 +106,12 @@ billRouter.post('/new-bill', verifyCashier, branchAccess,businessAccess,newBill)
  */
 
 
-
-
-
 // Get all items in a bill by bill ID
 // billRouter.get('/bill/:billId', verifyCashier, getBillItems);
+
+
+billRouter.put('/update', verifyCashier, branchAccess,businessAccess, updateBill);
+
 
 module.exports = billRouter;
 
