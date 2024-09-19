@@ -5,6 +5,7 @@ const {
   registerCustomer,
   updateCustomer,
   deleteCustomer,
+  getCustomerByPhone
 } = require("../controllers/customer");
 const validateToken = require("../middleware/validateTokenHandler");
 
@@ -156,5 +157,10 @@ customerRouter.put("/", validateToken, updateCustomer);
  *         description: Internal Server Error
  */
 customerRouter.delete("/", validateToken, deleteCustomer);
+
+customerRouter.get("/:phone", getCustomerByPhone);
+
+
+
 
 module.exports = customerRouter;
