@@ -3,6 +3,8 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Employee = require("../models/employee"); 
 const Business = require("../models/business");
+const { Op } = require('sequelize');
+
 
 const employeeLogginController = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
@@ -62,8 +64,8 @@ const employeeLogginController = asyncHandler(async (req, res) => {
 
     return res.status(401).json({ message: "Invalid email or password" });
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: "Internal server error" });
+    
+    return res.status(500).json({ message: "Error processing request", error });
   }
 });
 
