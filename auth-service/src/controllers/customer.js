@@ -15,6 +15,9 @@ const customerLogginController = asyncHandler(async (req, res) => {
     // Query the database to find the customer by email
     const customer = await Customer.findOne({ where: { customer_mail: email } });
 
+  
+
+
     if (!customer) {
       return res.status(401).json({ message: "Invalid email or password" });
     }
