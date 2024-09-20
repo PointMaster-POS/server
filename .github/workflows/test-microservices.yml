@@ -21,14 +21,14 @@ jobs:
         with:
           node-version: '16'
 
-      # Navigate to each service directory
+      # Navigate to each service directory and install dependencies
       - name: Install dependencies for ${{ matrix.service }}
         run: |
-          cd ${{ matrix.service }}
+          cd ${{ matrix.service }}/src
           npm install
 
       # Run tests for each service
       - name: Run tests for ${{ matrix.service }}
         run: |
-          cd ${{ matrix.service }}
+          cd ${{ matrix.service }}/src
           npm test
