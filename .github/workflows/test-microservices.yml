@@ -25,6 +25,7 @@ jobs:
       - name: Install dependencies for ${{ matrix.service }}
         run: |
           cd ${{ matrix.service }}/src
+          npm audit fix || true  
           npm install
 
       # Run tests for each service
