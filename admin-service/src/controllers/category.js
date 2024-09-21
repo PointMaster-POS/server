@@ -4,6 +4,7 @@ const asyncHandler = require('express-async-handler');
 const createCategory = asyncHandler(async (req, res) => {
     let { category_name, category_location, branch_id } = req.body; 
     // If branch_id is not provided in the body, use the branch_id from req.employee (for branch managers)
+   
     if (!branch_id) {
       
         branch_id = req.branch.branch_id;
@@ -13,8 +14,8 @@ const createCategory = asyncHandler(async (req, res) => {
     console.log(branch_id);
 
     // Validate that category_name and category_location are provided
-    if (!category_name || !category_location) {
-        return res.status(400).json({ message: "Category name and location are required" });
+    if (!category_name || !category_location || !branch_id) {
+        return res.status(400).json({ message: "Category name, location and branch are required" });
     }
 
     // Create the category in the database
@@ -33,11 +34,13 @@ const createCategory = asyncHandler(async (req, res) => {
 const getCategories = asyncHandler(async (req, res) => {
     let branch_id;
     if( !req.branch){
-        branch_id = req.params.branch_id;
+        branch_id = req.body.branch_id;
+        console.log(req.body);
     }
     else {
         branch_id = req.branch.branch_id;
     }
+    console.log(branch_id);
     const getCategoriesQuery = `SELECT * FROM categories WHERE branch_id = ?`;
 
     db.query(getCategoriesQuery, [branch_id], (err, result) => {
@@ -52,7 +55,7 @@ const getCategories = asyncHandler(async (req, res) => {
 const updateCategory = asyncHandler(async (req, res) => {
     let branch_id;
     if( !req.branch){
-        branch_id = req.params.branch_id;
+        branch_id = req.params.branchID;
     }
     else {
         branch_id = req.branch.branch_id;

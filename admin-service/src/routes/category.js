@@ -44,7 +44,7 @@ categoryRouter.post("/", validateToken, branchAccess, createCategory);
 
  categoryRouter.get("/", validateToken, branchAccess, getCategories);
 
-categoryRouter.put(  "/:categoryID", validateToken, branchAccess, updateCategory);
+categoryRouter.put(  "/:branchID/:categoryID", validateToken, branchAccess, updateCategory);
 
 
 categoryRouter.delete(  "/:categoryID", validateToken, branchAccess, updateCategory);
