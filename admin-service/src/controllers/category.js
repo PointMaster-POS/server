@@ -87,7 +87,7 @@ const updateCategory = asyncHandler(async (req, res) => {
 const deleteCategory = asyncHandler(async (req, res) => {
     let branch_id;
     if( !req.branch){
-        branch_id = req.params.branch_id;
+        branch_id = req.params.branchID;
     }
     else {
         branch_id = req.branch.branch_id;
