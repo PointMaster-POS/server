@@ -3,8 +3,9 @@ const validateToken = require("../middleware/validateToken");
 const {
   createCategory,
   getCategories,
-  updateCategory
- 
+  updateCategory,
+  deleteCategory,
+  getAllBranchCategories,
 } = require("../controllers/category");
 const { branchAccess } = require("../middleware/businessAccess");
 
@@ -42,11 +43,26 @@ const { branchAccess } = require("../middleware/businessAccess");
 // categoryRouter.post("/manager", validateToken, branchAccess, createCategory);
 categoryRouter.post("/", validateToken, branchAccess, createCategory);
 
- categoryRouter.get("/", validateToken, branchAccess, getCategories);
-
-categoryRouter.put(  "/:categoryID", validateToken, branchAccess, updateCategory);
+categoryRouter.get("/", validateToken, branchAccess, getCategories);
 
 
-categoryRouter.delete(  "/:categoryID", validateToken, branchAccess, updateCategory);
+//get categories name list by branch id
+categoryRouter.get("/name/:branchID", validateToken, getAllBranchCategories);
+
+
+
+categoryRouter.put(
+  "/:branchID/:categoryID",
+  validateToken,
+  branchAccess,
+  updateCategory
+);
+
+categoryRouter.delete(
+  "/:branchID/:categoryID",
+  validateToken,
+  branchAccess,
+  deleteCategory
+);
 
 module.exports = categoryRouter;
