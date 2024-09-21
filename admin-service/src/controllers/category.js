@@ -110,4 +110,18 @@ const deleteCategory = asyncHandler(async (req, res) => {
 }   
 );
 
-module.exports = { createCategory , getCategories, updateCategory, deleteCategory };
+const getAllBranchCategories = asyncHandler(async (req, res) => {
+    const branch_id = req.params.branchID;
+    const getCategoriesQuery = `SELECT category_id, category_name FROM categories WHERE branch_id = ?`;
+    console.log(branch_id);
+
+    db.query(getCategoriesQuery, [branch_id], (err, result) => {
+        if (err) {
+            return res.status(500).json({ message: err.message });
+        } else {
+            return res.status(200).json(result);
+        }
+    });
+});
+
+module.exports = { createCategory , getCategories, updateCategory, deleteCategory , getAllBranchCategories};

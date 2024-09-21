@@ -5,6 +5,7 @@ const {
   getCategories,
   updateCategory,
   deleteCategory,
+  getAllBranchCategories,
 } = require("../controllers/category");
 const { branchAccess } = require("../middleware/businessAccess");
 
@@ -43,6 +44,12 @@ const { branchAccess } = require("../middleware/businessAccess");
 categoryRouter.post("/", validateToken, branchAccess, createCategory);
 
 categoryRouter.get("/", validateToken, branchAccess, getCategories);
+
+
+//get categories name list by branch id
+categoryRouter.get("/name/:branchID", validateToken, getAllBranchCategories);
+
+
 
 categoryRouter.put(
   "/:branchID/:categoryID",
