@@ -28,6 +28,7 @@ const branchAccess = asyncHandler(async (req, res, next) => {
     });
 });
 
+
 const businessAccess = asyncHandler(async (req, res, next) => {
     const query = `
     SELECT business_id From business_branch WHERE branch_id = ?

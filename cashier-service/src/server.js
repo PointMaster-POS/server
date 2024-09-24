@@ -53,6 +53,7 @@ const swaggerOptions = {
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
+
 // Routes
 app.use('/cashier/inventory', inventoryRouter);
 app.use('/cashier/history', historyRouter);

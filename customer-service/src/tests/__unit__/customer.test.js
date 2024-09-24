@@ -133,7 +133,7 @@ const {
         await getCustomerByPhone(req, res);
   
         expect(res.statusCode).toBe(404);
-        expect(res._getJSONData()).toEqual({ message: "Customer not found" });
+        expect(res._getJSONData())?.toEqual({ message: "Customer not found" });
       });
     });
   
@@ -151,16 +151,16 @@ const {
         expect(res._getJSONData()).toEqual(mockCustomerLoyaltyDetails);
       });
   
-    //   it('should return 404 if no points are found', async () => {
-    //     db.query.mockImplementation((query, values, callback) => {
-    //       callback(null, []); // Simulate no points found
-    //     });
+      it('should return 404 if no points are found', async () => {
+        db.query.mockImplementation((query, values, callback) => {
+          callback(null, []); // Simulate no points found
+        });
   
-    //     await getCustomerPointsByPhone(req, res);
+        await getCustomerPointsByPhone(req, res);
   
-    //     expect(res.statusCode).toBe(404);
-    //     expect(res._getJSONData()).toEqual({ message: "Points not found" });
-    //   });
+        expect(res.statusCode).toBe(404);
+        expect(res._getJSONData()).toEqual({ message: "Customer not found" });
+      });
     });
   
     afterAll(() => {
