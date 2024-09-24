@@ -5,6 +5,7 @@ const categoryRouter = require('./routes/category');
 const dotenv = require('dotenv').config();
 const createBusinessRouter = require('./routes/registration');
 const branchRouter = require('./routes/branch');
+const loyaltyRouter = require('./routes/loyalty');
 const app = express();
 
 // Swagger
@@ -54,6 +55,7 @@ app.use(bodyParser.json());
 app.use('/registration', createBusinessRouter);
 app.use('/branch', branchRouter); 
 app.use('/category', categoryRouter);
+app.use('/loyalty', loyaltyRouter);
 
 // Start server
 app.listen(PORT, () => {

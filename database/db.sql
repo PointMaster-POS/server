@@ -133,6 +133,7 @@ CREATE TABLE categories (
   branch_id VARCHAR(36) NOT NULL,
   category_name VARCHAR(255) NOT NULL,
   category_location VARCHAR(255),
+  status BOOL NOT NULL,
   FOREIGN KEY (branch_id) REFERENCES business_branch(branch_id)
 );
 
@@ -140,6 +141,7 @@ CREATE TRIGGER before_insert_categories
 BEFORE INSERT ON categories
 FOR EACH ROW
 SET NEW.category_id = UUID();
+
 
 CREATE TABLE items (
   item_id VARCHAR(36) NOT NULL PRIMARY KEY,
@@ -160,6 +162,28 @@ CREATE TRIGGER before_insert_items
 BEFORE INSERT ON items
 FOR EACH ROW
 SET NEW.item_id = UUID();
+
+
+--trigger to set category status to false when branch status is set to false
+CREATE TRIGGER before_update_branch
+BEFORE UPDATE ON business_branch
+FOR EACH ROW
+BEGIN
+  IF NEW.status = false THEN
+    UPDATE categories SET status = false WHERE branch_id = NEW.branch_id;
+  END IF;
+END;
+
+--trigger to delete all items in a category when the category status is set to false
+CREATE TRIGGER before_update_categories
+BEFORE UPDATE ON categories
+FOR EACH ROW  
+BEGIN
+  IF NEW.status = false THEN
+    DELETE FROM items WHERE category_id = NEW.category_id;
+  END IF;
+END;
+
 
 CREATE TABLE bill_items (
   bill_id INT NOT NULL,

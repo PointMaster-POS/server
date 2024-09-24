@@ -20,7 +20,6 @@ const getCustomer = asyncHandler(async (req, res) => {
           "SELECT points  FROM customer_loyalty WHERE customer_id = ? AND loyalty_program_id = ? ";
         const loyalty_id_query =
           "SELECT loyalty_program_id FROM loyalty_programs WHERE business_id = ? ";
-
         db.query(loyalty_id_query, [business_id], (err, loyalty_id) => {
           if (err) {
             return res.status(500).json({ message: err.message });
@@ -42,8 +41,6 @@ const getCustomer = asyncHandler(async (req, res) => {
               });
           }
         });
-
-        
       } else {
         return res.status(404).json({ message: "Customer not found" });
       }
