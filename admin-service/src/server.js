@@ -7,6 +7,7 @@ const createBusinessRouter = require('./routes/registration');
 const branchRouter = require('./routes/branch');
 const loyaltyRouter = require('./routes/loyalty');
 const employeeRouter = require('./routes/employee');
+const itemsRouter = require('./routes/items');
 const app = express();
 
 // Swagger
@@ -59,6 +60,7 @@ app.use('/branch', branchRouter);
 app.use('/category', categoryRouter);
 app.use('/loyalty', loyaltyRouter);
 app.use('/employee', employeeRouter);
+app.use('/items', itemsRouter);
 
 // Start server
 app.listen(PORT, () => {

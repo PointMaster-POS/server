@@ -113,9 +113,6 @@ const deleteCustomer = asyncHandler(async (req, res) => {
 
 const getCustomerByPhone = asyncHandler(async (req, res) => {
   const phone = req.params.phone;
-
-
-
   const query = `SELECT * FROM customer WHERE customer_phone = ?`;
 
   db.query(query, [phone], (err, results) => {
