@@ -9,7 +9,8 @@ const getAllBillsByCustomerId = asyncHandler(async (req, res) => {
   const getBillsQuery = `
     SELECT 
         b.bill_id, 
-        bus.business_id, 
+        bus.business_id,
+        bus.business_name, 
         b.date_time, 
         b.total_price 
     FROM 
@@ -41,7 +42,38 @@ const getBillByID = asyncHandler(async (req, res) => {
     if (err) {
       return res.status(500).json({ message: err.message });
     } else {
-      return res.status(200).json(results[0]);
+      //get bill items 
+      const getBillItemsQuery = `SELECT * FROM bill_items WHERE bill_id = ?`;
+      db.query(getBillItemsQuery, [bill_id], (err, items) => {
+        if (err) {
+          return res.status(500).json({ message: err.message });
+        } else {
+          // results[0].items = items;
+          //add bill items list to bill object
+          //search employee name from employee_id in employee table
+          const getEmployeeNameQuery = `SELECT employee_name FROM employee WHERE employee_id = ?`;
+          db.query(getEmployeeNameQuery, [results[0].employee_id], (err, employee) => {
+            if (err) {
+              return res.status(500).json({ message: err.message });
+            } else {
+              results[0].employee_name = employee[0].employee_name;
+              results[0].items = items;
+              //get branch name from branch_id in business_branch table 
+              const getBranchNameQuery = `SELECT branch_name FROM business_branch WHERE branch_id = ?`;
+              db.query(getBranchNameQuery, [results[0].branch_id], (err, branch) => {
+                if (err) {
+                  return res.status(500).json({ message: err.message });
+                } else {
+                  results[0].branch_name = branch[0].branch_name;
+                  return res.status(200).json(results[0]);
+                }
+              });
+            }
+          });
+         
+        }
+      });
+
     }
   });
 });
