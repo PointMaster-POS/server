@@ -6,17 +6,17 @@ const validateToken = require('../middleware/validateToken');
 const { createItem, getItem, updateItem, deleteItem } = require('../controllers/items');
 
 //create item to a paticular category
-itemsRouter.post('/:categoryID', validateToken, createItem);
+itemsRouter.post('/', validateToken, createItem);
 
 //get all items in a category
-itemsRouter.get('/:categoryID', validateToken, getItem);
+itemsRouter.get('/:category_id', validateToken, getItem);
 
 
 //update item in a category
-itemsRouter.put('/:categoryID/:itemID', validateToken, updateItem);
+itemsRouter.put('/:item_id', validateToken, updateItem);
 
 //delete item in a category
-itemsRouter.delete('/:categoryID/:itemID', validateToken, deleteItem);
+itemsRouter.delete('/:item_id', validateToken, deleteItem);
 
 
 module.exports = itemsRouter;
