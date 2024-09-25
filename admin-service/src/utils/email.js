@@ -1,4 +1,4 @@
-const transporter = require('../config/email');
+const {transporter} = require('../config/email');
 
 const sendEmail = async (to, subject, text, html) => {
     try {
@@ -7,7 +7,7 @@ const sendEmail = async (to, subject, text, html) => {
         to: to, 
         subject: subject, 
         text: text,
-        html: html 
+        html: html
       });
   
       console.log('Message sent: %s', info.messageId);
@@ -18,4 +18,4 @@ const sendEmail = async (to, subject, text, html) => {
 };
 
 
-  module.exports = sendEmail;
+module.exports = {sendEmail};
