@@ -164,25 +164,25 @@ FOR EACH ROW
 SET NEW.item_id = UUID();
 
 
---trigger to set category status to false when branch status is set to false
-CREATE TRIGGER before_update_branch
-BEFORE UPDATE ON business_branch
-FOR EACH ROW
-BEGIN
-  IF NEW.status = false THEN
-    UPDATE categories SET status = false WHERE branch_id = NEW.branch_id;
-  END IF;
-END;
+-- --trigger to set category status to false when branch status is set to false
+-- CREATE TRIGGER before_update_branch
+-- BEFORE UPDATE ON business_branch
+-- FOR EACH ROW
+-- BEGIN
+--   IF NEW.status = false THEN
+--     UPDATE categories SET status = false WHERE branch_id = NEW.branch_id;
+--   END IF;
+-- END;
 
---trigger to delete all items in a category when the category status is set to false
-CREATE TRIGGER before_update_categories
-BEFORE UPDATE ON categories
-FOR EACH ROW  
-BEGIN
-  IF NEW.status = false THEN
-    DELETE FROM items WHERE category_id = NEW.category_id;
-  END IF;
-END;
+-- --trigger to delete all items in a category when the category status is set to false
+-- CREATE TRIGGER before_update_categories
+-- BEFORE UPDATE ON categories
+-- FOR EACH ROW  
+-- BEGIN
+--   IF NEW.status = false THEN
+--     DELETE FROM items WHERE category_id = NEW.category_id;
+--   END IF;
+-- END;
 
 
 CREATE TABLE bill_items (
@@ -243,10 +243,10 @@ VALUES
 ((SELECT customer_id FROM customer WHERE customer_name = 'Jane Smith'), (SELECT loyalty_program_id FROM loyalty_programs WHERE loyalty_program_name = 'Loyalty Program 2'), '2024-08-02', 75);
 
 -- Insert data into categories table
-INSERT INTO categories (branch_id, category_name, category_location)
+INSERT INTO categories (branch_id, category_name, category_location, status)
 VALUES 
-((SELECT branch_id FROM business_branch WHERE branch_name = 'Branch 1'), 'Electronics', 'Aisle 1'),
-((SELECT branch_id FROM business_branch WHERE branch_name = 'Branch 1'), 'Clothing', 'Aisle 2');
+((SELECT branch_id FROM business_branch WHERE branch_name = 'Branch 1'), 'Electronics', 'Aisle 1', true),
+((SELECT branch_id FROM business_branch WHERE branch_name = 'Branch 1'), 'Clothing', 'Aisle 2', true);
 
 -- Insert data into items table
 INSERT INTO items (category_id, item_name, minimum_stock, barcode, stock, price, image_url, exp_date, discount, supplier_name)

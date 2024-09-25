@@ -10,18 +10,22 @@ const createLoyalty = asyncHandler(async (req, res) => {
     return res.status(400).json({ message: "Unauthorized" });
   }
   const business_id = req.owner.business_id;
+  console.log(business_id);
 
   const loyaltyProgramCheckQuery = `SELECT * FROM loyalty_programs WHERE business_id = ?`;
 
   db.query(loyaltyProgramCheckQuery, [business_id], (err, result) => {
     if (err) {
+        console.log(err);
       return res.status(500).json({ message: err.message });
     } else {
       if (result.length > 0) {
+        console.log(result);
         return res
           .status(400)
           .json({ message: "Loyalty program already exists" });
       } else {
+        console.log("creating loyalty program");
         const {
           loyalty_program_name,
           points_per_hundred,
@@ -30,16 +34,17 @@ const createLoyalty = asyncHandler(async (req, res) => {
           minimum_eligibility_value,
           start_date,
         } = req.body;
-        if (
-          !loyalty_program_name ||
-          !points_per_hundred ||
-          !redeem_value ||
-          !by_sales ||
-          !minimum_eligibility_value ||
-          !start_date
-        ) {
-          return res.status(400).json({ message: "All fields are required" });
-        }
+        // if (
+        //     !loyalty_program_name ||
+        //     !points_per_hundred ||
+        //     !redeem_value ||
+        //     !by_sales ||
+        //     !minimum_eligibility_value ||
+        //     !start_date
+        // ) {
+        //     return res.status(400).json({ message: "All fields are required" });
+        // }
+
         const createLoyaltyProgramQuery = `INSERT INTO loyalty_programs (business_id, loyalty_program_name, points_per_hundred, redeem_value, by_sales, minimum_eligibility_value, start_date) VALUES (?, ?, ?, ?, ?, ?, ?)`;
 
         db.query(
@@ -141,7 +146,9 @@ const updateLoyalty = asyncHandler(async (req, res) => {
     ],
     (err, result) => {
       if (err) {
+        console.log(err);
         return res.status(500).json({ message: err.message });
+        
       } else {
         if (result.affectedRows === 0) {
           //loyalty program not found

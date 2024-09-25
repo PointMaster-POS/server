@@ -2,6 +2,7 @@ const db = require('../config/db');
 const asyncHandler = require('express-async-handler');
 
 const createCategory = asyncHandler(async (req, res) => {
+    console.log(req.body);
     let { category_name, category_location, branch_id } = req.body; 
     // If branch_id is not provided in the body, use the branch_id from req.employee (for branch managers)
    
@@ -19,11 +20,12 @@ const createCategory = asyncHandler(async (req, res) => {
     }
 
     // Create the category in the database
-    const createCategoryQuery = `INSERT INTO categories (category_name, category_location, branch_id) VALUES (?, ?, ?)`;
+    const createCategoryQuery = `INSERT INTO categories (category_name, category_location, branch_id, status) VALUES (?, ?, ?, 1)`;
 
     db.query(createCategoryQuery, [category_name, category_location, branch_id], (err, result) => {
         if (err) {
-            return res.status(500).json({ message: err.message });
+        
+            
         } else {
             return res.status(201).json({ message: "Category created successfully" });
         }
@@ -33,15 +35,16 @@ const createCategory = asyncHandler(async (req, res) => {
 
 const getCategories = asyncHandler(async (req, res) => {
     let branch_id;
+    console.log("req.branch");
     if( !req.branch){
         branch_id = req.body.branch_id;
-        console.log(req.body);
+        console.log(req.owner);
     }
     else {
         branch_id = req.branch.branch_id;
     }
     console.log(branch_id);
-    const getCategoriesQuery = `SELECT * FROM categories WHERE branch_id = ?`;
+    const getCategoriesQuery = `SELECT * FROM categories WHERE branch_id = ? and status = 1`;   
 
     db.query(getCategoriesQuery, [branch_id], (err, result) => {
         if (err) {
@@ -70,6 +73,7 @@ const updateCategory = asyncHandler(async (req, res) => {
 
     const updateCategoryQuery = `UPDATE categories SET category_name = ?, category_location = ? WHERE category_id = ? AND branch_id = ?`;
 
+
     db.query(updateCategoryQuery, [category_name, category_location, category_id, branch_id], (err, result) => {
         if (err) {
             return res.status(500).json({ message: err.message });
@@ -94,7 +98,7 @@ const deleteCategory = asyncHandler(async (req, res) => {
     }
     const category_id = req.params.categoryID;
 
-    const deleteCategoryQuery = `DELETE FROM categories WHERE category_id = ? AND branch_id = ?`;
+    const deleteCategoryQuery = `UPDATE categories SET status = 0 WHERE category_id = ? AND branch_id = ?`;
 
     db.query(deleteCategoryQuery, [category_id, branch_id
     ], (err, result) => {
