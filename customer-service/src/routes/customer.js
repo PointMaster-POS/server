@@ -6,7 +6,8 @@ const {
   updateCustomer,
   deleteCustomer,
   getCustomerByPhone,
-  getCustomerPointsByPhone
+  getCustomerPointsByPhone,
+  getCustomerProfile
 } = require("../controllers/customer");
 const validateToken = require("../middleware/validateTokenHandler");
 
@@ -160,6 +161,8 @@ customerRouter.put("/", validateToken, updateCustomer);
 customerRouter.delete("/", validateToken, deleteCustomer);
 
 customerRouter.get("/:phone", getCustomerByPhone);
+
+customerRouter.get("/my-profile", validateToken, getCustomerProfile);
 
 customerRouter.get("/points/:phone/:buinessID", getCustomerPointsByPhone);
 

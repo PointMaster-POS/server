@@ -42,7 +42,22 @@ const getLoyalityPointsByCustomerID = asyncHandler(async (req, res) => {
   });
 });
 
+const getLoyaltyProgram = asyncHandler(async (req, res) => {
+  const business_id = req.params.businessID;
+
+  const getLoyaltyProgramQuery = `SELECT * FROM loyalty_programs WHERE business_id = ?`;
+
+  db.query(getLoyaltyProgramQuery, [business_id], (err, results) => {
+    if (err) {
+      return res.status(500).json({ message: err.message });
+    } else {
+      return res.status(200).json(results[0]);
+    }
+  });
+});
+
 module.exports = {
   getLoyalityPointsByBusinessID,
   getLoyalityPointsByCustomerID,
+  getLoyaltyProgram
 };

@@ -114,7 +114,7 @@ const deleteCustomer = asyncHandler(async (req, res) => {
 const getCustomerByPhone = asyncHandler(async (req, res) => {
   const phone = req.params.phone;
   const query = `SELECT * FROM customer WHERE customer_phone = ?`;
-  
+
 
   db.query(query, [phone], (err, results) => {
     if (err) {
@@ -129,6 +129,7 @@ const getCustomerByPhone = asyncHandler(async (req, res) => {
 });
 
 const getCustomerPointsByPhone = asyncHandler(async (req, res) => {
+  console.log("getCustomerPointsByPhone");
   const phone = req.params.phone;
   const businessID = req.params.buinessID;
   //get customer details by phone
@@ -177,11 +178,28 @@ const getCustomerPointsByPhone = asyncHandler(async (req, res) => {
 );
 
 
+const getCustomerProfile = asyncHandler(async (req, res) => {
+  const customer_id = req.customer.customer_id;
+  console.log(customer_id);
+  const query = `SELECT * FROM customer WHERE customer_id = ?`;
+  db.query(query, [customer_id], (err, results) => {
+    if (err) {
+      return res.status(500).json({ message: err.message });
+    }
+    if (results.length > 0) {
+      return res.status(200).json(results[0]);
+    } else {
+      return res.status(404).json({ message: "Customer not found" });
+    }
+  });
+});
+
 module.exports = {
   registerCustomer,
   getAllCustomers,
   updateCustomer,
   deleteCustomer,
   getCustomerByPhone,
-  getCustomerPointsByPhone
+  getCustomerPointsByPhone,
+  getCustomerProfile
 };
