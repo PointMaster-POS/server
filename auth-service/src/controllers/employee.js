@@ -64,7 +64,6 @@ const employeeLogginController = asyncHandler(async (req, res) => {
 
     return res.status(401).json({ message: "Invalid email or password" });
   } catch (error) {
-    
     return res.status(500).json({ message: "Error processing request", error });
   }
 });

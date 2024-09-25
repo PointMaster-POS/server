@@ -5,11 +5,14 @@ const categoryRouter = require('./routes/category');
 const dotenv = require('dotenv').config();
 const createBusinessRouter = require('./routes/registration');
 const branchRouter = require('./routes/branch');
+const loyaltyRouter = require('./routes/loyalty');
+const employeeRouter = require('./routes/employee');
 const app = express();
 
 // Swagger
 const swaggerJsDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
+
 
 // Constants
 const PORT =  3001;
@@ -54,6 +57,8 @@ app.use(bodyParser.json());
 app.use('/registration', createBusinessRouter);
 app.use('/branch', branchRouter); 
 app.use('/category', categoryRouter);
+app.use('/loyalty', loyaltyRouter);
+app.use('/employee', employeeRouter);
 
 // Start server
 app.listen(PORT, () => {
