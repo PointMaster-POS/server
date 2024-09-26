@@ -126,7 +126,6 @@ const newBill = asyncHandler(async (req, res) => {
                     const newPoints =
                       customerLoyaltyDetails.points +
                       (loyaltyProgram.points_per_hundred * total_amount) / 100;
-
                     db.query(
                       `UPDATE customer_loyalty SET points = ? WHERE customer_id = ? AND loyalty_program_id = ?`,
                       [
