@@ -37,7 +37,7 @@ const getCategoriesOwner = asyncHandler(async (req, res) => {
 
     console.log("req.branch");
     
-    const  branch_id = req.params.branch_id;
+    const  branch_id = req.params.branchID;
     
   
     console.log(branch_id);

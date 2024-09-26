@@ -2,10 +2,11 @@ const categoryRouter = require("express").Router();
 const validateToken = require("../middleware/validateToken");
 const {
   createCategory,
-  getCategories,
   updateCategory,
   deleteCategory,
   getAllBranchCategories,
+  getCategoriesManager,
+  getCategoriesOwner,
 } = require("../controllers/category");
 const { branchAccess } = require("../middleware/businessAccess");
 
@@ -43,12 +44,13 @@ const { branchAccess } = require("../middleware/businessAccess");
 // categoryRouter.post("/manager", validateToken, branchAccess, createCategory);
 categoryRouter.post("/", validateToken, branchAccess, createCategory);
 
-categoryRouter.get("/", validateToken, branchAccess, getCategories);
+categoryRouter.get("/owner/:branchID", validateToken, branchAccess, getCategoriesOwner);
+
+categoryRouter.get("/manager/", validateToken, branchAccess, getCategoriesManager);
 
 
 //get categories name list by branch id
 categoryRouter.get("/name/:branchID", validateToken, getAllBranchCategories);
-
 
 
 categoryRouter.put(
