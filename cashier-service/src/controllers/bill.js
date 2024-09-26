@@ -14,119 +14,184 @@ const newBill = asyncHandler(async (req, res) => {
     customer_phone,
     status,
   } = req.body;
-
+  if (req.cashier === undefined) {
+    return res.status(400).json({ message: "Unauthorized" });
+  }
   const cashier_id = req.cashier.employee_id;
   const branch_id = req.branch.branch_id;
   const business_id = req.business.business_id;
 
-  try {
-    // Get loyalty program for the business
-    const [loyaltyProgram] = await db.query(
-      `SELECT * FROM loyalty_programs WHERE business_id = ?`,
-      [business_id]
-    );
+  // Get loyalty program for the business
+  const loyaltyProgramQuery = `SELECT * FROM loyalty_programs WHERE business_id = ?`;
+  db.query(loyaltyProgramQuery, [business_id], async (err, result) => {
+    if (err) {
+      return res.status(500).json({ message: err.message });
+    } else {
+      const loyaltyProgram = result[0];
+      // if (!loyaltyProgram) {
+      //   return res.status(404).json({ message: "Loyalty Program not found" });
+      // }
 
-    if (!loyaltyProgram.length) {
-      return res.status(404).json({ message: "Loyalty Program not found" });
-    }
+      if (loyalty_points_redeemed) {
+        const loyaltyPointsQuery = `SELECT * FROM customer_loyalty WHERE customer_id = ? AND loyalty_program_id = ?`;
+        const customeIDQuery = `SELECT customer_id FROM customer WHERE customer_phone = ?`;
+        let customer_id;
+        db.query(customeIDQuery, [customer_phone], (err, result) => {
+          if (err) {
+            return res.status(500).json({ message: err.message });
 
-    // Redeem loyalty points if applicable
-    let customer_id;
-    if (loyalty_points_redeemed) {
-      const [customerData] = await db.query(
-        `SELECT customer_id FROM customer WHERE customer_phone = ?`,
-        [customer_phone]
-      );
+          }
+          customer_id = result[0].customer_id;
+        });
+       
+        db.query(
+          loyaltyPointsQuery,
+          [customer_id, loyaltyProgram.loyalty_program_id],
 
-      if (!customerData.length) {
-        return res.status(404).json({ message: "Customer not found" });
-      }
+          (err, result) => {
+            if (err) {
+              return res.status(500).json({ message: err.message });
+            }
 
-      customer_id = customerData[0].customer_id;
-
-      const [customerLoyalty] = await db.query(
-        `SELECT * FROM customer_loyalty WHERE customer_id = ? AND loyalty_program_id = ?`,
-        [customer_id, loyaltyProgram[0].loyalty_program_id]
-      );
-
-      if (
-        customerLoyalty.length &&
-        loyaltyProgram[0].minimum_eligibility_value <=
-          customerLoyalty[0].points &&
-        total_amount >= customerLoyalty[0].points
-      ) {
-        const newPoints = customerLoyalty[0].points - total_amount;
-        await db.query(
-          `UPDATE customer_loyalty SET points = ? WHERE customer_id = ? AND loyalty_program_id = ?`,
-          [newPoints, customer_id, loyaltyProgram[0].loyalty_program_id]
+            if (result.length > 0) {
+              const customerLoyaltyDetails = result[0];
+              if (
+                loyaltyProgram.minimum_eligibility_value <=
+                  customerLoyaltyDetails.points &&
+                total_amount >= customerLoyaltyDetails.points
+              ) {
+                const newPoints = customerLoyaltyDetails.points - total_amount;
+                db.query(
+                  `UPDATE customer_loyalty SET points = ? WHERE customer_id = ? AND loyalty_program_id = ?`,
+                  [newPoints, customer_id, loyaltyProgram.loyalty_program_id],
+                  (err) => {
+                    if (err) {
+                      return res.status(500).json({ message: err.message });
+                    }
+                  }
+                );
+              }
+            }
+          }
         );
       }
-    }
+      console.log("Items list: ", items_list);
+      // Create the bill  and return the bill_id make the query returning the bill_id
+      const createBillQuery = `INSERT INTO bill (date_time, payment_method, total_price, discount, received, customer_phone, employee_id, notes, branch_id, status)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`;
 
-    // Create the bill
-    const timestamp = new Date()
-      .toISOString()
-      .slice(0, 19)
-      .replace("T", " ");
-    const billResult = await db.query(
-      `INSERT INTO bill (date_time, payment_method, total_price, discount, received, customer_phone, employee_id, notes, branch_id, status)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [
-        timestamp,
-        payment_method,
-        total_amount,
-        discount,
-        received,
-        customer_phone,
-        cashier_id,
-        notes,
-        branch_id,
-        status,
-      ]
-    );
+      const timestamp = new Date().toISOString().slice(0, 19).replace("T", " ");
 
-    const bill_id = billResult[0].insertId;
+      db.query(
+        createBillQuery,
+        [
+          timestamp,
+          payment_method,
+          total_amount,
+          discount,
+          received,
+          customer_phone,
+          cashier_id,
+          notes,
+          branch_id,
+          status,
+        ],
+        async (err, result) => {
+          if (err) {
+            return res.status(500).json({ message: err.message });
+          } else {
+            const bill_id = result.insertId;
+            console.log("Created Bill ID: ", bill_id);
+            console.log("Customer Phone: ", customer_phone);
+            //write a query to get customer id from customer phone
+            const customerDataQuery = `SELECT customer_id FROM customer WHERE customer_phone = ?`;
+            try {
+              const [result] = await db.query(customerDataQuery, [customer_phone]);
+            
+              if (result.length === 0) {
+                return res.status(404).json({ message: "Customer not found" });
+              }
+            
+              const customer_id = result[0].customer_id;
+              console.log("Customer Data: ", result);
+            
 
-    // Add loyalty points if applicable
-    if (customer_id) {
-      const [customerLoyalty] = await db.query(
-        `SELECT * FROM customer_loyalty WHERE customer_id = ? AND loyalty_program_id = ?`,
-        [customer_id, loyaltyProgram[0].loyalty_program_id]
+            console.log("Customer ID: ", customer_id);
+            // Add loyalty points if applicable
+            if (customer_id) {
+              const loyaltyPointsQuery = `SELECT * FROM customer_loyalty WHERE customer_id = ? AND loyalty_program_id = ?`;
+              db.query(
+                loyaltyPointsQuery,
+                [customer_id, loyaltyProgram.loyalty_program_id],
+                (err, result) => {
+                  if (err) {
+                    return res.status(500).json({ message: err.message });
+                  }
+                  //   console.log("Loyalty Points: ", result);
+                  if (result.length > 0) {
+                    const customerLoyaltyDetails = result[0];
+                    const newPoints =
+                      customerLoyaltyDetails.points +
+                      (loyaltyProgram.points_per_hundred * total_amount) / 100;
+                    db.query(
+                      `UPDATE customer_loyalty SET points = ? WHERE customer_id = ? AND loyalty_program_id = ?`,
+                      [
+                        newPoints,
+                        customer_id,
+                        loyaltyProgram.loyalty_program_id,
+                      ],
+                      (err) => {
+                        if (err) {
+                          return res.status(500).json({ message: err.message });
+                        }
+                      }
+                    );
+                    console.log("Customer Loyalty Points Updated");
+                  }
+                }
+              );
+            }
+          } 
+          catch (error) {
+            console.log(error);
+
+          }
+
+            // Reduce item quantities in inventory
+            items_list.forEach((item) => {
+              db.query(
+                `UPDATE items SET stock = stock - ? WHERE item_id = ?`,
+                [item.quantity, item.item_id],
+                (err) => {
+                  if (err) {
+                    return res.status(500).json({ message: err.message });
+                  }
+                }
+              );
+            });
+
+            //Create bill items
+            items_list.forEach((item) => {
+              console.log("hellp");
+              console.log(item.item_id);
+              db.query(
+                `INSERT INTO bill_items (bill_id, item_id, quantity) VALUES (?, ?, ?)`,
+                [bill_id, item.item_id, item.quantity],
+                (err) => {
+                  if (err) {
+                    return res.status(500).json({ message: err.message });
+                  }
+                }
+              );
+            });
+
+            res.status(201).json({ message: "Bill created successfully" });
+          }
+        }
       );
-
-      if (customerLoyalty.length) {
-        const newPoints =
-          customerLoyalty[0].points +
-          (loyaltyProgram[0].points_per_hundred * total_amount) / 100;
-        await db.query(
-          `UPDATE customer_loyalty SET points = ? WHERE customer_id = ? AND loyalty_program_id = ?`,
-          [newPoints, customer_id, loyaltyProgram[0].loyalty_program_id]
-        );
-      }
     }
-
-    // Reduce item quantities in inventory
-    for (const item of items_list) {
-      await db.query(
-        `UPDATE items SET stock = stock - ? WHERE item_id = ?`,
-        [item.quantity, item.item_id]
-      );
-    }
-
-    // Create bill items
-    for (const item of items_list) {
-      await db.query(
-        `INSERT INTO bill_items (bill_id, item_id, quantity) VALUES (?, ?, ?)`,
-        [bill_id, item.item_id, item.quantity]
-      );
-    }
-
-    return res.status(201).json({ message: "Bill created successfully" });
-  } catch (err) {
-    return res.status(500).json({ message: err.message });
-  }
+  });
 });
-
 
 const updateBill = asyncHandler(async (req, res) => {
   const {

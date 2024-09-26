@@ -45,6 +45,9 @@ CREATE TABLE employee (
   employee_name VARCHAR(255) NOT NULL,
   role VARCHAR(128),
   salary FLOAT,
+  phone VARCHAR(55),
+  employee_address VARCHAR(255),
+  birthday DATE,
   photo_url VARCHAR(2048),
   status BOOL NOT NULL,
   employee_email VARCHAR(255),
@@ -207,10 +210,10 @@ VALUES
 ((SELECT business_id FROM business WHERE business_mail = 'owner2@example.com'), 'Branch 2', 'Uptown', true);
 
 -- Insert data into employee table
-INSERT INTO employee (branch_id, employee_name, role, salary, photo_url, status, employee_email, password)
+INSERT INTO employee (branch_id, employee_name, role, salary, photo_url, status, employee_email, password , phone , employee_address, birthday)
 VALUES 
-((SELECT branch_id FROM business_branch WHERE branch_name = 'Branch 1'), 'Employee 1', 'Cashier', 3000, 'employee1.png', true, 'john.doe@example.com', '$2a$12$YiVwORUpdUpZQSK5nbAf5uLoc3quatyJX1d4gjmFKe.QftSYFOelW'),
-((SELECT branch_id FROM business_branch WHERE branch_name = 'Branch 2'), 'Employee 2', 'Sales', 3500, 'employee2.png', true, 'joane.doe@example.com', 'hashedpassword4');
+((SELECT branch_id FROM business_branch WHERE branch_name = 'Branch 1'), 'Employee 1', 'Cashier', 3000, 'employee1.png', true, 'john.doe@example.com', '$2a$12$YiVwORUpdUpZQSK5nbAf5uLoc3quatyJX1d4gjmFKe.QftSYFOelW', '123456789', '123 Employee St, City, Country', '1995-01-01'),
+((SELECT branch_id FROM business_branch WHERE branch_name = 'Branch 2'), 'Employee 2', 'Sales', 3500, 'employee2.png', true, 'joane.doe@example.com', 'hashedpassword4', '987654321', '456 Employee St, City, Country', '1990-05-15');
 
 -- Insert data into loyalty_programs table
 INSERT INTO loyalty_programs (business_id, loyalty_program_name, points_per_hundred, redeem_value, by_sales, minimum_eligibility_value, start_date)

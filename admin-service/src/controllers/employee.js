@@ -30,7 +30,7 @@ const getAllEmployees = asyncHandler(async (req, res) => {
 */
 
 const createEmployee = asyncHandler(async (req, res) => {
-  const { employee_name, role, salary, photo_url, employee_email } = req.body;
+  const { employee_name, role, salary, birthday, employee_address, phone, photo_url, employee_email } = req.body;
   let branch_id;
 
   // check if the user is authorized to create employee
@@ -57,7 +57,7 @@ const createEmployee = asyncHandler(async (req, res) => {
     numbers: true,
   });
   const hashedPassword = await bcrypt.hash(password, 10);
-  const createEmployeeQuery = `INSERT INTO employee (branch_id, employee_name, role, salary, photo_url, status, employee_email, password) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+  const createEmployeeQuery = `INSERT INTO employee (branch_id, employee_name, role, salary, photo_url, status, employee_email, password, birthday, phone, employee_address) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
   const checkEmployeeQuery = `SELECT * FROM employee WHERE employee_email = ? AND branch_id = ?`;
 
   //check if employee already exists
@@ -80,6 +80,9 @@ const createEmployee = asyncHandler(async (req, res) => {
             status,
             employee_email,
             hashedPassword,
+            birthday,
+            phone,
+            employee_address,
           ],
           (err, result) => {
             if (err) {
