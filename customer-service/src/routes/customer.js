@@ -167,6 +167,4 @@ customerRouter.get("/my-profile", validateToken, getCustomerProfile);
 customerRouter.get("/points/:phone/:buinessID", getCustomerPointsByPhone);
 
 
-
-
 module.exports = customerRouter;

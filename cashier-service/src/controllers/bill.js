@@ -94,13 +94,21 @@ const newBill = asyncHandler(async (req, res) => {
           if (err) {
             return res.status(500).json({ message: err.message });
           } else {
-            // Retrieve customer_id using Axios from the customer service
+           
             const bill_id = result.insertId;
             console.log("Created Bill ID: ", bill_id);
-            const customerResponse = await axios.get(
-              `http://localhost:3004/customer/${customer_phone}`
-            );
-            const customer_id = customerResponse.data.customer_id;
+            console.log("Customer Phone: ", customer_phone);
+            //write a query to get customer id from customer phone 
+            const customerDataQuery = `SELECT customer_id FROM customer WHERE customer_phone = ?`; 
+            let customer_id;  
+            db.query(customerDataQuery, [customer_phone], (err, result) => {
+              if (err) {
+                return res.status(500).json({ message: err.message });
+              }
+              console.log("Customer Data: ", result);
+               customer_id = result[0].customer_id;
+            });
+      
             console.log("Customer ID: ", customer_id);
             // Add loyalty points if applicable
             if (customer_id) {
