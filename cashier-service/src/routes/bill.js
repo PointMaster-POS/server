@@ -1,8 +1,10 @@
 const express = require('express');
 const billRouter = express.Router();
-const { newBill, getBillItems, updateBill } = require('../controllers/bill');
+const { createNewBill, getBillItems, updateBill } = require('../controllers/bill');
 const { branchAccess, businessAccess } = require('../middleware/businessAccess');
 const verifyCashier = require('../middleware/verifyCashier');
+const redeemLoyaltyPoints = require('../middleware/redeemLoyaltyPoints');
+const updateInventory = require('../middleware/updateInventory');
 
 /**
  * @swagger
@@ -62,7 +64,7 @@ const verifyCashier = require('../middleware/verifyCashier');
  */
 
 // Post a new bill
-billRouter.post('/new-bill', verifyCashier, branchAccess,businessAccess,newBill);
+billRouter.post('/new-bill', verifyCashier, branchAccess,businessAccess, redeemLoyaltyPoints, updateInventory, createNewBill);
 
 /**
  * @swagger
@@ -110,7 +112,7 @@ billRouter.post('/new-bill', verifyCashier, branchAccess,businessAccess,newBill)
 // billRouter.get('/bill/:billId', verifyCashier, getBillItems);
 
 
-billRouter.put('/update', verifyCashier, branchAccess,businessAccess, updateBill);
+billRouter.put('/update', verifyCashier, branchAccess,businessAccess,  updateBill);
 
 
 module.exports = billRouter;

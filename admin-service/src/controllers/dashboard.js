@@ -50,11 +50,15 @@ const getExpiredItems = asyncHandler(async (req, res) => {
                 i.item_id,
                 i.item_name,
                 i.exp_date,
-                bb.branch_name
+                bb.branch_name,
+                c.category_name,
+                c.category_location
             FROM 
                 items i
             JOIN 
-                business_branch bb ON i.category_id = bb.branch_id -- Adjust this join based on your actual relationship
+                business_branch bb ON i.category_id = bb.branch_id 
+            JOIN 
+                categories c ON i.category_id = c.category_id 
             WHERE 
                 bb.business_id = ? 
                 AND i.exp_date < CURDATE()`;
