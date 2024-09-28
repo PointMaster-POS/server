@@ -5,7 +5,8 @@ const updateInventory = asyncHandler((req, res, next) => {
     const { items_list } = req.body;
   
     if (!items_list || items_list.length === 0) {
-      return next(); // If no items, proceed to next function
+        // If no items, proceed to next function
+      return next(); 
     }
   
     console.log("Items list: ", items_list);
