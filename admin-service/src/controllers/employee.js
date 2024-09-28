@@ -45,6 +45,7 @@ const createEmployee = asyncHandler(async (req, res) => {
     branch_id = req.branch.branch_id;
   }
 
+  console.log(branch_id);
   // check if all fields are present
   if (!employee_name || !role || !salary || !photo_url || !employee_email) {
     return res.status(400).json({ message: "All fields are required" });
@@ -69,6 +70,7 @@ const createEmployee = asyncHandler(async (req, res) => {
         return res.status(400).json({ message: "Employee already exists" });
       } else {
         //create employee if not exists
+        console.log(branch_id)
         db.query(
           createEmployeeQuery,
           [

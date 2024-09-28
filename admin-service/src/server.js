@@ -8,6 +8,7 @@ const branchRouter = require('./routes/branch');
 const loyaltyRouter = require('./routes/loyalty');
 const employeeRouter = require('./routes/employee');
 const itemsRouter = require('./routes/items');
+const dashboardRouter = require('./routes/dashboard');  
 const app = express();
 
 // Swagger
@@ -61,6 +62,7 @@ app.use('/category', categoryRouter);
 app.use('/loyalty', loyaltyRouter);
 app.use('/employee', employeeRouter);
 app.use('/items', itemsRouter);
+app.use('/dashboard', dashboardRouter);
 
 // Start server
 app.listen(PORT, () => {
