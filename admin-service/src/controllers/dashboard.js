@@ -1,7 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const db = require("../config/db");
-const { get } = require("../routes/dashboard");
-// const { get } = require("../routes/dashboard");
+
 
 //get popular items
 
@@ -13,6 +12,8 @@ const getPopularItems = asyncHandler(async (req, res) => {
     startDate: startDate,
     endDate: endDate,
   });
+
+    let popularItems = [];
 
   // SQL Query to retrieve popular items
   const query = `
