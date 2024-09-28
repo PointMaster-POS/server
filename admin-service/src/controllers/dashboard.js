@@ -40,7 +40,6 @@ ORDER BY
     purchase_count DESC;
     `;
 
-
   try {
     db.query(query, [businessID, startDate, endDate], (err, result) => {
       if (err) {
@@ -95,7 +94,6 @@ const getExpiredItems = asyncHandler(async (req, res) => {
   }
 });
 
-
 //get Number of bills per month
 
 /*
@@ -116,13 +114,13 @@ ORDER BY
 */
 
 const getNumberOfBillsPerMonth = (req, res) => {
-    const { startMonth, endMonth } = req.params;
-  
-    // Assuming the business ID is part of the request (added through token validation)
-    const business_id = req.owner.business_id;
-  
-    // Define the SQL query
-    const sqlQuery = `
+  const { startMonth, endMonth } = req.params;
+
+  // Assuming the business ID is part of the request (added through token validation)
+  const business_id = req.owner.business_id;
+
+  // Define the SQL query
+  const sqlQuery = `
       SELECT 
         DATE_FORMAT(b.date_time, '%Y-%m') AS bill_month, 
         COUNT(b.bill_id) AS number_of_bills
@@ -138,19 +136,67 @@ const getNumberOfBillsPerMonth = (req, res) => {
       ORDER BY 
         bill_month ASC;
     `;
-  
-    // Execute the query with the provided business ID, startMonth, and endMonth
-    db.query(sqlQuery, [business_id, `${startMonth}-01`, `${endMonth}-31`], (err, results) => {
+
+  // Execute the query with the provided business ID, startMonth, and endMonth
+  db.query(
+    sqlQuery,
+    [business_id, `${startMonth}-01`, `${endMonth}-31`],
+    (err, results) => {
       if (err) {
         return res.status(500).json({ message: err.message });
       }
-  
+
       // Send the query results as the response
       res.status(200).json({
         message: `Number of bills for business ${business_id} from ${startMonth} to ${endMonth}`,
-        data: results
+        data: results,
       });
+    }
+  );
+};
+
+// Function to get the Service Time Report
+const getServiceTimeReport = asyncHandler(async (req, res) => {
+    const businessId = req.owner.business_id;
+    const { startDate, endDate } = req.query;
+
+    // SQL query to fetch the number of bills created in the given date range
+    const query = `
+        SELECT 
+            DATE_FORMAT(b.date_time, '%Y-%m-%d') AS transaction_date,
+            COUNT(b.bill_id) AS number_of_bills
+        FROM 
+            bill b
+        JOIN 
+            business_branch bb ON b.branch_id = bb.branch_id
+        WHERE 
+            bb.business_id = ? 
+            AND b.date_time BETWEEN ? AND ?
+        GROUP BY 
+            transaction_date
+        ORDER BY 
+            transaction_date ASC;
+    `;
+
+    db.query(query, [businessId, startDate, endDate], (err, results) => {
+        if (err) {
+            return res.status(500).json({ message: err.message });
+        }
+
+        // Placeholder for service time calculation logic if needed
+        // This can be based on business-specific logic or hardcoded values
+
+        res.status(200).json({
+            message: 'Service time report retrieved successfully',
+            data: results
+        });
     });
-  };
-  
-module.exports = { getPopularItems, getExpiredItems, getNumberOfBillsPerMonth };
+});
+
+
+module.exports = {
+  getPopularItems,
+  getExpiredItems,
+  getNumberOfBillsPerMonth,
+  getServiceTimeReport,
+};
