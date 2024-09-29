@@ -14,6 +14,7 @@ const app = express();
 // Swagger
 const swaggerJsDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
+const businessRouter = require('./routes/business');
 
 
 // Constants
@@ -63,6 +64,7 @@ app.use('/loyalty', loyaltyRouter);
 app.use('/employee', employeeRouter);
 app.use('/items', itemsRouter);
 app.use('/dashboard', dashboardRouter);
+app.use('/business', businessRouter);
 
 // Start server
 app.listen(PORT, () => {
