@@ -45,7 +45,8 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 // Routes
 app.use('/customer', customerRouter);
 app.use('/employee', employeeRouter);
-app.use('/password-manager', passwordResetRouter);
+// app.use('/password-manager', passwordResetRouter);
 
 // Export the app for testing or server use
 module.exports = app;
+
