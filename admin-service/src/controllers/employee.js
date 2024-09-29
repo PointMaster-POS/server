@@ -187,4 +187,39 @@ const getOwnerByID = asyncHandler(async (req, res) => {
   });
 });
 
-module.exports = { getAllEmployees, createEmployee , getEmployeeByID, getOwnerByID};
+const updateEmployee = asyncHandler(async (req, res) => {
+  const employee_id = req.params.employee_id;
+  const { employee_name, role, salary, photo_url, employee_email, birthday, phone, employee_address } = req.body;
+  const updateEmployeeQuery = `UPDATE employee SET employee_name = ?, role = ?, salary = ?, photo_url = ?, employee_email = ?, birthday = ?, phone = ?, employee_address = ? WHERE employee_id = ?`;
+
+  db.query(
+    updateEmployeeQuery,
+    [employee_name, role, salary, photo_url, employee_email, birthday, phone, employee_address, employee_id],
+    (err, result) => {
+      if (err) {
+        return res.status(500).json({ message: err.message });
+      } else {
+        return res.status(200).json({ message: "Employee updated successfully" });
+
+        //send mail to employee 
+
+      }
+    }
+  );
+});
+
+
+const deleteEmployee = asyncHandler(async (req, res) => {
+  const employee_id = req.params.employee_id;
+  const deleteEmployeeQuery = `UPDATE employee SET status = ? WHERE employee_id = ?`;
+
+  db.query(deleteEmployeeQuery, [0, employee_id], (err, result) => {
+    if (err) {
+      return res.status(500).json({ message: err.message });
+    } else {
+      return res.status(200).json({ message: "Employee deleted successfully" });
+    }
+  });
+});
+
+module.exports = { getAllEmployees, createEmployee , getEmployeeByID, getOwnerByID, updateEmployee, deleteEmployee };

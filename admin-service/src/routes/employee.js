@@ -6,8 +6,8 @@ const {
   getAllEmployees,
   getEmployeeByID,
   getOwnerByID,
-//   updateEmployee,
-//   deleteEmployee,
+   updateEmployee,
+   deleteEmployee,
 } = require("../controllers/employee");
 const { branchAccess } = require("../middleware/businessAccess");
 
@@ -16,8 +16,8 @@ const { branchAccess } = require("../middleware/businessAccess");
 
 employeeRouter.post("/", validateToken, createEmployee);
 employeeRouter.get("/all-employee/:branch_id", validateToken, getAllEmployees);
-// employeeRouter.put("/:employee_id", validateToken, updateEmployee);
-// employeeRouter.delete("/:employee_id", validateToken, deleteEmployee);
+employeeRouter.put("/:employee_id", validateToken, updateEmployee);
+employeeRouter.delete("/:employee_id", validateToken, deleteEmployee);
 
 employeeRouter.get("/employee-profile", validateToken, branchAccess , getEmployeeByID);
 

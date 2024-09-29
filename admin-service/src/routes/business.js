@@ -15,4 +15,5 @@ businessRouter.put('/update-business-details', validateToken, updateBusinessDeta
 businessRouter.put('/update-owner-details', validateToken, updateOwnerDetails);
 
 
+//export business router
 module.exports = businessRouter;    
