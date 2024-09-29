@@ -10,10 +10,11 @@ const createNewBill = asyncHandler((req, res) => {
     payment_method,
     total_amount,
     items_list,
-    discount,
+    discount, 
     received,
     notes,
     status,
+    customer_phone
   } = req.body;
 
   const cashier_id = req.cashier.employee_id;
@@ -21,7 +22,7 @@ const createNewBill = asyncHandler((req, res) => {
 
   // Insert the bill into the 'bill' table
   db.query(
-    'INSERT INTO bill (employee_id, branch_id, total_price, payment_method, discount, received, notes, status, date_time) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+    'INSERT INTO bill (employee_id, branch_id, total_price, payment_method, discount, received, notes, status, date_time, customer_phone) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
     [
       cashier_id,
       branch_id,
@@ -32,6 +33,7 @@ const createNewBill = asyncHandler((req, res) => {
       notes,
       status,
       new Date(),
+      customer_phone
     ],
     (err, billResult) => {
       if (err) {

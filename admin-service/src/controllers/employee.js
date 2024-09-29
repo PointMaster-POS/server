@@ -152,4 +152,39 @@ const createEmployee = asyncHandler(async (req, res) => {
   });
 });
 
-module.exports = { getAllEmployees, createEmployee };
+
+const getEmployeeByID = asyncHandler(async (req, res) => {
+  const employee_id = req.employee.employee_id;
+  console.log(employee_id);
+  const getEmployeeQuery = `SELECT * FROM employee WHERE employee_id = ? AND status = ?`;
+
+  db.query(getEmployeeQuery, [employee_id, 1], (err, result) => {
+    if (err) {
+      return res.status(500).json({ message: err.message });
+    } else {
+      if (result.length === 0) {
+        return res.status(404).json({ message: "Employee not found" });
+      }
+      return res.status(200).json(result[0]);
+    }
+  });
+});
+
+const getOwnerByID = asyncHandler(async (req, res) => {
+  const business_id = req.owner.business_id;
+  const getOwnerQuery = `SELECT * FROM business WHERE business_id = ?`;
+
+
+  db.query(getOwnerQuery, [business_id], (err, result) => {
+    if (err) {
+      return res.status(500).json({ message: err.message });
+    } else {
+      if (result.length === 0) {
+        return res.status(404).json({ message: "Owner not found" });
+      }
+      return res.status(200).json(result[0]);
+    }
+  });
+});
+
+module.exports = { getAllEmployees, createEmployee , getEmployeeByID, getOwnerByID};
