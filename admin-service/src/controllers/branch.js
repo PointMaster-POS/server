@@ -51,6 +51,9 @@ const getBranch = asyncHandler(async (req, res) => {
 });
 
 const getAllBranches = asyncHandler(async (req, res) => {
+    if (req.owner === undefined) {
+        return res.status(400).json({ message: "Unauthorized" });
+    }
     const business_id = req.owner.business_id;
     const getBranchQuery = `SELECT * FROM business_branch WHERE business_id = ?`;
 

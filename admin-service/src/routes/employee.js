@@ -8,6 +8,7 @@ const {
   getOwnerByID,
    updateEmployee,
    deleteEmployee,
+   getAllEmployeeBranch
 } = require("../controllers/employee");
 const { branchAccess } = require("../middleware/businessAccess");
 
@@ -22,5 +23,6 @@ employeeRouter.delete("/:employee_id", validateToken, deleteEmployee);
 employeeRouter.get("/employee-profile", validateToken, branchAccess , getEmployeeByID);
 
 employeeRouter.get("/owner-profile", validateToken, branchAccess , getOwnerByID);
+employeeRouter.get("/branch-employee", validateToken, branchAccess , getAllEmployeeBranch);
 
 module.exports = employeeRouter;

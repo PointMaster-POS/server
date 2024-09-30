@@ -60,6 +60,7 @@ categoryRouter.put(
   updateCategory
 );
 
+
 categoryRouter.delete(
   "/:branchID/:categoryID",
   validateToken,

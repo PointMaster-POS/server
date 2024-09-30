@@ -30,7 +30,16 @@ const getAllEmployees = asyncHandler(async (req, res) => {
 */
 
 const createEmployee = asyncHandler(async (req, res) => {
-  const { employee_name, role, salary, birthday, employee_address, phone, photo_url, employee_email } = req.body;
+  const {
+    employee_name,
+    role,
+    salary,
+    birthday,
+    employee_address,
+    phone,
+    photo_url,
+    employee_email,
+  } = req.body;
   let branch_id;
 
   // check if the user is authorized to create employee
@@ -70,7 +79,7 @@ const createEmployee = asyncHandler(async (req, res) => {
         return res.status(400).json({ message: "Employee already exists" });
       } else {
         //create employee if not exists
-        console.log(branch_id)
+        console.log(branch_id);
         db.query(
           createEmployeeQuery,
           [
@@ -152,7 +161,6 @@ const createEmployee = asyncHandler(async (req, res) => {
   });
 });
 
-
 const getEmployeeByID = asyncHandler(async (req, res) => {
   const employee_id = req.employee.employee_id;
   console.log(employee_id);
@@ -174,7 +182,6 @@ const getOwnerByID = asyncHandler(async (req, res) => {
   const business_id = req.owner.business_id;
   const getOwnerQuery = `SELECT * FROM business WHERE business_id = ?`;
 
-
   db.query(getOwnerQuery, [business_id], (err, result) => {
     if (err) {
       return res.status(500).json({ message: err.message });
@@ -189,25 +196,44 @@ const getOwnerByID = asyncHandler(async (req, res) => {
 
 const updateEmployee = asyncHandler(async (req, res) => {
   const employee_id = req.params.employee_id;
-  const { employee_name, role, salary, photo_url, employee_email, birthday, phone, employee_address } = req.body;
+  const {
+    employee_name,
+    role,
+    salary,
+    photo_url,
+    employee_email,
+    birthday,
+    phone,
+    employee_address,
+  } = req.body;
   const updateEmployeeQuery = `UPDATE employee SET employee_name = ?, role = ?, salary = ?, photo_url = ?, employee_email = ?, birthday = ?, phone = ?, employee_address = ? WHERE employee_id = ?`;
 
   db.query(
     updateEmployeeQuery,
-    [employee_name, role, salary, photo_url, employee_email, birthday, phone, employee_address, employee_id],
+    [
+      employee_name,
+      role,
+      salary,
+      photo_url,
+      employee_email,
+      birthday,
+      phone,
+      employee_address,
+      employee_id,
+    ],
     (err, result) => {
       if (err) {
         return res.status(500).json({ message: err.message });
       } else {
-        return res.status(200).json({ message: "Employee updated successfully" });
+        return res
+          .status(200)
+          .json({ message: "Employee updated successfully" });
 
-        //send mail to employee 
-
+        //send mail to employee
       }
     }
   );
 });
-
 
 const deleteEmployee = asyncHandler(async (req, res) => {
   const employee_id = req.params.employee_id;
@@ -222,4 +248,25 @@ const deleteEmployee = asyncHandler(async (req, res) => {
   });
 });
 
-module.exports = { getAllEmployees, createEmployee , getEmployeeByID, getOwnerByID, updateEmployee, deleteEmployee };
+const getAllEmployeeBranch = asyncHandler(async (req, res) => {
+  const branch_id = req.branch.branch_id;
+  const getEmployeeQuery = `SELECT * FROM employee WHERE branch_id = ?`;
+
+  db.query(getEmployeeQuery, [branch_id], (err, result) => {
+    if (err) {
+      return res.status(500).json({ message: err.message });
+    } else {
+      return res.status(200).json(result);
+    }
+  });
+});
+
+module.exports = {
+  getAllEmployees,
+  createEmployee,
+  getEmployeeByID,
+  getOwnerByID,
+  updateEmployee,
+  deleteEmployee,
+  getAllEmployeeBranch,
+};
