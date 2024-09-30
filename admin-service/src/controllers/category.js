@@ -24,6 +24,7 @@ const createCategory = asyncHandler(async (req, res) => {
 
     db.query(createCategoryQuery, [category_name, category_location, branch_id], (err, result) => {
         if (err) {
+
             return res.status(500).json({ message: err.message });
             
         } else {
