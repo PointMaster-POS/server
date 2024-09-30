@@ -6,7 +6,7 @@ CREATE TABLE business (
   business_id VARCHAR(36) NOT NULL PRIMARY KEY,
   business_name VARCHAR(255) NOT NULL,
   business_mail VARCHAR(255) NOT NULL,
-  business_image_url VARCHAR(2048), 
+  business_url VARCHAR(2048), 
   business_hotline VARCHAR(64),
   business_description TEXT,
   business_address VARCHAR(1048),
@@ -17,7 +17,7 @@ CREATE TABLE business (
   business_owner_birthday DATE,
   business_owner_photo_url VARCHAR(2048),
   business_password VARCHAR(2048) NOT NULL,
-  logo_location VARCHAR(255),
+  logo_url VARCHAR(2048),
   business_registration_number VARCHAR(100),
   business_type VARCHAR(50),
   business_registration_date DATE,
@@ -159,7 +159,7 @@ CREATE TABLE items (
   stock FLOAT,
   price FLOAT,
   buying_price FLOAT,
-  image_url LONGBLOB,
+  image_url varchar(2048),
   exp_date DATE,
   discount FLOAT,
   supplier_name VARCHAR(255),
@@ -203,10 +203,10 @@ CREATE TABLE bill_items (
 );
 
 -- Insert data into business table
-INSERT INTO business (business_name, business_mail, business_image_url, business_hotline, business_description, business_address, business_owner_name, business_owner_mail, business_owner_phone, business_owner_address, business_owner_birthday, business_owner_photo_url, business_password, logo_location, business_registration_number, business_type, business_registration_date, status)
+INSERT INTO business (business_name, business_mail, business_url, business_hotline, business_description, business_address, business_owner_name, business_owner_mail, business_owner_phone, business_owner_address, business_owner_birthday, business_owner_photo_url, business_password, logo_url, business_registration_number, business_type, business_registration_date, status)
 VALUES 
-('Lassana Flora', 'owner1@example.com', "https://firebasestorage.googleapis.com/v0/b/pointmaster-79d9a.appspot.com/o/business-logos%2Fabstract-dark-purple-gradient-background-perfect-for-promotion-presentation-wallpaper-design-etc-vector.jpg?alt=media&token=861697d8-9991-47b3-8a49-df5fc71f0fe7", '123456789', 'A description of business 1', '123 Business St, City, Country', 'Owner 1', 'owner1@example.com', 0222222222, '123 Owner St, City, Country', '1990-01-01', 'https://example.com/owner1.jpg', '$2a$10$AEmY09NKHS4b3LtFayfXreUSlZ3h6WaErKlOT5wxYIblCpGtxGEEy','logo1.png', 'BRN123456', 'Retail', '2023-01-01', true),
-('Perera & Sons', 'owner2@example.com', 'http://examplebusiness2.com', '987654321', 'A description of business 2', '456 Market Rd, City, Country', 'Owner 2', 'owner2@example.com', 0333333333, '456 Owner St, City, Country', '1995-05-15', 'https://example.com/owner2.jpg', '$2a$10$AEmY09NKHS4b3LtFayfXreUSlZ3h6WaErKlOT5wxYIblCpGtxGEEy','logo2.png', 'BRN654321', 'Food & Beverage', '2023-02-01', true);
+('Lassana Flora', 'owner1@example.com', 'https://firebasestorage.googleapis.com/v0/b/pointmaster-79d9a.appspot.com/o/business-logos%2Fabstract-dark-purple-gradient-background-perfect-for-promotion-presentation-wallpaper-design-etc-vector.jpg?alt=media&token=861697d8-9991-47b3-8a49-df5fc71f0fe7', '123456789', 'A description of business 1', '123 Business St, City, Country', 'Owner 1', 'owner1@example.com', 0222222222, '123 Owner St, City, Country', '1990-01-01', 'https://example.com/owner1.jpg', '$2a$10$AEmY09NKHS4b3LtFayfXreUSlZ3h6WaErKlOT5wxYIblCpGtxGEEy','logo1.png', 'BRN123456', 'Retail', '2023-01-01', true),
+('Perera & Sons', 'owner2@example.com', 'http://examplebusiness2.com', '987654321', 'A description of business 2', '456 Market Rd, City, Country', 'Owner 2', 'owner2@example.com', 0333333333, '456 Owner St, City, Country', '1995-05-15', 'https://example.com/owner2.jpg', '$2a$10$AEmY09NKHS4b3LtFayfXreUSlZ3h6WaErKlOT5wxYIblCpGtxGEEy','https://firebasestorage.googleapis.com/v0/b/pointmaster-79d9a.appspot.com/o/business-logos%2Fabstract-dark-purple-gradient-background-perfect-for-promotion-presentation-wallpaper-design-etc-vector.jpg?alt=media&token=861697d8-9991-47b3-8a49-df5fc71f0fe7', 'BRN654321', 'Food & Beverage', '2023-02-01', true);
 
 -- Insert data into business_branch table
 INSERT INTO business_branch (business_id, branch_name, branch_location, status)

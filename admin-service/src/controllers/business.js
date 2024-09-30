@@ -37,7 +37,7 @@ const updateBusinessDetails = asyncHandler((req, res) => {
         business_hotline,
         business_description,
         business_address,
-        logo_location,
+        logo_url,
         business_registration_number,
         business_type,
         business_registration_date,
@@ -47,9 +47,9 @@ const updateBusinessDetails = asyncHandler((req, res) => {
         return res.status(400).json({ message: 'Business name and mail are required' });
     }
 
-    const updateBusinessQuery = `UPDATE business SET business_name = ?, business_mail = ?, business_url = ?, business_hotline = ?, business_description = ?, business_address = ?, logo_location = ?, business_registration_number = ?, business_type = ?, business_registration_date = ? WHERE business_id = ?`;
+    const updateBusinessQuery = `UPDATE business SET business_name = ?, business_mail = ?, business_url = ?, business_hotline = ?, business_description = ?, business_address = ?, logo_url = ?, business_registration_number = ?, business_type = ?, business_registration_date = ? WHERE business_id = ?`;
 
-    db.query(updateBusinessQuery, [business_name, business_mail, business_url, business_hotline, business_description, business_address, logo_location, business_registration_number, business_type, business_registration_date, business_id], (err, result) => {
+    db.query(updateBusinessQuery, [business_name, business_mail, business_url, business_hotline, business_description, business_address, logo_url, business_registration_number, business_type, business_registration_date, business_id], (err, result) => {
         if (err) {
             return res.status(500).json({ message: err.message });
         } else {
