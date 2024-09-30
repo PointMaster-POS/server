@@ -24,8 +24,9 @@ const createCategory = asyncHandler(async (req, res) => {
 
     db.query(createCategoryQuery, [category_name, category_location, branch_id], (err, result) => {
         if (err) {
-        
-          return res.status(500).json({message: err.message});  
+
+            return res.status(500).json({ message: err.message });
+            
         } else {
             return res.status(201).json({ message: "Category created successfully" });
         }
@@ -33,16 +34,13 @@ const createCategory = asyncHandler(async (req, res) => {
 });
 
 
-const getCategories = asyncHandler(async (req, res) => {
-    let branch_id;
+const getCategoriesOwner = asyncHandler(async (req, res) => {
+
     console.log("req.branch");
-    if( !req.branch){
-        branch_id = req.body.branch_id;
-        console.log(req.owner);
-    }
-    else {
-        branch_id = req.branch.branch_id;
-    }
+    
+    const  branch_id = req.params.branchID;
+    
+  
     console.log(branch_id);
     const getCategoriesQuery = `SELECT * FROM categories WHERE branch_id = ? and status = 1`;   
 
@@ -54,6 +52,27 @@ const getCategories = asyncHandler(async (req, res) => {
         }
     });
 });
+
+const getCategoriesManager = asyncHandler(async (req, res) => {
+
+    console.log("req.branch");
+    
+    const  branch_id = req.branch.branch_id;
+    
+  
+    console.log(branch_id);
+    const getCategoriesQuery = `SELECT * FROM categories WHERE branch_id = ? and status = 1`;   
+
+    db.query(getCategoriesQuery, [branch_id], (err, result) => {
+        if (err) {
+            return res.status(500).json({ message: err.message });
+        } else {
+            return res.status(200).json(result);
+        }
+    });
+});
+
+
 
 const updateCategory = asyncHandler(async (req, res) => {
     let branch_id;
@@ -128,4 +147,4 @@ const getAllBranchCategories = asyncHandler(async (req, res) => {
     });
 });
 
-module.exports = { createCategory , getCategories, updateCategory, deleteCategory , getAllBranchCategories};
+module.exports = { createCategory , getCategoriesOwner, getCategoriesManager, updateCategory, deleteCategory , getAllBranchCategories};

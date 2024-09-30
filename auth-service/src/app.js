@@ -6,6 +6,8 @@ const employeeRouter = require('./routes/employee');
 const dotenv = require('dotenv').config();
 const swaggerJsDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
+const passwordResetRouter = require('./routes/resetpassword');
+
 
 // Initialize express app
 const app = express();
@@ -43,6 +45,8 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 // Routes
 app.use('/customer', customerRouter);
 app.use('/employee', employeeRouter);
+// app.use('/password-manager', passwordResetRouter);
 
 // Export the app for testing or server use
 module.exports = app;
+

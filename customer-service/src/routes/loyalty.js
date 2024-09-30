@@ -2,10 +2,11 @@ const express = require("express");
 const loyalityRouter = express.Router();
 const {
   getLoyalityPointsByBusinessID,
-  // redeemLoyalityPointsAtShop,
+  getLoyaltyProgram,
   getLoyalityPointsByCustomerID,
 } = require("../controllers/loyality");
 const validateToken = require("../middleware/validateTokenHandler");
+
 
 /**
  * @swagger
@@ -130,5 +131,7 @@ loyalityRouter.get("/", validateToken, getLoyalityPointsByCustomerID);
 //  *         description: Internal Server Error
 //  */
 // loyalityRouter.post("/redeem/:customerID/:businessID", redeemLoyalityPointsAtShop);
+
+loyalityRouter.get("/loyalty-program/:businessID", getLoyaltyProgram);
 
 module.exports = loyalityRouter;
