@@ -2,7 +2,7 @@ const dashBoardRouter = require('express').Router();
 const validateToken = require('../middleware/validateToken');
 
 
-const { getPopularItems, getExpiredItems, getNumberOfBillsPerMonth , getServiceTimeReport, getNumberOfCustomers,  customerProfileWithMostPoints} = require('../controllers/dashboard');
+const { getPopularItems, getExpiredItems, getNumberOfBillsPerMonth , getServiceTimeReport, getNumberOfCustomers,  customerProfileWithMostPoints, salesByPaymentMethod} = require('../controllers/dashboard');
 
 
 dashBoardRouter.get('/business/sale-report/item/:startDate/:endDate', validateToken, getPopularItems);
@@ -11,7 +11,7 @@ dashBoardRouter.get('/business/sale-report/number-of-bills/:startMonth/:endMonth
 dashBoardRouter.get('/business/sale-report/service-time/:startDate/:endDate', validateToken, getServiceTimeReport);
 dashBoardRouter.get('/business/number-of-customers', validateToken, getNumberOfCustomers);
 dashBoardRouter.get('/business/customer-profile-with-most-points', validateToken, customerProfileWithMostPoints);
-
+dashBoardRouter.get('/business/sales-by-payment-method', validateToken, salesByPaymentMethod);
 
 
 
