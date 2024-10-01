@@ -194,10 +194,109 @@ const getServiceTimeReport = asyncHandler(async (req, res) => {
     });
 });
 
+//get number of customers of business
+const getNumberOfCustomers = asyncHandler(async (req, res) => {
+  const businessID = req.owner.business_id; // Assuming the business ID is stored in the request context
+
+  const query = `
+    SELECT COUNT(DISTINCT customer_id) AS numberOfCustomers
+    FROM customer_loyalty cl
+    INNER JOIN loyalty_programs lp ON cl.loyalty_program_id = lp.loyalty_program_id
+    WHERE lp.business_id = ?
+  `;
+
+  try {
+    db.query(query, [businessID], (err, result) => {
+      if (err) {
+        return res.status(500).json({ message: err.message });
+      } else {
+        return res.status(200).json({ numberOfCustomers: result[0].numberOfCustomers });
+      }
+    });
+  } catch (error) {
+    console.error("Error fetching number of customers:", error);
+    res
+      .status(500)
+      .json({ message: "Internal Server Error", error: error.message });
+  }
+});
+
+
+const customerProfileWithMostPoints = asyncHandler(async (req, res) => {
+  const businessID = req.owner.business_id; // Assuming the business ID is stored in the request context
+
+  const query = `
+    SELECT c.customer_id, c.customer_name, c.photo_url, c.customer_mail, c.customer_phone, c.birthday, c.gender, cl.totalPoints
+    FROM customer c
+    INNER JOIN (
+      SELECT customer_id, SUM(points) AS totalPoints
+      FROM customer_loyalty cl
+      INNER JOIN loyalty_programs lp ON cl.loyalty_program_id = lp.loyalty_program_id
+      WHERE lp.business_id = ?
+      GROUP BY customer_id
+      ORDER BY totalPoints DESC
+      LIMIT 1
+    ) cl ON c.customer_id = cl.customer_id
+  `;
+
+  try {
+    db.query(query, [businessID], (err, result) => {
+      if (err) {
+        return res.status(500).json({ message: err.message });
+      } else {
+        if (result.length > 0) {
+          return res.status(200).json(result[0]);
+        } else {
+          return res.status(404).json({ message: "No customers found." });
+        }
+      }
+    });
+  } catch (error) {
+    console.error("Error fetching customer with most points:", error);
+    res
+      .status(500)
+      .json({ message: "Internal Server Error", error: error.message });
+  }
+});
+
+const salesByPaymentMethod = asyncHandler(async (req, res) => {
+  const businessID = req.owner.business_id; // Assuming the business ID is stored in the request context
+
+  // SQL Query to retrieve sales grouped by payment method and branch
+  const query = `
+    SELECT b.payment_method, bb.branch_name, COUNT(b.bill_id) AS total_sales
+    FROM bill b
+    INNER JOIN business_branch bb ON b.branch_id = bb.branch_id
+    WHERE bb.business_id = ?
+    GROUP BY b.payment_method, bb.branch_name
+  `;
+
+  try {
+    // Execute the query
+    db.query(query, [businessID], (err, result) => {
+      if (err) {
+        // Send error response if something goes wrong
+        return res.status(500).json({ message: err.message });
+      } else {
+        // Send the resulting data back in the response
+        return res.status(200).json(result);
+      }
+    });
+  } catch (error) {
+    // Catch any other errors that occur and send an error response
+    console.error("Error fetching sales by payment method:", error);
+    res.status(500).json({ message: "Internal Server Error", error: error.message });
+  }
+});
+
+
 
 module.exports = {
   getPopularItems,
   getExpiredItems,
   getNumberOfBillsPerMonth,
   getServiceTimeReport,
+  getNumberOfCustomers,
+  customerProfileWithMostPoints,
+  salesByPaymentMethod,
 };
