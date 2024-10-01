@@ -31,6 +31,8 @@ const createItem = asyncHandler(async (req, res) => {
     exp_date,
     discount,
     supplier_name,
+    suplier_contact,
+  
   } = req.body;
   if (
     !category_id ||
@@ -40,14 +42,14 @@ const createItem = asyncHandler(async (req, res) => {
     !stock ||
     !price ||
     !image_url ||
-    !exp_date ||
-    !discount ||
-    !supplier_name
+    !exp_date 
+
+    
   ) {
     return res.status(400).json({ message: "All fields are required" });
   }
   const itemCheckQuery = `SELECT * FROM items WHERE barcode = ? AND item_name = ?`;
-  const itemCreateQuery = `INSERT INTO items (category_id, item_name, minimum_stock, barcode, stock, price, image_url, exp_date, discount, supplier_name) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+  const itemCreateQuery = `INSERT INTO items (category_id, item_name, minimum_stock, barcode, stock, price, image_url, exp_date, discount, supplier_name, suplier_contact, status) VALUES (?,? ,?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
   db.query(itemCheckQuery, [barcode, item_name], (err, result) => {
     if (err) {
       return res.status(500).json({ message: err.message });
@@ -68,6 +70,9 @@ const createItem = asyncHandler(async (req, res) => {
             exp_date,
             discount,
             supplier_name,
+            suplier_contact,
+            1,
+
           ],
           (err, result) => {
             if (err) {
@@ -89,7 +94,7 @@ const getItemsByCategory = asyncHandler(async (req, res) => {
   const category_id = req.params.category_id;
 
   //query to get items by category
-  const getItemsQuery = `SELECT * FROM items WHERE category_id = ?`;
+  const getItemsQuery = `SELECT * FROM items WHERE category_id = ? AND status = 1`;
 
   //execute query
   db.query(getItemsQuery, [category_id], (err, result) => {
@@ -104,18 +109,22 @@ const getItemsByCategory = asyncHandler(async (req, res) => {
 const updateItem = asyncHandler(async (req, res) => {
   //check if all fields are present
   const item_id = req.params.item_id;
+  console.log(item_id);
   const {
     category_id,
     item_name,
     minimum_stock,
     barcode,
     stock,
+    buying_price, 
     price,
     image_url,
     exp_date,
     discount,
     supplier_name,
+    supplier_contact,
   } = req.body;
+  console.log(req.body);
   if (
     !category_id ||
     !item_name ||
@@ -128,7 +137,7 @@ const updateItem = asyncHandler(async (req, res) => {
   }
 
   //query to update item
-  const updateItemQuery = `UPDATE items SET category_id = ?, item_name = ?, minimum_stock = ?, barcode = ?, stock = ?, price = ?, image_url = ?, exp_date = ?, discount = ?, supplier_name = ? WHERE item_id = ?`;
+  const updateItemQuery = `UPDATE items SET category_id = ?, item_name = ?, minimum_stock = ?, barcode = ?, stock = ?,buying_price = ?, price = ?, image_url = ?, exp_date = ?, discount = ?, supplier_name = ?, supplier_contact = ? WHERE item_id = ?`;
 
   //execute query
   db.query(
@@ -139,12 +148,15 @@ const updateItem = asyncHandler(async (req, res) => {
       minimum_stock,
       barcode,
       stock,
+      buying_price,
       price,
       image_url,
       exp_date,
       discount,
       supplier_name,
+      supplier_contact,
       item_id,
+      
     ],
     (err, result) => {
       if (err) {
@@ -165,7 +177,7 @@ const deleteItem = asyncHandler(async (req, res) => {
   const item_id = req.params.item_id;
 
   //query to delete item
-  const deleteItemQuery = `DELETE FROM items WHERE item_id = ?`;
+  const deleteItemQuery = `UPDATE items SET status = 0 WHERE item_id = ?`;
 
   //execute query
   db.query(deleteItemQuery, [item_id], (err, result) => {

@@ -84,6 +84,7 @@ SET NEW.loyalty_program_id = UUID();
 CREATE TABLE customer (
   customer_id VARCHAR(36) NOT NULL PRIMARY KEY, -- Changed customer_id to NOT NULL
   customer_name VARCHAR(255) NOT NULL,
+  photo_url VARCHAR(2048),
   customer_mail VARCHAR(255),
   customer_phone VARCHAR(55) NOT NULL UNIQUE, -- Ensuring unique phone numbers
   birthday DATE,
@@ -163,6 +164,8 @@ CREATE TABLE items (
   exp_date DATE,
   discount FLOAT,
   supplier_name VARCHAR(255),
+  supplier_contact VARCHAR(255),
+  status BOOL NOT NULL,
   FOREIGN KEY (category_id) REFERENCES categories(category_id)
 );
 
@@ -227,10 +230,10 @@ VALUES
 ((SELECT business_id FROM business WHERE business_mail = 'owner2@example.com'), 'Loyalty Program 2', 15, 0.15, true, 150, '2024-02-01');
 
 -- Insert data into customer table
-INSERT INTO customer (customer_name, customer_mail, customer_phone, birthday, gender, password)
+INSERT INTO customer (customer_name, photo_url, customer_mail, customer_phone, birthday, gender, password)
 VALUES 
-('John Doe', 'john.doe@example.com', '123456789', '1990-01-01', 'Male', '$2a$12$YiVwORUpdUpZQSK5nbAf5uLoc3quatyJX1d4gjmFKe.QftSYFOelW'),
-('Jane Smith', 'jane.smith@example.com', '987654321', '1985-05-15', 'Female', 'hashedpassword456');
+('John Doe', 'https://firebasestorage.googleapis.com/v0/b/pointmaster-79d9a.appspot.com/o/business-logos%2Fabstract-dark-purple-gradient-background-perfect-for-promotion-presentation-wallpaper-design-etc-vector.jpg?alt=media&token=861697d8-9991-47b3-8a49-df5fc71f0fe7', 'john.doe@example.com', '123456789', '1990-01-01', 'Male', '$2a$12$YiVwORUpdUpZQSK5nbAf5uLoc3quatyJX1d4gjmFKe.QftSYFOelW'),
+('Jane Smith', 'https://firebasestorage.googleapis.com/v0/b/pointmaster-79d9a.appspot.com/o/business-logos%2Fabstract-dark-purple-gradient-background-perfect-for-promotion-presentation-wallpaper-design-etc-vector.jpg?alt=media&token=861697d8-9991-47b3-8a49-df5fc71f0fe7','jane.smith@example.com', '987654321', '1985-05-15', 'Female', 'hashedpassword456');
 
 -- -- Insert data into bill table
 -- INSERT INTO bill (branch_id, employee_id, payment_method, total_price, received, status, notes, date_time, customer_id)
@@ -257,10 +260,10 @@ VALUES
 ((SELECT branch_id FROM business_branch WHERE branch_name = 'Branch 1'), 'Clothing', 'Aisle 2', true);
 
 -- Insert data into items table
-INSERT INTO items (category_id, item_name, minimum_stock, barcode, stock, price, buying_price, image_url, exp_date, discount, supplier_name)
+INSERT INTO items (category_id, item_name, minimum_stock, barcode, stock, price, buying_price, image_url, exp_date, discount, supplier_name, supplier_contact, status)
 VALUES 
-((SELECT category_id FROM categories WHERE category_name = 'Electronics'), 'Laptop', 10, '123456789012', 50, 10030,40 ,'https://firebasestorage.googleapis.com/v0/b/pointmaster-79d9a.appspot.com/o/business-logos%2Fabstract-dark-purple-gradient-background-perfect-for-promotion-presentation-wallpaper-design-etc-vector.jpg?alt=media&token=861697d8-9991-47b3-8a49-df5fc71f0fe7', '2023-12-31', 10, 'Supplier 1'),
-((SELECT category_id FROM categories WHERE category_name = 'Clothing'), 'T-Shirt', 20, '987654321098', 100, 10000, 400,'tshirt.png', '2024-08-31', 5, 'Supplier 2');
+((SELECT category_id FROM categories WHERE category_name = 'Electronics'), 'Laptop', 10, '123456789012', 50, 10030,40 ,'https://firebasestorage.googleapis.com/v0/b/pointmaster-79d9a.appspot.com/o/business-logos%2Fabstract-dark-purple-gradient-background-perfect-for-promotion-presentation-wallpaper-design-etc-vector.jpg?alt=media&token=861697d8-9991-47b3-8a49-df5fc71f0fe7', '2023-12-31', 10, 'Supplier 1', '123456789', true),
+((SELECT category_id FROM categories WHERE category_name = 'Clothing'), 'T-Shirt', 20, '987654321098', 100, 10000, 400,'tshirt.png', '2024-08-31', 5, 'Supplier 2', '987654321', true);
 
 -- Insert data into bill_items table
 -- INSERT INTO bill_items (bill_id, item_id, quantity)

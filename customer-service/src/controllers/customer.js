@@ -71,10 +71,10 @@ const getAllCustomers = asyncHandler(async (req, res) => {
 //controller to update customer details , by decoding the token and getting the customer id
 //protected route
 const updateCustomer = asyncHandler(async (req, res) => {
-  const { customer_name, customer_mail, customer_phone, birthday, gender } =
+  const { customer_name, customer_mail, customer_phone, birthday, gender,photo_url } =
     req.body;
 
-  const query = `UPDATE customer SET customer_name = ?, customer_mail = ?, customer_phone = ?, birthday = ?, gender = ? WHERE customer_id = ?`;
+  const query = `UPDATE customer SET customer_name = ?, customer_mail = ?, customer_phone = ?, birthday = ?, gender = ?, photo_url = ? WHERE customer_id = ?`;
 
   const customer_id = req.customer.customer_id;
   //query to update customer
@@ -87,6 +87,7 @@ const updateCustomer = asyncHandler(async (req, res) => {
       birthday,
       gender,
       customer_id,
+      photo_url,
     ],
     (err, results) => {
       if (err) {
