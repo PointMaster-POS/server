@@ -98,6 +98,10 @@ module.exports = redeemLoyaltyPoints;
 const updateLoyaltyPoints = asyncHandler((req, res, next) => {
     const { loyalty_points_redeemed, total_amount, customer_phone } = req.body;
     const business_id = req.business.business_id;
+
+    if (!customer_phone) {
+        return next(); // If no points redeemed, skip to next function
+    }
     
     const loyaltyProgramQuery = `SELECT * FROM loyalty_programs WHERE business_id = ?`;
 
