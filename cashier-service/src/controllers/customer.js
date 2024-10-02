@@ -33,7 +33,7 @@ const getCustomer = asyncHandler(async (req, res) => {
                     //integrate customer points with customer details
                     return res
                       .status(200)
-                      .json({ ...result[0], points: points[0].points });
+                      .json({ ...result[0], points: points[0] ? points[0].points : 0 });
                   } else {
                     return res.status(404).json({ message: "Customer not found" });
                   }

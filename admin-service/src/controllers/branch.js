@@ -67,6 +67,7 @@ const getAllBranches = asyncHandler(async (req, res) => {
     });
 });
 
+
 const updateBranch = asyncHandler(async (req, res) => {
     const branch_id = req.params.branch_id;
     const { branch_name, branch_location } = req.body;

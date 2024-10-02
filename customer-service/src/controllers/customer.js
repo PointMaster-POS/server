@@ -12,6 +12,7 @@ const registerCustomer = asyncHandler(async (req, res) => {
     birthday,
     gender,
     password,
+    photo_url,
   } = req.body;
 
   console.log(req.body);
@@ -40,7 +41,7 @@ const registerCustomer = asyncHandler(async (req, res) => {
     console.log(hashed_pw);
 
     // If email does not exist, proceed with registration
-    const registerCustomerQuery = `INSERT INTO customer (customer_name, customer_mail, customer_phone, birthday, gender, password) VALUES (?,?,?,?,?,?)`;
+    const registerCustomerQuery = `INSERT INTO customer (customer_name, customer_mail, customer_phone, birthday, gender, password, photo_url) VALUES (?,?,?,?,?,?,?)`;
 
     db.query(
       registerCustomerQuery,
@@ -51,6 +52,7 @@ const registerCustomer = asyncHandler(async (req, res) => {
         birthday,
         gender,
         hashed_pw,
+        photo_url,
       ],
       (err, result) => {
         if (err) {

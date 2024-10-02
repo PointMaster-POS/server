@@ -31,7 +31,7 @@ const createItem = asyncHandler(async (req, res) => {
     exp_date,
     discount,
     supplier_name,
-    suplier_contact,
+    supplier_contact
   
   } = req.body;
   if (
@@ -49,7 +49,8 @@ const createItem = asyncHandler(async (req, res) => {
     return res.status(400).json({ message: "All fields are required" });
   }
   const itemCheckQuery = `SELECT * FROM items WHERE barcode = ? AND item_name = ?`;
-  const itemCreateQuery = `INSERT INTO items (category_id, item_name, minimum_stock, barcode, stock, price, image_url, exp_date, discount, supplier_name, suplier_contact, status) VALUES (?,? ,?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+  const itemCreateQuery = `INSERT INTO items (category_id, item_name, minimum_stock, barcode, stock, price, image_url, exp_date, discount, supplier_name, supplier_contact, status) VALUES (?,? ,?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+  console.log({"LOG": req.body});
   db.query(itemCheckQuery, [barcode, item_name], (err, result) => {
     if (err) {
       return res.status(500).json({ message: err.message });
@@ -70,12 +71,13 @@ const createItem = asyncHandler(async (req, res) => {
             exp_date,
             discount,
             supplier_name,
-            suplier_contact,
+            supplier_contact,
             1,
 
           ],
           (err, result) => {
             if (err) {
+              console.log(err);
               return res.status(500).json({ message: err.message });
             } else {
               return res
