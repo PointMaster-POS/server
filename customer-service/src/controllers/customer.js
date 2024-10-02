@@ -11,25 +11,33 @@ const registerCustomer = asyncHandler(async (req, res) => {
     customer_phone,
     birthday,
     gender,
-    hashed_pw,
+    password,
   } = req.body;
 
-  if (!customer_name || !customer_mail || !hashed_pw) {
+  console.log(req.body);
+
+  if (!customer_name || !customer_mail || !password) {
     return res
       .status(400)
       .json({ message: "Please provide name, email, and password" });
   }
 
   // Check if the email is already registered
-  const checkEmailQuery = `SELECT * FROM customer WHERE customer_mail = ?`;
-  db.query(checkEmailQuery, [customer_mail], (err, results) => {
+  const checkEmailQuery = `SELECT * FROM customer WHERE customer_mail = ? OR customer_phone = ?`;
+  db.query(checkEmailQuery, [customer_mail, customer_phone], (err, results) => {
     if (err) {
+      console.log(err);
       return res.status(500).json({ message: err.message });
     }
 
     if (results.length > 0) {
       return res.status(400).json({ message: "Email already exists" });
+
     }
+
+    //hash the password 
+    const hashed_pw =bcrypt.hashSync(req.body.password, 10); 
+    console.log(hashed_pw);
 
     // If email does not exist, proceed with registration
     const registerCustomerQuery = `INSERT INTO customer (customer_name, customer_mail, customer_phone, birthday, gender, password) VALUES (?,?,?,?,?,?)`;
@@ -74,9 +82,12 @@ const updateCustomer = asyncHandler(async (req, res) => {
   const { customer_name, customer_mail, customer_phone, birthday, gender,photo_url } =
     req.body;
 
+
+console.log(req.body);
   const query = `UPDATE customer SET customer_name = ?, customer_mail = ?, customer_phone = ?, birthday = ?, gender = ?, photo_url = ? WHERE customer_id = ?`;
 
   const customer_id = req.customer.customer_id;
+
   //query to update customer
   db.query(
     query,
@@ -86,12 +97,15 @@ const updateCustomer = asyncHandler(async (req, res) => {
       customer_phone,
       birthday,
       gender,
-      customer_id,
       photo_url,
+      customer_id,
+    
     ],
     (err, results) => {
       if (err) {
+        console.log(err);
         return res.status(500).json({ message: err.message });
+        
       }
       return res.status(200).json({ message: "Customer updated successfully" });
     }
