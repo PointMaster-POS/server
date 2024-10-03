@@ -5,6 +5,7 @@ const { branchAccess, businessAccess } = require('../middleware/businessAccess')
 const verifyCashier = require('../middleware/verifyCashier');
 const redeemLoyaltyPoints = require('../middleware/redeemLoyaltyPoints');
 const updateInventory = require('../middleware/updateInventory');
+const updateLoyaltyPoints = require('../middleware/updateLoyaltyPoints');
 
 /**
  * @swagger
@@ -64,7 +65,7 @@ const updateInventory = require('../middleware/updateInventory');
  */
 
 // Post a new bill
-billRouter.post('/new-bill', verifyCashier, branchAccess,businessAccess, redeemLoyaltyPoints, updateInventory, createNewBill);
+billRouter.post('/new-bill', verifyCashier, branchAccess,businessAccess, redeemLoyaltyPoints, updateLoyaltyPoints ,updateInventory, createNewBill);
 
 /**
  * @swagger

@@ -19,7 +19,7 @@ const getHistory = asyncHandler(async (req, res) => {
       bills.map(async (bill) => {
         const items = await new Promise((resolve, reject) => {
           // Get the item_ids from bill_items table
-          const getItemsQuery = "SELECT item_id FROM bill_items WHERE bill_id = ?";
+          const getItemsQuery = "SELECT item_id, quantity FROM bill_items WHERE bill_id = ?";
           db.query(getItemsQuery, [bill.bill_id], (err, data) => {
             if (err) return reject(err);
             
@@ -31,7 +31,12 @@ const getHistory = asyncHandler(async (req, res) => {
 
             db.query("SELECT * FROM items WHERE item_id IN (?)", [itemIds], (err, items) => {
               if (err) return reject(err);
-              resolve(items);
+              // Combine item details with quantity
+              const itemsWithQuantity = items.map((item, index) => {
+                return { ...item, quantity: data[index].quantity };
+              });
+
+              resolve(itemsWithQuantity);
             });
           });
         });

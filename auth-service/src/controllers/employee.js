@@ -20,6 +20,7 @@ const employeeLogginController = asyncHandler(async (req, res) => {
     if (employee) {
       const isMatch = await bcrypt.compare(password, employee.password);
       if (isMatch) {
+        console.log({"here --------> ": employee});
         const accessToken = jwt.sign(
           {
             employee: {
@@ -35,6 +36,7 @@ const employeeLogginController = asyncHandler(async (req, res) => {
         return res.status(200).json({ accessToken });
       }
     }
+    console.log("not found as employee");
 
     // If not found as an employee, check if it's a business owner
     let business = await Business.findOne({ where: { 
