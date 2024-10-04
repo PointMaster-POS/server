@@ -5,6 +5,7 @@ const { getRedisClient } = require('../config/redisclient');
 const db = require('../config/db'); // Assuming this is your database configuration
 const { sendEmail } = require("../utils/email");
 const generatePW = require("generate-password");
+const Mailgen = require("mailgen");
 
 // Controller for first form submission (business details)
 const registerBusiness = asyncHandler(async (req, res) => {
@@ -15,7 +16,7 @@ const registerBusiness = asyncHandler(async (req, res) => {
         business_hotline,
         business_description,
         business_address,
-        logo_location,
+        logo_url,
         business_hours,
         business_registration_number,
         business_type,
@@ -26,6 +27,7 @@ const registerBusiness = asyncHandler(async (req, res) => {
     if (!business_name || !business_mail) {
         return res.status(400).json({ message: 'Business name and mail are required' });
     }
+    console.log(req.body);
     
     const businessData = {
         business_name,
@@ -34,7 +36,7 @@ const registerBusiness = asyncHandler(async (req, res) => {
         business_hotline,
         business_description,
         business_address,
-        logo_location,
+        logo_url,
         business_registration_number,
         business_type,
         business_registration_date,
@@ -136,9 +138,10 @@ const verifyEmailSending = asyncHandler(async (req, res) => {
 
     // Configure Mailgen for email template
     let mailGenerator = new Mailgen({
-        theme: 'default',
+        theme: 'salted',
         product: {
-            name: 'Your Company Name',
+            name: 'PointMaster',
+            logo : 'https://firebasestorage.googleapis.com/v0/b/pointmaster-79d9a.appspot.com/o/business-logos%2FP.png?alt=media&token=602901a8-1db2-4cea-ba6a-307075d9c4b3',
             link: 'https://pointmaster.com'
         }
     });
@@ -151,19 +154,36 @@ const verifyEmailSending = asyncHandler(async (req, res) => {
     // Define email content
     const emailContent = {
         body: {
-            name: email, // or you can use a user's name if you have it
-            intro: `Welcome! Here is your verification code: ${code}.`,
+            name: email, // or you can use a user's name if available
+            intro: 'Welcome to PointMaster! We are excited to have you on board.',
+            table: {
+                data: [
+                    {
+                        'Your Verification Code': `<strong style="font-size: 24px; color: #FF5722;">${code}</strong>` // Highlight code with style
+                    }
+                ],
+                columns: { // Adjust table settings for better alignment
+                    customWidth: {
+                        'Your Verification Code': '30%'
+                    },
+                    customAlignment: {
+                        'Your Verification Code': 'center'
+                    }
+                }
+            },
             action: {
-                instructions: 'Please use the following code to complete your verification process:',
+                instructions: 'Please use the above code to complete your verification process. Simply enter the code on the verification page:',
                 button: {
-                    color: '#22BC66', // Customize button color
+                    color: '#22BC66', // Customize button color to green
                     text: 'Verify Now',
                     link: 'https://yourcompanywebsite.com/verify'
                 }
             },
-            outro: 'If you did not request this email, you can safely ignore it.'
+            outro: 'Need help or have questions? Just reply to this email, we\'re always happy to assist!',
+            signature: 'Best regards, The PointMaster Team'
         }
     };
+    
 
     // Generate HTML content
     const mailHtml = mailGenerator.generate(emailContent);
