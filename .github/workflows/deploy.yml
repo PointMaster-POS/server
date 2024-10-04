@@ -1,0 +1,31 @@
+name: Deploy to DigitalOcean via HTTPS
+
+on:
+  push:
+    branches:
+      - main  # Change this to the branch you want to deploy
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Deploy to DigitalOcean server via HTTPS
+      - name: Deploy API via HTTPS
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.DO_SSH_USER }}@${{ secrets.DO_SERVER_IP }} << 'EOF'
+            cd ~/pointmaster/server  # Navigate to your project directory
+            git config --global credential.helper cache
+            git config --global credential.helper 'cache --timeout=3600'
+            git config user.email "actions@github.com"
+            git config user.name "GitHub Actions"
+            git remote set-url origin https://github.com/USERNAME/REPO.git  # Use HTTPS URL of your repo
+            echo "https://${{ secrets.GH_PAT }}:x-oauth-basic@github.com" > ~/.git-credentials
+            git pull origin main  # Pull the latest changes via HTTPS
+            docker-compose down  # Stop the existing containers
+            docker-compose up -d  # Rebuild and restart the services
+          EOF
