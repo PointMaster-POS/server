@@ -1,32 +1,108 @@
-version: '3.8'
+version: "3.8"
 
 services:
-  auth-service:
+  redis:
+    image: redis:6.0.7
+    container_name: redis
+    restart: always
+    environment:
+      - REDIS_URL=redis://redis:6379
+    volumes:
+      - redis_volume_data:/data
+    ports:
+      - 6380:6379
+  redis_insight:
+    image: redislabs/redisinsight:1.14.0
+    container_name: redis_insight
+    restart: always
+    ports:
+      - 8001:8001
+    volumes:
+      - redis_insight_volume_data:/db
+  db:
+    image: mysql:8.1
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: pointmaster
+    ports:
+      - "3308:3306"
+    volumes:
+      - ./database:/docker-entrypoint-initdb.d/
+    restart: always
+
+  admin-service:
     build:
-      context: ./auth-service
+      context: ./admin-service
+      dockerfile: Dockerfile
     ports:
       - "3001:3001"
     environment:
-      - JWT_SECRET= sep-group-8
+      - ACCESS_TOKEN_SECRET=panadura
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_USER=root
+      - DB_PASSWORD=password
+      - DB_NAME=pointmaster
+      - REDIS_URL=redis://redis:6379
+      - REGISTRATION_SECRET=panadura
+    depends_on:
+      - db
+      - redis
+    restart: on-failure
 
-  costomer-service:
+  auth-service:
     build:
-      context: ./customer-service
+      context: ./auth-service
+      dockerfile: Dockerfile
     ports:
       - "3002:3002"
+    environment:
+      - ACCESS_TOKEN_SECRET=panadura
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_USER=root
+      - DB_PASSWORD=password
+      - DB_NAME=pointmaster
+    depends_on:
+      - db
+    restart: on-failure
 
   cashier-service:
     build:
       context: ./cashier-service
+      dockerfile: Dockerfile
     ports:
       - "3003:3003"
-
-  gateway:
-    build:
-      context: ./gateway
-    ports:
-      - "3000:3000"
+    environment:
+      - ACCESS_TOKEN_SECRET=panadura
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_USER=root
+      - DB_PASSWORD=password
+      - DB_NAME=pointmaster
     depends_on:
-      - auth-service
-      - user-service
-      - order-service
+      - db
+
+    restart: on-failure
+
+  customer-service:
+    build:
+      context: ./customer-service
+      dockerfile: Dockerfile
+    ports:
+      - "3004:3004"
+    environment:
+      - ACCESS_TOKEN_SECRET=panadura
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_USER=root
+      - DB_PASSWORD=password
+      - DB_NAME=pointmaster
+
+    depends_on:
+      - db
+    restart: on-failure
+
+volumes:
+  redis_volume_data:
+  redis_insight_volume_data:

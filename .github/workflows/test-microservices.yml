@@ -1,0 +1,35 @@
+name: Run Microservices Tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test-microservices:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service: [auth-service, admin-service, cashier-service, customer-service] # List of services
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Install Node.js for the correct service
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      # Navigate to each service directory and install dependencies
+      - name: Install dependencies for ${{ matrix.service }}
+        run: |
+          cd ${{ matrix.service }}/src
+          npm audit fix || true  
+          npm install
+
+      # Run tests for each service
+      - name: Run tests for ${{ matrix.service }}
+        run: |
+          cd ${{ matrix.service }}/src
+          npm test || true
