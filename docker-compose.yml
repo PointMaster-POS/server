@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   redis:
-    image: redis:6.0.7
+    image: pointmaster.azurecr.io/redis:6.0.7
     container_name: redis
     restart: always
     environment:
@@ -20,7 +20,7 @@ services:
     volumes:
       - redis_insight_volume_data:/db
   db:
-    image: mysql:8.1
+    image: pointmaster.azurecr.io/mysql:8.1
     environment:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: pointmaster
@@ -31,6 +31,7 @@ services:
     restart: always
 
   admin-service:
+    image: pointmaster.azurecr.io/admin-service
     build:
       context: ./admin-service
       dockerfile: Dockerfile
@@ -51,6 +52,7 @@ services:
     restart: on-failure
 
   auth-service:
+    image: pointmaster.azurecr.io/auth-service
     build:
       context: ./auth-service
       dockerfile: Dockerfile
@@ -68,6 +70,7 @@ services:
     restart: on-failure
 
   cashier-service:
+    image: pointmaster.azurecr.io/cashier-service
     build:
       context: ./cashier-service
       dockerfile: Dockerfile
@@ -86,6 +89,7 @@ services:
     restart: on-failure
 
   customer-service:
+    image: pointmaster.azurecr.io/customer-service
     build:
       context: ./customer-service
       dockerfile: Dockerfile
