@@ -85,7 +85,6 @@ services:
       - DB_NAME=pointmaster
     depends_on:
       - db
-
     restart: on-failure
 
   customer-service:
@@ -102,7 +101,6 @@ services:
       - DB_USER=root
       - DB_PASSWORD=password
       - DB_NAME=pointmaster
-
     depends_on:
       - db
     restart: on-failure

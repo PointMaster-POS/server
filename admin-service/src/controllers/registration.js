@@ -3,6 +3,8 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs'); // For password hashing
 const { getRedisClient } = require('../config/redisclient');
 const db = require('../config/db'); // Assuming this is your database configuration
+const { sendEmail } = require("../utils/email");
+const generatePW = require("generate-password");
 
 // Controller for first form submission (business details)
 const registerBusiness = asyncHandler(async (req, res) => {
@@ -123,4 +125,76 @@ const submitOwnerDetails = asyncHandler(async (req, res) => {
     }
 });
 
-module.exports = { registerBusiness, submitOwnerDetails };
+
+//verify email endpoint 
+
+const verifyEmailSending = asyncHandler(async (req, res) => {
+    const { email } = req.body;
+
+    // Generate 4-digit code
+    const code = Math.floor(1000 + Math.random() * 9000);
+
+    // Configure Mailgen for email template
+    let mailGenerator = new Mailgen({
+        theme: 'default',
+        product: {
+            name: 'Your Company Name',
+            link: 'https://pointmaster.com'
+        }
+    });
+
+    //save the code in redis key should be email and value should be code
+    const client = getRedisClient();
+    await client.set(email, code, 'EX', 300); // Expires in 5 minutes
+
+
+    // Define email content
+    const emailContent = {
+        body: {
+            name: email, // or you can use a user's name if you have it
+            intro: `Welcome! Here is your verification code: ${code}.`,
+            action: {
+                instructions: 'Please use the following code to complete your verification process:',
+                button: {
+                    color: '#22BC66', // Customize button color
+                    text: 'Verify Now',
+                    link: 'https://yourcompanywebsite.com/verify'
+                }
+            },
+            outro: 'If you did not request this email, you can safely ignore it.'
+        }
+    };
+
+    // Generate HTML content
+    const mailHtml = mailGenerator.generate(emailContent);
+    
+    // Generate plaintext version (optional but recommended)
+    const mailText = mailGenerator.generatePlaintext(emailContent);
+
+    // Subject for the email
+    const subject = "Your Verification Code";
+
+    // Send the email using your email sending function
+    sendEmail(email, subject, mailText, mailHtml);
+
+    res.status(200).json({ message: 'Verification email sent successfully' });
+});
+
+
+//verify email endpoint
+const verifyMail = asyncHandler(async (req, res) => {
+    const { email, code } = req.body;
+
+    const client = getRedisClient();
+    const storedCode = await client.get(email);
+
+    if (code === storedCode) {
+        return res.status(200).json({ message: 'Verification successful' });
+    } else {
+        return res.status(400).json({ message: 'Invalid verification code' });
+    }
+});
+
+
+
+module.exports = { registerBusiness, submitOwnerDetails, verifyEmailSending, verifyMail };
