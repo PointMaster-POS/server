@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   redis:
-    image: pointmaster.azurecr.io/redis:6.0.7
+    image: redis:6.0.7
     container_name: redis
     restart: always
     environment:
@@ -31,7 +31,7 @@ services:
     restart: always
 
   admin-service:
-    image: pointmaster.azurecr.io/admin-service
+    image: admin-service
     build:
       context: ./admin-service
       dockerfile: Dockerfile
@@ -52,7 +52,7 @@ services:
     restart: on-failure
 
   auth-service:
-    image: pointmaster.azurecr.io/auth-service
+    image: auth-service
     build:
       context: ./auth-service
       dockerfile: Dockerfile
@@ -70,7 +70,7 @@ services:
     restart: on-failure
 
   cashier-service:
-    image: pointmaster.azurecr.io/cashier-service
+    image: cashier-service
     build:
       context: ./cashier-service
       dockerfile: Dockerfile
@@ -88,7 +88,7 @@ services:
     restart: on-failure
 
   customer-service:
-    image: pointmaster.azurecr.io/customer-service
+    image: customer-service
     build:
       context: ./customer-service
       dockerfile: Dockerfile
