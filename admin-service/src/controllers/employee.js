@@ -5,7 +5,7 @@ const generatePW = require("generate-password");
 const bcrypt = require("bcryptjs");
 
 const getAllEmployees = asyncHandler(async (req, res) => {
-  const query = "SELECT * FROM employee WHERE branch_id = ? ";
+  const query = "SELECT * FROM employee WHERE branch_id = ? AND status = 1";  
   const employee_id = req.params.branch_id;
 
   if (req.owner === undefined && req.employee.role !== "manager") {

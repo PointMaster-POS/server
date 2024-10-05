@@ -289,6 +289,131 @@ const salesByPaymentMethod = asyncHandler(async (req, res) => {
   }
 });
 
+const getBillsBetweenDates = asyncHandler(async (req, res) => {
+  const businessID = req.owner.business_id; // Assuming the business ID is stored in the request context
+  const { startDate, endDate } = req.params; // Extract startDate and endDate from query params
+
+  // Ensure both startDate and endDate are provided
+  if (!startDate || !endDate) {
+    return res.status(400).json({ message: "Please provide both startDate and endDate." });
+  }
+
+  const query = `
+            SELECT 
+                DATE(date_time) AS bill_date, 
+                COUNT(*) AS number_of_bills 
+            FROM 
+                bill 
+            WHERE 
+                branch_id IN (
+                  SELECT branch_id 
+                  FROM business_branch 
+                  WHERE business_id = ?
+                )
+                AND date_time BETWEEN ? AND ? 
+            GROUP BY 
+                DATE(date_time) 
+            ORDER BY 
+                DATE(date_time)`;
+
+  try {
+    db.query(query, [businessID, startDate, endDate], (err, result) => {
+      if (err) {
+        return res.status(500).json({ message: err.message });
+      } else {
+        return res.status(200).json(result);
+      }
+    });
+  } catch (error) {
+    console.error("Error fetching bills between dates:", error);
+    res.status(500).json({ message: "Internal Server Error", error: error.message });
+  }
+});
+
+const getBranchPerformanceReport = asyncHandler(async (req, res) => {
+  const businessID = req.owner.business_id; // Assuming the business ID is stored in the request context
+  const { startDate, endDate } = req.params; // Get start and end date from request parameters
+
+  const query = `
+      SELECT 
+          bb.branch_name, 
+          SUM(b.total_price) AS total_sales, 
+          COUNT(b.bill_id) AS number_of_bills 
+      FROM 
+          bill b 
+      JOIN 
+          business_branch bb ON b.branch_id = bb.branch_id 
+      WHERE 
+          bb.business_id = ? 
+          AND b.date_time BETWEEN ? AND ? 
+      GROUP BY 
+          bb.branch_name;
+  `;
+
+  try {
+      db.query(query, [businessID, startDate, endDate], (err, result) => {
+          if (err) {
+              return res.status(500).json({ message: err.message });
+          } else {
+              return res.status(200).json(result);
+          }
+      });
+  } catch (error) {
+      console.error("Error fetching branch performance data:", error);
+      res.status(500).json({ message: "Internal Server Error", error: error.message });
+  }
+});
+
+
+const getItemsWithLowStock = asyncHandler(async (req, res) => {
+  const businessID = req.owner.business_id; // Assuming the business ID is stored in the request context
+  const minStock = req.params.minStock; // Get minimum stock from request parameters
+
+  console.log({ businessID, minStock });
+  const query = `
+      SELECT 
+            i.item_id, 
+            i.item_name, 
+            i.stock, 
+            i.status,
+            c.category_name,
+            c.category_location
+        FROM 
+            items i
+        JOIN 
+            categories c ON i.category_id = c.category_id
+        WHERE 
+            i.stock <= ? 
+            AND i.status = 1
+            AND i.category_id IN (
+                SELECT 
+                    category_id 
+                FROM 
+                    business_branch bb 
+                JOIN 
+                    categories cat ON bb.branch_id = cat.branch_id 
+                WHERE 
+                    bb.business_id = ?
+            );
+  `;
+
+  try {
+      db.query(query, [minStock, businessID], (err, result) => {
+          if (err) {
+              return res.status(500).json({ message: err.message });
+          } else {
+            console.log(result);
+            console.log({minStock});
+              return res.status(200).json(result);
+          }
+      });
+  } catch (error) {
+      console.error("Error fetching items with low stock:", error);
+      res.status(500).json({ message: "Internal Server Error", error: error.message });
+  }
+});
+
+
 
 
 module.exports = {
@@ -299,4 +424,7 @@ module.exports = {
   getNumberOfCustomers,
   customerProfileWithMostPoints,
   salesByPaymentMethod,
+  getBillsBetweenDates,
+  getBranchPerformanceReport,
+  getItemsWithLowStock,
 };
