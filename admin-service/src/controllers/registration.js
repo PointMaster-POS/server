@@ -46,8 +46,9 @@ const registerBusiness = asyncHandler(async (req, res) => {
     const client = getRedisClient();
 
     // Check if the business already exists in Redis
-    const exists = await client.exists(business_mail);
-    if (exists) {
+    // const exists = await client.exists(business_mail);
+    if (false) {
+        console.log('Business data already exists');
         return res.status(400).json({ message: 'Business data already exists' });
     }
 
