@@ -487,7 +487,6 @@ const averageNumberOfItemsPerBill = asyncHandler(async (req, res) => {
 } 
 );
 
-
 module.exports = {
   averageNumberOfItemsPerBill,
   getPopularItems,
