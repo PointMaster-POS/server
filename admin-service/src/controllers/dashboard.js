@@ -443,8 +443,48 @@ const getNumberOfEmployeesBusiness = asyncHandler(async (req, res) => {
   }
 });
 
-// const 
+const averageNumberOfItemsPerBill = asyncHandler(async (req, res) => {  
+  const businessID = req.owner.business_id; // Assuming the business ID is stored in the request context
+  const { startDate, endDate } = req.params; // Extract startDate and endDate from query params
 
+  // SQL query to calculate the average number of items per bill
+  const query = `
+    SELECT 
+      AVG(number_of_items) AS average_items_per_bill
+    FROM (
+      SELECT 
+        b.bill_id, 
+        COUNT(bi.item_id) AS number_of_items
+      FROM 
+        bill b
+      JOIN 
+        bill_items bi ON b.bill_id = bi.bill_id
+      JOIN 
+        business_branch bb ON b.branch_id = bb.branch_id
+      WHERE 
+        bb.business_id = ?
+        AND b.date_time BETWEEN ? AND ?
+      GROUP BY 
+        b.bill_id
+    ) AS items_per_bill;
+  `;
+
+  try {
+    db.query(query, [businessID, startDate, endDate], (err, result) => {
+      if (err) {
+        return res.status(500).json({ message: err.message });
+      } else {
+        const { average_items_per_bill } = result[0];
+        return res.status(200).json({ average_items_per_bill });
+      }
+    });
+  } catch (error) {
+    console.error("Error fetching the average number of items per bill:", error);
+    res.status(500).json({ message: "Internal Server Error", error: error.message });
+  }
+
+} 
+);
 
 
 
