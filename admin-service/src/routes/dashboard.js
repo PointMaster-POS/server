@@ -11,7 +11,8 @@ const {
   salesByPaymentMethod,
   getBillsBetweenDates,
   getBranchPerformanceReport,
-  getItemsWithLowStock
+  getItemsWithLowStock,
+  getNumberOfEmployeesBusiness
 } = require("../controllers/dashboard");
 
 dashBoardRouter.get(
@@ -61,6 +62,13 @@ dashBoardRouter.get(
     "/business/low-stock-items/:minStock",
     validateToken,
     getItemsWithLowStock
+
+);
+
+dashBoardRouter.get(
+  "/business/employees/get-number-of-employees",
+  validateToken,
+  getNumberOfEmployeesBusiness
 );
 
 module.exports = dashBoardRouter;

@@ -26,6 +26,7 @@ const employeeLogginController = asyncHandler(async (req, res) => {
             employee: {
               employee_name: employee.employee_name,
               employee_id: employee.employee_id,
+              emoloyee_branch_id: employee.branch_id,
               employee_role: employee.role,
               email: employee.email,
             },

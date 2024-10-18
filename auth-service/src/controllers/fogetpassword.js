@@ -2,6 +2,7 @@ const asyncHandler = require('express-async-handler');
 const bcrypt = require('bcryptjs');
 const Business = require('../models/business');
 
+
 const fogetPasswordController = asyncHandler(async (req, res) => {
     const { business_mail, birthday, newPassword } = req.body;
     console.log('Reset Password for Business Owner');
@@ -16,7 +17,7 @@ const fogetPasswordController = asyncHandler(async (req, res) => {
     const business = await Business.findOne({
         where: {
             business_mail: business_mail,
-            business_owner_birthday: birthday
+             business_owner_birthday: birthday
         }
     });
 

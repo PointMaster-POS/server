@@ -13,17 +13,17 @@ const Business = sequelize.define('Business', {
   business_owner_mail: {
     type: DataTypes.STRING,
     unique: true,
-    
+
   },
   business_mail: {
     type: DataTypes.STRING,
     unique: true,
   },
   business_owner_birthday: {
-    type: DataTypes.DATE, // Assuming birthday is stored as a DATE
+    type: DataTypes.DATE, 
   },
   business_password: {
-    type: DataTypes.STRING(2048), // To store hashed passwords
+    type: DataTypes.STRING(2048), 
   },
 }, {
   tableName: 'business',
