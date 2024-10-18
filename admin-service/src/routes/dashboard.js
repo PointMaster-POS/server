@@ -12,7 +12,8 @@ const {
   getBillsBetweenDates,
   getBranchPerformanceReport,
   getItemsWithLowStock,
-  getNumberOfEmployeesBusiness
+  getNumberOfEmployeesBusiness,
+  averageNumberOfItemsPerBill
 } = require("../controllers/dashboard");
 
 dashBoardRouter.get(
@@ -69,6 +70,12 @@ dashBoardRouter.get(
   "/business/employees/get-number-of-employees",
   validateToken,
   getNumberOfEmployeesBusiness
+);
+
+dashBoardRouter.get(
+  "/business/average-number-of-items-per-bill/:startDate/:endDate",
+  validateToken,
+  averageNumberOfItemsPerBill
 );
 
 module.exports = dashBoardRouter;

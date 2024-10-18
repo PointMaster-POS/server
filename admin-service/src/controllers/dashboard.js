@@ -446,6 +446,7 @@ const getNumberOfEmployeesBusiness = asyncHandler(async (req, res) => {
 const averageNumberOfItemsPerBill = asyncHandler(async (req, res) => {  
   const businessID = req.owner.business_id; // Assuming the business ID is stored in the request context
   const { startDate, endDate } = req.params; // Extract startDate and endDate from query params
+  
 
   // SQL query to calculate the average number of items per bill
   const query = `
@@ -487,11 +488,8 @@ const averageNumberOfItemsPerBill = asyncHandler(async (req, res) => {
 );
 
 
-
-
-
-
 module.exports = {
+  averageNumberOfItemsPerBill,
   getPopularItems,
   getExpiredItems,
   getNumberOfBillsPerMonth,
