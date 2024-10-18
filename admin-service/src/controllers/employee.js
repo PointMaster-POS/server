@@ -248,7 +248,7 @@ const deleteEmployee = asyncHandler(async (req, res) => {
 
 const getAllEmployeeBranch = asyncHandler(async (req, res) => {
   const branch_id = req.branch.branch_id;
-  const getEmployeeQuery = `SELECT * FROM employee WHERE branch_id = ?`;
+  const getEmployeeQuery = `SELECT * FROM employee WHERE branch_id = ? AND status = 1`;
 
   db.query(getEmployeeQuery, [branch_id], (err, result) => {
     if (err) {
