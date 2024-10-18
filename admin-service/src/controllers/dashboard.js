@@ -60,6 +60,7 @@ ORDER BY
 //expired items
 const getExpiredItems = asyncHandler(async (req, res) => {
   const businessID = req.owner.business_id; // Assuming the business ID is stored in the request context
+  //need to get items expires withing month
 
   const query = `
             SELECT 
@@ -77,7 +78,9 @@ const getExpiredItems = asyncHandler(async (req, res) => {
                 categories c ON i.category_id = c.category_id 
             WHERE 
                 bb.business_id = ? 
-                AND i.exp_date < CURDATE()`;
+                AND i.exp_date BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 1 MONTH);
+        `;
+                
 
   try {
     db.query(query, [businessID], (err, result) => {
@@ -366,8 +369,8 @@ const getBranchPerformanceReport = asyncHandler(async (req, res) => {
 
 
 const getItemsWithLowStock = asyncHandler(async (req, res) => {
-  const businessID = req.owner.business_id; // Assuming the business ID is stored in the request context
-  const minStock = req.params.minStock; // Get minimum stock from request parameters
+  const businessID = req.owner.business_id; 
+  const minStock = req.params.minStock; 
 
   console.log({ businessID, minStock });
   const query = `
@@ -375,6 +378,7 @@ const getItemsWithLowStock = asyncHandler(async (req, res) => {
             i.item_id, 
             i.item_name, 
             i.stock, 
+            i.image_url,
             i.status,
             c.category_name,
             c.category_location
@@ -413,10 +417,78 @@ const getItemsWithLowStock = asyncHandler(async (req, res) => {
   }
 });
 
+//get number of employees for business
+const getNumberOfEmployeesBusiness = asyncHandler(async (req, res) => {
+  const businessID = req.owner.business_id;
 
+  const query = `
+    SELECT COUNT(e.employee_id) AS employeeCount
+    FROM employee e
+    JOIN business_branch bb ON e.branch_id = bb.branch_id
+    WHERE bb.business_id = ?;
+  `;
 
+  try {
+    db.query(query, [businessID], (err, result) => {
+      if (err) {
+        return res.status(500).json({ message: err.message });
+      } else {
+        const { employeeCount } = result[0];
+        return res.status(200).json({ employeeCount });
+      }
+    });
+  } catch (error) {
+    console.error("Error fetching the number of employees for the business:", error);
+    res.status(500).json({ message: "Internal Server Error", error: error.message });
+  }
+});
+
+const averageNumberOfItemsPerBill = asyncHandler(async (req, res) => {  
+  const businessID = req.owner.business_id; // Assuming the business ID is stored in the request context
+  const { startDate, endDate } = req.params; // Extract startDate and endDate from query params
+  
+
+  // SQL query to calculate the average number of items per bill
+  const query = `
+    SELECT 
+      AVG(number_of_items) AS average_items_per_bill
+    FROM (
+      SELECT 
+        b.bill_id, 
+        COUNT(bi.item_id) AS number_of_items
+      FROM 
+        bill b
+      JOIN 
+        bill_items bi ON b.bill_id = bi.bill_id
+      JOIN 
+        business_branch bb ON b.branch_id = bb.branch_id
+      WHERE 
+        bb.business_id = ?
+        AND b.date_time BETWEEN ? AND ?
+      GROUP BY 
+        b.bill_id
+    ) AS items_per_bill;
+  `;
+
+  try {
+    db.query(query, [businessID, startDate, endDate], (err, result) => {
+      if (err) {
+        return res.status(500).json({ message: err.message });
+      } else {
+        const { average_items_per_bill } = result[0];
+        return res.status(200).json({ average_items_per_bill });
+      }
+    });
+  } catch (error) {
+    console.error("Error fetching the average number of items per bill:", error);
+    res.status(500).json({ message: "Internal Server Error", error: error.message });
+  }
+
+} 
+);
 
 module.exports = {
+  averageNumberOfItemsPerBill,
   getPopularItems,
   getExpiredItems,
   getNumberOfBillsPerMonth,
@@ -427,4 +499,5 @@ module.exports = {
   getBillsBetweenDates,
   getBranchPerformanceReport,
   getItemsWithLowStock,
+  getNumberOfEmployeesBusiness,
 };
