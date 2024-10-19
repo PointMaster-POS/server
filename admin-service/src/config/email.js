@@ -1,7 +1,6 @@
 const nodemailer = require('nodemailer');
 
-
-
+//e mail configuration
 const transporter = nodemailer.createTransport({
   service: 'gmail', 
   auth: {
@@ -10,8 +9,7 @@ const transporter = nodemailer.createTransport({
   }
 });
 
-
-
+// verify connection configuration
 transporter.verify((error, success) => {
   if (error) {
     console.log(error);
