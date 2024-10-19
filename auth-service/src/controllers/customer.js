@@ -5,6 +5,7 @@ const Customer = require('../models/customer');
 
 const customerLogginController = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
+  console.log('Customer Login');
 
   // Validate input
   if (!email || !password) {

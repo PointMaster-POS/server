@@ -3,6 +3,7 @@ const redis = require('redis');
 // Create a Redis client instance
 let client;
 
+//redis client configuration
 const getRedisClient = () => {
     if (!client) {
         client = redis.createClient({

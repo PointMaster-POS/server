@@ -43,8 +43,6 @@ const createItem = asyncHandler(async (req, res) => {
     !price ||
     !image_url ||
     !exp_date 
-
-    
   ) {
     return res.status(400).json({ message: "All fields are required" });
   }
