@@ -29,24 +29,8 @@ services:
     ports:
       - "3307:3306"
     volumes:
-      - db_data:/var/lib/mysql
+      - db_data:/var/lib/mysql  # Add a volume for persistent MySQL data
       - ./database:/docker-entrypoint-initdb.d/
-    restart: always
-
-  # Load balancer service
-  nginx:
-    image: nginx:latest
-    container_name: nginx
-    ports:
-      - "80:80" 
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf 
-    depends_on:
-      - cashier-service-1
-      - cashier-service-2
-      - admin-service
-      - auth-service
-      - customer-service
     restart: always
 
   admin-service:
@@ -54,6 +38,8 @@ services:
     build:
       context: ./admin-service
       dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
     environment:
       - ACCESS_TOKEN_SECRET=panadura
       - DB_HOST=db
@@ -68,45 +54,31 @@ services:
       - redis
     restart: on-failure
 
-  # First instance of cashier service
-  cashier-service-1:
-    image: cashier-service
-    build:
-      context: ./cashier-service
-      dockerfile: Dockerfile
-    environment:
-      - ACCESS_TOKEN_SECRET=panadura
-      - DB_HOST=db
-      - DB_PORT=3306
-      - DB_USER=root
-      - DB_PASSWORD=password
-      - DB_NAME=pointmaster
-    depends_on:
-      - db
-    restart: on-failure
-
-  # Second instance of cashier service
-  cashier-service-2:
-    image: cashier-service
-    build:
-      context: ./cashier-service
-      dockerfile: Dockerfile
-    environment:
-      - ACCESS_TOKEN_SECRET=panadura
-      - DB_HOST=db
-      - DB_PORT=3306
-      - DB_USER=root
-      - DB_PASSWORD=password
-      - DB_NAME=pointmaster
-    depends_on:
-      - db
-    restart: on-failure
-
   auth-service:
     image: auth-service
     build:
       context: ./auth-service
       dockerfile: Dockerfile
+    ports:
+      - "3002:3002"
+    environment:
+      - ACCESS_TOKEN_SECRET=panadura
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_USER=root
+      - DB_PASSWORD=password
+      - DB_NAME=pointmaster
+    depends_on:
+      - db
+    restart: on-failure
+
+  cashier-service:
+    image: cashier-service
+    build:
+      context: ./cashier-service
+      dockerfile: Dockerfile
+    ports:
+      - "3003:3003"
     environment:
       - ACCESS_TOKEN_SECRET=panadura
       - DB_HOST=db
@@ -123,6 +95,8 @@ services:
     build:
       context: ./customer-service
       dockerfile: Dockerfile
+    ports:
+      - "3004:3004"
     environment:
       - ACCESS_TOKEN_SECRET=panadura
       - DB_HOST=db
@@ -137,4 +111,4 @@ services:
 volumes:
   redis_volume_data:
   redis_insight_volume_data:
-  db_data:
+  db_data:  

@@ -58,6 +58,21 @@ const getBillByID = asyncHandler(async (req, res) => {
             } else {
               results[0].employee_name = employee[0].employee_name;
               results[0].items = items;
+              //get items name from item_id in item table
+              const getItemNameQuery = `SELECT * FROM items WHERE item_id = ?`;
+              items.forEach((item) => {
+                db.query(getItemNameQuery, [item.item_id], (err, itemName) => {
+                  if (err) {
+                    return res.status(500).json({ message: err.message });
+                  } else {
+                    console.log(itemName[0]);
+                    item.item_name = itemName[0].item_name;
+                    item.image = itemName[0].image_url;
+                    item.item_price = itemName[0].item_price;
+                    item.item_image = itemName[0].item_image;
+                  }
+                });
+              });
               //get branch name from branch_id in business_branch table 
               const getBranchNameQuery = `SELECT branch_name FROM business_branch WHERE branch_id = ?`;
               db.query(getBranchNameQuery, [results[0].branch_id], (err, branch) => {
