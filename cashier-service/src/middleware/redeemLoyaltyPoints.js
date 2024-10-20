@@ -9,7 +9,7 @@ const redeemLoyaltyPoints = asyncHandler((req, res, next) => {
     return next(); // If no points redeemed, skip to next function
   }
 
-  // Get loyalty program for the business
+  // ------------------- Redeem loyalty points -------------------
   db.query(
     "SELECT * FROM loyalty_programs WHERE business_id = ?",
     [business_id],
@@ -24,7 +24,7 @@ const redeemLoyaltyPoints = asyncHandler((req, res, next) => {
         return res.status(404).json({ message: "Loyalty program not found" });
       }
 
-      // Retrieve customer information
+      // ------------------- Fetch customer loyalty points -------------------
       db.query(
         "SELECT customer_id FROM customer WHERE customer_phone = ?",
         [customer_phone],
@@ -39,7 +39,8 @@ const redeemLoyaltyPoints = asyncHandler((req, res, next) => {
 
           const customer_id = customerResult[0].customer_id;
 
-          // Fetch loyalty points for the customer
+          // ------------------- Update customer loyalty points -------------------
+          // Fetch customer loyalty points
           db.query(
             "SELECT * FROM customer_loyalty WHERE customer_id = ? AND loyalty_program_id = ?",
             [customer_id, loyaltyProgram.loyalty_program_id],
@@ -55,8 +56,17 @@ const redeemLoyaltyPoints = asyncHandler((req, res, next) => {
                     customerLoyaltyDetails.points &&
                   total_amount >= customerLoyaltyDetails.points
                 ) {
-                  const newPoints =
-                    customerLoyaltyDetails.points - total_amount;
+                  let newPoints ;
+
+                  newPoints = customerLoyaltyDetails.points - total_amount;
+
+                  if (newPoints < 0) {
+                    newPoints = 0;
+                  }
+
+                  total_amount -= loyalty_points_redeemed;
+                  
+                  
 
                   // Update customer loyalty points
                   db.query(
